@@ -4,6 +4,7 @@
 #include "PhysicsManager.h"
 #include <memory>
 #include <cmath>
+#include "rlgl.h"
 
 class testEntity : public Entity
 {
@@ -18,19 +19,19 @@ public:
     void Register()
     {
         ecs->RegisterEntityAsDrawable(id);
-        ecs->RegisterEntityAsPhysicsObject(id);
+        // ecs->RegisterEntityAsPhysicsObject(id);
 
         // collider = std::make_unique<RectangleCollider>(pos, 10, 10);
-        if (!isRectangle)
-        {
-            collider = std::make_unique<CircleCollider>(pos, 10);
-        }
-        else
-        {
-            collider = std::make_unique<RectangleCollider>(pos, 10, 10);
-        }
+        // if (!isRectangle)
+        // {
+        //     collider = std::make_unique<CircleCollider>(pos, 10);
+        // }
+        // else
+        // {
+        //     collider = std::make_unique<RectangleCollider>(pos, 10, 10);
+        // }
 
-        collider->SetPhysicsToDynamic();
+        // collider->SetPhysicsToDynamic();
     }
 
     void Update() override
@@ -47,14 +48,15 @@ public:
     void Draw() override
     {
         // DrawRectangle(pos.x, pos.y, 10, 10, RED);
-        if (!isRectangle)
-        {
-            DrawCircle(pos.x, pos.y, 10, RED);
-        }
-        else
-        {
-            DrawRectangle(pos.x, pos.y, 10, 10, RED);
-        }
+        // if (!isRectangle)
+        // {
+        //     DrawCircle(pos.x, pos.y, 10, RED);
+        // }
+        // else
+        // {
+        //     DrawRectangle(pos.x, pos.y, 10, 10, RED);
+        // }
+        DrawCircleV(pos, radius, RED);
     };
 
     Vector2 pos{};
@@ -99,7 +101,15 @@ public:
 class Scene
 {
 public:
-    Scene(){};
+    Scene()
+    {
+        camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
+        camera.target = {0, 0};
+        camera.zoom = 10;
+        camera.rotation = 0;
+
+        rlDisableBackfaceCulling();
+    };
 
     void Init();
     void Run();
@@ -109,4 +119,5 @@ public:
 
     ECS ecs;
     PhysicsManager physManager;
+    Camera2D camera = {};
 };

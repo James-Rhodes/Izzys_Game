@@ -11,4 +11,4 @@ else
 endif
 
 default:
-	g++ $(SRC_FILES) -o output.exe $(OPTIMISE_FLAG) $(CPP_VERSION) -Wall -static-libstdc++ -Wno-missing-braces -I ./include/ -L ./lib/ -lraylib -lopengl32 -lgdi32 -lwinmm
+	g++ $(SRC_FILES) -o output.exe $(OPTIMISE_FLAG) $(CPP_VERSION) -Wall -static-libstdc++ -Wno-missing-braces -I ./include/ -L ./lib/ -lraylib -lbox2d -lopengl32 -lgdi32 -lwinmm
