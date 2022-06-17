@@ -10,6 +10,8 @@ void Scene::Run()
 void Scene::Init()
 {
     ecs.CreateEntity<testEntity>("test", (Vector2){0, 0}, 1);
+    ecs.CreateEntity<testEntity>("test2", (Vector2){0.5, 3}, 1);
+
     ecs.CreateEntity<StaticTest>("Ground", (Vector2){-50, -25}, 100, 10);
     // ecs.CreateEntity<testEntity>("test1", (Vector2){(GetScreenWidth() / 2) - 100, -10});
 

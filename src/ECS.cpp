@@ -50,10 +50,9 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObje
 
     b2FixtureDef fixture;
     fixture.shape = &circle;
-    // TODO: make density restitution, friction etc parameters of the config
-    fixture.density = 1.0f;
-    fixture.friction = 0.3f;
-    fixture.restitution = 0.3f;
+    fixture.density = config.density;
+    fixture.friction = config.friction;
+    fixture.restitution = config.restitution;
 
     body->CreateFixture(&fixture);
 
@@ -76,9 +75,9 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsO
     b2FixtureDef fixture;
     fixture.shape = &rect;
     // TODO: make density restitution, friction etc parameters of the config
-    fixture.density = 1.0f;
-    fixture.friction = 0.3f;
-    fixture.restitution = 0.3f;
+    fixture.density = config.density;
+    fixture.friction = config.friction;
+    fixture.restitution = config.restitution;
 
     body->CreateFixture(&fixture);
 

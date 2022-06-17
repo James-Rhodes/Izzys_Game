@@ -80,6 +80,8 @@ public:
         config.isDynamic = false;
         config.isRollable = false;
         config.pos = pos;
+        config.density = 10.f;
+        config.restitution = 1.0f;
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
 

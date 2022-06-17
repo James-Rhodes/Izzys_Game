@@ -31,28 +31,28 @@ class ECS;
 //     PhysicsReactionType reaction;
 //     PhysicsShape shape;
 // };
-
-struct CirclePhysicsObjectConfig
+struct PhysicsConfig
+{
+    Vector2 pos = {};
+    bool isDynamic = false;
+    bool isRollable = false;
+    float density = 1.0f;
+    float friction = 0.3f;
+    float restitution = 0.3f;
+};
+struct CirclePhysicsObjectConfig : public PhysicsConfig
 {
     // This object is passed in to ecs as physics object to define a circular physics object
     CirclePhysicsObjectConfig(){};
-    CirclePhysicsObjectConfig(Vector2 _pos, float _radius, bool _isDynamic = false, bool _isRollable = false) : pos(_pos), radius(_radius), isDynamic(_isDynamic), isRollable(_isRollable){};
-    Vector2 pos = {};
     float radius = 1.0;
-    bool isDynamic = false;
-    bool isRollable = false;
 };
-struct RectanglePhysicsObjectConfig
+struct RectanglePhysicsObjectConfig : public PhysicsConfig
 {
-    // This object is passed in to ecs as physics object to define a circular physics object
+    // This object is passed in to ecs as physics object to define a Rectangle physics object
     RectanglePhysicsObjectConfig(){};
-    RectanglePhysicsObjectConfig(Vector2 _pos, float _width, float _height, bool _isDynamic = false, bool _isRollable = false) : pos(_pos), width(_width), height(_height), isDynamic(_isDynamic), isRollable(_isRollable){};
 
-    Vector2 pos = {};
     float width = 1.0;
     float height = 1.0;
-    bool isDynamic = false;
-    bool isRollable = false;
 };
 
 class Entity
