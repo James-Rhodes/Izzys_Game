@@ -9,28 +9,11 @@ void Scene::Run()
 
 void Scene::Init()
 {
-    ecs.CreateEntity<testEntity>("test", (Vector2){0, 0}, 1);
-    ecs.CreateEntity<testEntity>("test2", (Vector2){0.5, 3}, 1);
+    ecs.CreateEntity<Ground>("Ground", (Vector2){-10, 0}, 20, 2);
+    ecs.CreateEntity<Ground>("Ground2", (Vector2){5, 5}, 10, 2);
 
-    ecs.CreateEntity<StaticTest>("Ground", (Vector2){-50, -25}, 100, 10);
-    // ecs.CreateEntity<testEntity>("test1", (Vector2){(GetScreenWidth() / 2) - 100, -10});
-
-    // ecs.CreateEntity<testEntity>("test1", (Vector2){(GetScreenWidth() / 2) - 5, 30});
-    // ecs.CreateEntity<testEntity>("test2", (Vector2){(GetScreenWidth() / 2) + 100, 30}, 10, true);
-    // ecs.CreateEntity<testEntity>("test2", (Vector2){(GetScreenWidth() / 2) + 100, 30});
-
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     // ecs.CreateEntity<testEntity>("test" + std::to_string(i), (Vector2){30 + 30 * i, 30});
-    // }
-
-    // ecs.CreateEntity<testEntity>("test3", (Vector2){(GetScreenWidth() / 2) + 5, -30}, 30);
-
-    // ecs.CreateEntity<StaticTest>("Bottom", (Vector2){0, GetScreenHeight() - 10}, GetScreenWidth(), 15);
-    // ecs.CreateEntity<StaticTest>("Left", (Vector2){0, 10}, 15, GetScreenHeight());
-
-    // ecs.CreateEntity<StaticTest>("Right", (Vector2){GetScreenWidth() - 15, 0}, 15, GetScreenHeight());
-    // ecs.CreateEntity<StaticTest>("Top", (Vector2){0, 10}, GetScreenWidth(), 15);
+    ecs.CreateEntity<Circle>("Circle", (Vector2){-11, 5}, 1);
+    ecs.CreateEntity<Box>("Box", (Vector2){-1, 5}, 1, 2);
 }
 
 void Scene::Update()
@@ -38,7 +21,7 @@ void Scene::Update()
     // for (const auto &ent : ecs.m_entityMap)
     for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
     {
-        std::cout << it->first << std::endl;
+
         if (!it->second->toBeDeleted)
         {
             it->second->entityPointer->Update();
@@ -61,12 +44,13 @@ void Scene::Draw()
 {
     camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
 
-    BeginDrawing();
+    // BeginDrawing();
+    BeginTextureMode(screenBuffer);
 
     BeginMode2D(camera);
-    rlPushMatrix();
+    // rlPushMatrix();
 
-    rlScalef(1, -1, 1);
+    // rlScalef(1, -1, 1);
 
     ClearBackground(RAYWHITE);
 
@@ -76,9 +60,15 @@ void Scene::Draw()
         drawer->Draw();
     }
 
-    rlPopMatrix();
+    // rlPopMatrix();
 
     EndMode2D();
+
+    EndTextureMode();
+
+    BeginDrawing();
+    ClearBackground(BLACK);
+    DrawTextureRec(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Vector2){0, 0}, WHITE);
 
     DrawFPS(10, 10);
 

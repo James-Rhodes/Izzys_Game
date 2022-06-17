@@ -66,7 +66,6 @@ public:
             m_physicsEntities.erase(entContainer->physicsObjectIterator);
         }
 
-        // m_entityMap.erase(id);
         entContainer->toBeDeleted = true;
 
         delete entPointer;

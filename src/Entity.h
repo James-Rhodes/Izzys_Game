@@ -5,32 +5,9 @@
 #include <memory>
 #include <iostream>
 #include "box2d.h"
-// #include "ECS.h"
-
-// enum PhysicsReactionType
-// {
-//     STATIC,
-//     DYNAMIC
-// };
-
-// enum PhysicsShape
-// {
-//     CIRCLE,
-//     RECTANGLE
-// };
 
 class ECS;
-// class PhysicsObject
-// {
-//     // Provides an interface to the b2Body class. Nothing more nothing less
-// public:
-//     PhysicsObject(){};
-//     void SetPos(Vector2 pos){};
 
-//     b2Body *physicsBody;
-//     PhysicsReactionType reaction;
-//     PhysicsShape shape;
-// };
 struct PhysicsConfig
 {
     Vector2 pos = {};

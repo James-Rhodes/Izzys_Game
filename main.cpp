@@ -10,8 +10,8 @@ int main()
     //--------------------------------------------------------------------------------------
     SetConfigFlags(FLAG_MSAA_4X_HINT);
 
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 640;
+    const int screenHeight = 360;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Raylib Template");

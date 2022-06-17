@@ -71,12 +71,10 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsO
     b2Body *body = physManager->CreateBody(&bodyDef);
 
     b2PolygonShape rect;
-    // rect.SetAsBox(config.width / 2, config.height / 2);
-    rect.SetAsBox(config.width, config.height);
+    rect.SetAsBox(config.width / 2, config.height / 2);
 
     b2FixtureDef fixture;
     fixture.shape = &rect;
-    // TODO: make density restitution, friction etc parameters of the config
     fixture.density = config.density;
     fixture.friction = config.friction;
     fixture.restitution = config.restitution;

@@ -3,6 +3,8 @@
 #include "box2d.h"
 #include "Entity.h"
 
+// Note: All collision boxes are drawn relative to the center of the shape. Rectangles should in
+// turn be drawn relative to the center not the corner. Circles are the same. DrawRectanglePro draws from the center
 class CollisionManager : public b2ContactListener
 {
 public:
