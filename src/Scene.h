@@ -38,11 +38,15 @@ public:
         if (IsKeyDown(KEY_LEFT))
         {
             physBody->SetTransform(physBody->GetPosition() + b2Vec2(-0.09, 0), 0);
+            physBody->SetLinearVelocity(b2Vec2((0 * physBody->GetLinearVelocity().x), physBody->GetLinearVelocity().y));
+
             physBody->SetAwake(true);
         }
         if (IsKeyDown(KEY_RIGHT))
         {
             physBody->SetTransform(physBody->GetPosition() + b2Vec2(0.09, 0), 0);
+
+            physBody->SetLinearVelocity(b2Vec2((0 * physBody->GetLinearVelocity().x), physBody->GetLinearVelocity().y));
             physBody->SetAwake(true);
         }
         if (IsKeyPressed(KEY_UP))
@@ -74,9 +78,9 @@ public:
         }
     }
 
+    Vector2 pos;
     float width;
     float height;
-    Vector2 pos;
     bool colliding = false;
 };
 class Circle : public Entity
@@ -136,7 +140,6 @@ public:
     void Draw()
     {
         DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BLACK);
-        DrawCircleV(pos, 0.2, RED);
         // DrawRectangleV(pos, {width, height}, BLACK);
     }
 
