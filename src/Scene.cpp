@@ -35,9 +35,19 @@ void Scene::Init()
 
 void Scene::Update()
 {
-    for (const auto &ent : ecs.m_entityMap)
+    // for (const auto &ent : ecs.m_entityMap)
+    for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
     {
-        ent.second->entityPointer->Update();
+        std::cout << it->first << std::endl;
+        if (!it->second->toBeDeleted)
+        {
+            it->second->entityPointer->Update();
+            ++it;
+        }
+        else
+        {
+            ecs.m_entityMap.erase(it++);
+        }
     }
 }
 

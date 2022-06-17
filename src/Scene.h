@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "ECS.h"
 #include "PhysicsManager.h"
+#include "CollisionManager.h"
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
@@ -30,12 +31,15 @@ public:
 
     void Update() override
     {
-        // mousePos = GetMousePosition();
-        // pos = GetMousePosition();
+
         if (IsKeyPressed(KEY_SPACE))
         {
-            // collider->Accelerate((Vector2){GetRandomValue(-10000, 10000), GetRandomValue(-10000, 10000)});
-            std::cout << "Hello " << GetRandomValue(-10000, 10000) << std::endl;
+
+            if (id == "test")
+            {
+                ecs->RemoveEntity<testEntity>(id);
+                return;
+            }
         }
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
     }
@@ -51,12 +55,29 @@ public:
         // {
         //     DrawRectangle(pos.x, pos.y, 10, 10, RED);
         // }
-        DrawCircleV(pos, radius, RED);
+        if (colliding)
+        {
+            DrawCircleV(pos, radius, RED);
+        }
+        else
+        {
+            DrawCircleV(pos, radius, PURPLE);
+        }
     };
+
+    void OnCollision(Entity *collidedEntity)
+    {
+        colliding = true;
+    }
+    void OnCollisionEnd(Entity *collidedEntity)
+    {
+        colliding = false;
+    }
 
     Vector2 pos{};
     float radius;
     bool isRectangle = false;
+    bool colliding = false;
 };
 
 class StaticTest : public Entity
@@ -97,6 +118,9 @@ public:
         DrawRectangleV(pos, {width, height}, BLUE);
     }
 
+    void OnCollision(Entity *collidedEntity) override{
+        // std::cout << collidedEntity->id << std::endl;
+    };
     Vector2 pos;
     float width;
     float height;
@@ -117,6 +141,7 @@ public:
 
         b2Vec2 gravity(0.0f, -20.0f);
         physManager = new b2World(gravity);
+        physManager->SetContactListener(&collisionManager);
         ecs.SetPhysicsManager(physManager);
     };
     ~Scene()
@@ -133,4 +158,5 @@ public:
     ECS ecs;
     b2World *physManager;
     Camera2D camera = {};
+    CollisionManager collisionManager;
 };

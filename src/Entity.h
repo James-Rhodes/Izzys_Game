@@ -64,9 +64,8 @@ public:
     virtual void Update() = 0;
     virtual void Draw(){};
     virtual void Register(){};
-    virtual void OnCollision(){
-
-    };
+    virtual void OnCollision(Entity *collidedEntity){};
+    virtual void OnCollisionEnd(Entity *collidedEntity){};
 
     void SetID(const std::string _id)
     {

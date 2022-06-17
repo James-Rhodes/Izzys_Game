@@ -16,6 +16,7 @@ struct EntityContainer
     std::list<Entity *>::iterator physicsObjectIterator;
     bool isDrawable = false;
     bool isPhysicsObject = false;
+    bool toBeDeleted = false;
 
     EntityContainer(Entity *ent) : entityPointer(ent){};
     // ~EntityContainer()
@@ -65,7 +66,8 @@ public:
             m_physicsEntities.erase(entContainer->physicsObjectIterator);
         }
 
-        m_entityMap.erase(id);
+        // m_entityMap.erase(id);
+        entContainer->toBeDeleted = true;
 
         delete entPointer;
     }
