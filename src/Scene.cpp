@@ -9,7 +9,8 @@ void Scene::Run()
 
 void Scene::Init()
 {
-    ecs.CreateEntity<testEntity>("test", (Vector2){0, 0});
+    ecs.CreateEntity<testEntity>("test", (Vector2){0, 0}, 1);
+    ecs.CreateEntity<StaticTest>("Ground", (Vector2){-50, -25}, 100, 10);
     // ecs.CreateEntity<testEntity>("test1", (Vector2){(GetScreenWidth() / 2) - 100, -10});
 
     // ecs.CreateEntity<testEntity>("test1", (Vector2){(GetScreenWidth() / 2) - 5, 30});
@@ -40,7 +41,8 @@ void Scene::Update()
 
 void Scene::UpdatePhysics()
 {
-    physManager.Update(GetFrameTime(), ecs.GetAllPhysicsObjects());
+    // physManager.Update(GetFrameTime(), ecs.GetAllPhysicsObjects());
+    physManager->Step(1 / 60.0f, 6, 2);
 }
 
 void Scene::Draw()

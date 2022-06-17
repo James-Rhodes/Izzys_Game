@@ -19,19 +19,13 @@ public:
     void Register()
     {
         ecs->RegisterEntityAsDrawable(id);
-        // ecs->RegisterEntityAsPhysicsObject(id);
 
-        // collider = std::make_unique<RectangleCollider>(pos, 10, 10);
-        // if (!isRectangle)
-        // {
-        //     collider = std::make_unique<CircleCollider>(pos, 10);
-        // }
-        // else
-        // {
-        //     collider = std::make_unique<RectangleCollider>(pos, 10, 10);
-        // }
-
-        // collider->SetPhysicsToDynamic();
+        CirclePhysicsObjectConfig config;
+        config.isDynamic = true;
+        config.isRollable = true;
+        config.radius = radius;
+        config.pos = pos;
+        ecs->RegisterEntityAsPhysicsObject(id, config);
     }
 
     void Update() override
@@ -40,9 +34,10 @@ public:
         // pos = GetMousePosition();
         if (IsKeyPressed(KEY_SPACE))
         {
-            collider->Accelerate((Vector2){GetRandomValue(-10000, 10000), GetRandomValue(-10000, 10000)});
+            // collider->Accelerate((Vector2){GetRandomValue(-10000, 10000), GetRandomValue(-10000, 10000)});
             std::cout << "Hello " << GetRandomValue(-10000, 10000) << std::endl;
         }
+        pos = {physBody->GetPosition().x, physBody->GetPosition().y};
     }
 
     void Draw() override
@@ -76,9 +71,16 @@ public:
     void Register() override
     {
         ecs->RegisterEntityAsDrawable(id);
-        ecs->RegisterEntityAsPhysicsObject(id);
-        collider = std::make_unique<RectangleCollider>(pos, width, height);
+        // ecs->RegisterEntityAsPhysicsObject(id);
+        // collider = std::make_unique<RectangleCollider>(pos, width, height);
         // collider = std::make_unique<CircleCollider>(pos, 200);
+        RectanglePhysicsObjectConfig config;
+        config.width = width;
+        config.height = height;
+        config.isDynamic = false;
+        config.isRollable = false;
+        config.pos = pos;
+        ecs->RegisterEntityAsPhysicsObject(id, config);
     }
 
     void Update() override
@@ -89,7 +91,8 @@ public:
     void Draw() override
     {
         // DrawCircle(pos.x, pos.y, 200, BLUE);
-        DrawRectangle(pos.x, pos.y, width, height, BLUE);
+        // DrawRectangle(pos.x, pos.y, width, height, BLUE);
+        DrawRectangleV(pos, {width, height}, BLUE);
     }
 
     Vector2 pos;
@@ -109,7 +112,15 @@ public:
         camera.rotation = 0;
 
         rlDisableBackfaceCulling();
+
+        b2Vec2 gravity(0.0f, -20.0f);
+        physManager = new b2World(gravity);
+        ecs.SetPhysicsManager(physManager);
     };
+    ~Scene()
+    {
+        delete physManager;
+    }
 
     void Init();
     void Run();
@@ -118,6 +129,6 @@ public:
     void UpdatePhysics();
 
     ECS ecs;
-    PhysicsManager physManager;
+    b2World *physManager;
     Camera2D camera = {};
 };

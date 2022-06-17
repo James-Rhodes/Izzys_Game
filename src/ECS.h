@@ -1,11 +1,13 @@
 #pragma once
 #include "Entity.h"
+// #include "PhysicsManager.h"
 #include <vector>
 #include <unordered_map>
 #include <stdexcept>
 #include <list>
 #include <memory>
 #include <iostream>
+#include "box2d.h"
 
 struct EntityContainer
 {
@@ -59,6 +61,7 @@ public:
 
         if (entContainer->isPhysicsObject)
         {
+            physManager->DestroyBody(entContainer->entityPointer->physBody);
             m_physicsEntities.erase(entContainer->physicsObjectIterator);
         }
 
@@ -68,7 +71,12 @@ public:
     }
 
     void RegisterEntityAsDrawable(const std::string &id);
-    void RegisterEntityAsPhysicsObject(const std::string &id);
+
+    void RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body);
+    void RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObjectConfig config);
+    void RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config);
+
+    void SetPhysicsManager(b2World *_physManager);
     std::list<Entity *> &GetAllDrawableObjects();
     std::list<Entity *> &GetAllPhysicsObjects();
 
@@ -111,4 +119,5 @@ public:
 private:
     std::list<Entity *> m_drawableEntities;
     std::list<Entity *> m_physicsEntities;
+    b2World *physManager;
 };

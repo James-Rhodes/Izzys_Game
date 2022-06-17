@@ -23,16 +23,66 @@ void ECS::RegisterEntityAsDrawable(const std::string &id)
     entContainer->drawableIterator = --m_drawableEntities.end();
 }
 
-void ECS::RegisterEntityAsPhysicsObject(const std::string &id)
+void ECS::RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body)
 {
     EntityContainer *entContainer = m_entityMap[id].get();
     entContainer->isPhysicsObject = true;
 
+    entContainer->entityPointer->physBody = body;
     // Add to physicsObject entities
     m_physicsEntities.push_back(entContainer->entityPointer);
 
     // Set the iterator in the EntityContainer so that it can be easily removed later. it is the iterator one before the end
     entContainer->physicsObjectIterator = --m_physicsEntities.end();
+}
+
+void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObjectConfig config)
+{
+    b2BodyDef bodyDef;
+    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_staticBody;
+    bodyDef.position.Set(config.pos.x, config.pos.y);
+    bodyDef.fixedRotation = !config.isRollable;
+
+    b2Body *body = physManager->CreateBody(&bodyDef);
+
+    b2CircleShape circle;
+    circle.m_radius = config.radius;
+
+    b2FixtureDef fixture;
+    fixture.shape = &circle;
+    // TODO: make density restitution, friction etc parameters of the config
+    fixture.density = 1.0f;
+    fixture.friction = 0.3f;
+    fixture.restitution = 0.3f;
+
+    body->CreateFixture(&fixture);
+
+    RegisterEntityAsPhysicsObject(id, body);
+}
+
+void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config)
+{
+    b2BodyDef bodyDef;
+    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_staticBody;
+    bodyDef.position.Set(config.pos.x, config.pos.y);
+    bodyDef.fixedRotation = !config.isRollable;
+
+    b2Body *body = physManager->CreateBody(&bodyDef);
+
+    b2PolygonShape rect;
+    // rect.SetAsBox(config.width / 2, config.height / 2);
+    rect.SetAsBox(config.width, config.height);
+
+    b2FixtureDef fixture;
+    fixture.shape = &rect;
+    // TODO: make density restitution, friction etc parameters of the config
+    fixture.density = 1.0f;
+    fixture.friction = 0.3f;
+    fixture.restitution = 0.3f;
+
+    body->CreateFixture(&fixture);
+
+    RegisterEntityAsPhysicsObject(id, body);
 }
 
 std::list<Entity *> &ECS::GetAllDrawableObjects()
@@ -44,3 +94,8 @@ std::list<Entity *> &ECS::GetAllPhysicsObjects()
 {
     return m_physicsEntities;
 };
+
+void ECS::SetPhysicsManager(b2World *_physManager)
+{
+    physManager = _physManager;
+}
