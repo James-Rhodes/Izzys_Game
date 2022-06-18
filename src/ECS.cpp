@@ -98,3 +98,32 @@ void ECS::SetPhysicsManager(b2World *_physManager)
 {
     physManager = _physManager;
 }
+
+void ECS::RemoveEntity(const std::string &id)
+{
+    EntityContainer *entContainer = m_entityMap[id].get();
+
+    entContainer->toBeDeleted = true;
+}
+
+void ECS::PermanentlyDeleteEntity(const std::string id)
+{
+    EntityContainer *entContainer = m_entityMap[id].get();
+
+    Entity *entPointer = entContainer->entityPointer;
+
+    if (entContainer->isDrawable)
+    {
+        m_drawableEntities.erase(entContainer->drawableIterator);
+    }
+
+    if (entContainer->isPhysicsObject)
+    {
+        physManager->DestroyBody(entContainer->entityPointer->physBody);
+        m_physicsEntities.erase(entContainer->physicsObjectIterator);
+    }
+
+    delete entPointer;
+
+    m_entityMap.erase(id);
+}

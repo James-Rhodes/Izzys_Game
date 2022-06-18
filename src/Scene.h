@@ -6,7 +6,36 @@
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
+class Coin : public Entity
+{
+public:
+    Coin(Vector2 _pos, float _radius) : pos(_pos), radius(_radius){};
 
+    void Register()
+    {
+        ecs->RegisterEntityAsDrawable(id);
+
+        CirclePhysicsObjectConfig config;
+        config.radius = radius;
+        config.pos = pos;
+        config.isDynamic = true;
+        config.isRollable = false;
+        config.restitution = 0.5;
+        ecs->RegisterEntityAsPhysicsObject(id, config);
+    }
+    void Update()
+    {
+        pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+    }
+
+    void Draw()
+    {
+        DrawCircleV(pos, radius, GOLD);
+    }
+
+    Vector2 pos;
+    float radius;
+};
 class Box : public Entity
 {
 public:
@@ -67,6 +96,11 @@ public:
         if (collidedEntity->id == "Circle")
         {
             colliding = true;
+        }
+
+        if (collidedEntity->id == "Coin")
+        {
+            ecs->RemoveEntity("Coin");
         }
     }
 

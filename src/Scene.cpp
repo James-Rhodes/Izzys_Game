@@ -13,6 +13,7 @@ void Scene::Init()
     ecs.CreateEntity<Ground>("Ground2", (Vector2){5, 5}, 10, 2);
 
     ecs.CreateEntity<Circle>("Circle", (Vector2){-11, 5}, 1);
+    ecs.CreateEntity<Coin>("Coin", (Vector2){5, 6}, 0.3);
     ecs.CreateEntity<Box>("Box", (Vector2){-1, 5}, 1, 2);
 }
 
@@ -29,7 +30,9 @@ void Scene::Update()
         }
         else
         {
-            ecs.m_entityMap.erase(it++);
+            std::string key = it->first;
+            it++;
+            ecs.PermanentlyDeleteEntity(key);
         }
     }
 }

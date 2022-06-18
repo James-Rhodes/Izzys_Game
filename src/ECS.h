@@ -33,8 +33,6 @@ public:
     ECS() = default;
     ~ECS() = default;
 
-    void RegisterEntity(Entity &entity);
-
     template <typename T, typename... Args>
     T &CreateEntity(const std::string &id, Args &&...args)
     {
@@ -49,28 +47,15 @@ public:
     }
 
     template <typename T>
-    void RemoveEntity(const std::string &id)
+    T &GetEntity(const std::string &id)
     {
-        EntityContainer *entContainer = m_entityMap[id].get();
+        // Object must derive from Entity for this to work
+        return *(T *)(m_entityMap[id].get()->entityPointer);
+    };
 
-        T *entPointer = (T *)entContainer->entityPointer;
+    void RemoveEntity(const std::string &id);
 
-        if (entContainer->isDrawable)
-        {
-            m_drawableEntities.erase(entContainer->drawableIterator);
-        }
-
-        if (entContainer->isPhysicsObject)
-        {
-            physManager->DestroyBody(entContainer->entityPointer->physBody);
-            m_physicsEntities.erase(entContainer->physicsObjectIterator);
-        }
-
-        entContainer->toBeDeleted = true;
-
-        delete entPointer;
-    }
-
+    void RegisterEntity(Entity &entity);
     void RegisterEntityAsDrawable(const std::string &id);
 
     void RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body);
@@ -80,13 +65,6 @@ public:
     void SetPhysicsManager(b2World *_physManager);
     std::list<Entity *> &GetAllDrawableObjects();
     std::list<Entity *> &GetAllPhysicsObjects();
-
-    template <typename T>
-    T &GetEntity(const std::string &id)
-    {
-        // Object must derive from Entity for this to work
-        return *(T *)(m_entityMap[id].get()->entityPointer);
-    };
 
     void PrintDrawableEntities()
     {
@@ -115,10 +93,14 @@ public:
         }
     }
 
-    std::unordered_map<std::string, std::unique_ptr<EntityContainer>> m_entityMap;
-
 private:
+    std::unordered_map<std::string, std::unique_ptr<EntityContainer>> m_entityMap;
     std::list<Entity *> m_drawableEntities;
     std::list<Entity *> m_physicsEntities;
     b2World *physManager;
+
+    void PermanentlyDeleteEntity(const std::string id);
+
+    // void DeleteEntity()
+    friend class Scene;
 };
