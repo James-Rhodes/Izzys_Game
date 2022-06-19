@@ -19,7 +19,6 @@ void Scene::Init()
 
 void Scene::Update()
 {
-    // for (const auto &ent : ecs.m_entityMap)
     for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
     {
 
@@ -45,7 +44,6 @@ void Scene::UpdatePhysics()
 
 void Scene::Draw()
 {
-    camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
 
     // BeginDrawing();
     BeginTextureMode(screenBuffer);
@@ -69,9 +67,24 @@ void Scene::Draw()
 
     EndTextureMode();
 
+    if (currScreenWidth != GetScreenWidth() || currScreenHeight != GetScreenHeight())
+    {
+        if (currScreenHeight != GetScreenHeight())
+        {
+            currScreenHeight = GetScreenHeight();
+            currScreenWidth = currScreenHeight * (aspectRatio);
+        }
+        else
+        {
+            currScreenWidth = GetScreenWidth();
+            currScreenHeight = currScreenWidth * (1 / aspectRatio);
+        }
+        SetWindowSize(currScreenWidth, currScreenHeight);
+    }
+
     BeginDrawing();
     ClearBackground(BLACK);
-    DrawTextureRec(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Vector2){0, 0}, WHITE);
+    DrawTexturePro(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Rectangle){0, 0, (float)currScreenWidth, (float)currScreenHeight}, {0, 0}, 0, RAYWHITE);
 
     DrawFPS(10, 10);
 

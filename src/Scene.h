@@ -186,7 +186,15 @@ class Scene
 public:
     Scene()
     {
-        camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
+        minScreenWidth = 640;
+        minScreenHeight = 360;
+        currScreenWidth = minScreenWidth;
+        currScreenHeight = minScreenHeight;
+
+        screenBuffer = LoadRenderTexture(minScreenWidth, minScreenHeight); // Min Width and Height
+        SetWindowMinSize(minScreenWidth, minScreenHeight);
+        aspectRatio = (float)minScreenWidth / (float)minScreenHeight;
+        camera.offset = {(float)screenBuffer.texture.width / 2, (float)screenBuffer.texture.height / 2};
         camera.target = {0, 0};
         camera.zoom = 10;
         camera.rotation = 0;
@@ -197,8 +205,6 @@ public:
         physManager = new b2World(gravity);
         physManager->SetContactListener(&collisionManager);
         ecs.SetPhysicsManager(physManager);
-
-        screenBuffer = LoadRenderTexture(640, 360);
     };
     ~Scene()
     {
@@ -216,4 +222,9 @@ public:
     Camera2D camera = {};
     CollisionManager collisionManager;
     RenderTexture2D screenBuffer;
+    float aspectRatio;
+    int minScreenWidth;
+    int minScreenHeight;
+    int currScreenWidth;
+    int currScreenHeight;
 };
