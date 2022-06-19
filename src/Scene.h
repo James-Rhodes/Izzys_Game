@@ -191,7 +191,8 @@ public:
         currScreenWidth = minScreenWidth;
         currScreenHeight = minScreenHeight;
 
-        screenBuffer = LoadRenderTexture(minScreenWidth, minScreenHeight); // Min Width and Height
+        screenBuffer = LoadRenderTexture(minScreenWidth, minScreenHeight);
+        SetTextureFilter(screenBuffer.texture, TEXTURE_FILTER_POINT);
         SetWindowMinSize(minScreenWidth, minScreenHeight);
         aspectRatio = (float)minScreenWidth / (float)minScreenHeight;
         camera.offset = {(float)screenBuffer.texture.width / 2, (float)screenBuffer.texture.height / 2};

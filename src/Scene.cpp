@@ -38,20 +38,15 @@ void Scene::Update()
 
 void Scene::UpdatePhysics()
 {
-    // physManager.Update(GetFrameTime(), ecs.GetAllPhysicsObjects());
     physManager->Step(1 / 60.0f, 6, 2);
 }
 
 void Scene::Draw()
 {
 
-    // BeginDrawing();
     BeginTextureMode(screenBuffer);
 
     BeginMode2D(camera);
-    // rlPushMatrix();
-
-    // rlScalef(1, -1, 1);
 
     ClearBackground(RAYWHITE);
 
@@ -60,8 +55,6 @@ void Scene::Draw()
     {
         drawer->Draw();
     }
-
-    // rlPopMatrix();
 
     EndMode2D();
 
