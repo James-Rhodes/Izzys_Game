@@ -1,7 +1,7 @@
 #pragma once
 #include "raylib.h"
-#include "ECS.h"
-#include "CollisionManager.h"
+#include "EngineFiles/ECS.h"
+#include "EngineFiles/CollisionManager.h"
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
@@ -196,7 +196,7 @@ public:
         aspectRatio = (float)minScreenWidth / (float)minScreenHeight;
         camera.offset = {(float)screenBuffer.texture.width / 2, (float)screenBuffer.texture.height / 2};
         camera.target = {0, 0};
-        camera.zoom = 10;
+        camera.zoom = 64;
         camera.rotation = 0;
 
         rlDisableBackfaceCulling();

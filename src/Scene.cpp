@@ -9,12 +9,9 @@ void Scene::Run()
 
 void Scene::Init()
 {
-    ecs.CreateEntity<Ground>("Ground", (Vector2){-10, 0}, 20, 2);
-    ecs.CreateEntity<Ground>("Ground2", (Vector2){5, 5}, 10, 2);
+    ecs.CreateEntity<Ground>("Ground", (Vector2){0, -3.3}, 10, 2);
 
-    ecs.CreateEntity<Circle>("Circle", (Vector2){-11, 5}, 1);
-    ecs.CreateEntity<Coin>("Coin", (Vector2){5, 6}, 0.3);
-    ecs.CreateEntity<Box>("Box", (Vector2){-1, 5}, 1, 2);
+    // ecs.CreateEntity<Box>("Box", (Vector2){0, 0}, 1, 0.5); // Stand in Capy boi
 }
 
 void Scene::Update()

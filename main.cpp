@@ -1,6 +1,6 @@
 #include "raylib.h"
 // #include "./src/ECS.h"
-#include "./src/Game.h"
+#include "Game.h"
 #include <iostream>
 #include <string>
 
