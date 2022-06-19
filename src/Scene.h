@@ -5,6 +5,8 @@
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
+
+#include "./CharacterFiles/Capybara.h"
 class Coin : public Entity
 {
 public:

@@ -10,7 +10,7 @@ void Scene::Run()
 void Scene::Init()
 {
     ecs.CreateEntity<Ground>("Ground", (Vector2){0, -3.3}, 10, 2);
-
+    ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
     // ecs.CreateEntity<Box>("Box", (Vector2){0, 0}, 1, 0.5); // Stand in Capy boi
 }
 
