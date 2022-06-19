@@ -163,6 +163,7 @@ public:
         config.width = width;
         config.height = height;
         config.isDynamic = false;
+        config.restitution = 0;
 
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
@@ -203,7 +204,7 @@ public:
 
         rlDisableBackfaceCulling();
 
-        b2Vec2 gravity(0.0f, -20.0f);
+        b2Vec2 gravity(0.0f, -10.0f);
         physManager = new b2World(gravity);
         physManager->SetContactListener(&collisionManager);
         ecs.SetPhysicsManager(physManager);

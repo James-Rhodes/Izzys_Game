@@ -2,6 +2,7 @@
 
 void Capy::Update()
 {
+    controller.Update(physBody);
     pos = GetPosition();
 }
 
