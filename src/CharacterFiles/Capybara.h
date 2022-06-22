@@ -9,6 +9,7 @@ class Capy : public Entity
 public:
     Capy(Vector2 initPosition) : pos(initPosition)
     {
+        texture = LoadTexture("../../../assets/Capy_Sprite_Sheet.png"); // FIX THIS
     }
 
     void Register()
@@ -47,4 +48,5 @@ public:
     float timeOfLastDash = 0;
     float dashRechargeTime = 0.8;
     bool isOnGround = false;
+    Texture2D texture;
 };

@@ -10,6 +10,7 @@ void Capy::Update()
 void Capy::Draw()
 {
     DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
+    DrawTexture(texture, 0, 0, RAYWHITE);
 }
 
 Vector2 Capy::GetPosition()
@@ -45,7 +46,6 @@ void Capy::UpdateController()
     if (IsKeyPressed(KEY_UP))
 
     {
-        // if (physBody->GetLinearVelocity().y == 0)
         if (isOnGround)
         {
             float gravity = physBody->GetWorld()->GetGravity().y;
@@ -65,7 +65,7 @@ void Capy::UpdateController()
         }
     }
 
-    physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 6 : 4);
+    physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
 }
 
 void Capy::OnCollision(Entity *collidedEntity)
