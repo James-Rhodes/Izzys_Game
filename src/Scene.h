@@ -175,7 +175,7 @@ public:
 
     void Draw()
     {
-        DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BLACK);
+        DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, DARKGREEN);
         // DrawRectangleV(pos, {width, height}, BLACK);
     }
 

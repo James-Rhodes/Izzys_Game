@@ -3,13 +3,13 @@
 #include "raylib.h"
 #include <math.h>
 #include "../EngineFiles/ECS.h"
-
 class Capy : public Entity
 {
 public:
     Capy(Vector2 initPosition) : pos(initPosition)
     {
-        texture = LoadTexture("../../../assets/Capy_Sprite_Sheet.png"); // FIX THIS
+        texture = LoadTexture("./assets/Capy_Sprite_Sheet.png");
+        frameSize = {(float)texture.width / 4.0f, (float)texture.height};
     }
 
     void Register()
@@ -49,4 +49,8 @@ public:
     float dashRechargeTime = 0.8;
     bool isOnGround = false;
     Texture2D texture;
+    Vector2 frameSize;
+    float currTime = 0;
+    float frameTime = 0.2;
+    int currFrame = 0;
 };

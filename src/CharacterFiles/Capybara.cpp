@@ -9,8 +9,16 @@ void Capy::Update()
 
 void Capy::Draw()
 {
-    DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
-    DrawTexture(texture, 0, 0, RAYWHITE);
+    // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
+    // DrawTexture(texture, 0, 0, RAYWHITE);
+    int offsetX = ((currFrame) % 4) * frameSize.x;
+    int offsetY = 0;
+    if (GetTime() - currTime > frameTime)
+    {
+        currFrame++;
+        currTime = GetTime();
+    }
+    DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
 }
 
 Vector2 Capy::GetPosition()

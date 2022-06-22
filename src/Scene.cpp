@@ -46,8 +46,8 @@ void Scene::Draw()
     BeginTextureMode(screenBuffer);
 
     BeginMode2D(camera);
-
-    ClearBackground(RAYWHITE);
+    Color bg = {157, 220, 224, 255};
+    ClearBackground(bg);
 
     auto drawables = ecs.GetAllDrawableObjects();
     for (auto drawer : drawables)
