@@ -45,7 +45,8 @@ void Capy::UpdateController()
     if (IsKeyPressed(KEY_UP))
 
     {
-        if (physBody->GetLinearVelocity().y == 0)
+        // if (physBody->GetLinearVelocity().y == 0)
+        if (isOnGround)
         {
             float gravity = physBody->GetWorld()->GetGravity().y;
             float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
@@ -65,4 +66,19 @@ void Capy::UpdateController()
     }
 
     physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 6 : 4);
+}
+
+void Capy::OnCollision(Entity *collidedEntity)
+{
+    if (collidedEntity->id.rfind("Ground", 0) == 0)
+    {
+        isOnGround = true;
+    }
+}
+void Capy::OnCollisionEnd(Entity *collidedEntity)
+{
+    if (collidedEntity->id.rfind("Ground", 0) == 0)
+    {
+        isOnGround = false;
+    }
 }

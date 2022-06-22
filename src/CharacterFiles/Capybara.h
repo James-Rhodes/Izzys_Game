@@ -34,6 +34,9 @@ public:
 
     void UpdateController();
 
+    void OnCollision(Entity *collidedEntity);
+    void OnCollisionEnd(Entity *collidedEntity);
+
     Vector2 GetPosition();
 
     Vector2 pos;
@@ -43,4 +46,5 @@ public:
     float jumpHeight = 3;
     float timeOfLastDash = 0;
     float dashRechargeTime = 0.8;
+    bool isOnGround = false;
 };
