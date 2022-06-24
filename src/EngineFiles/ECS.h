@@ -1,4 +1,5 @@
 #pragma once
+#include "raylib.h"
 #include "Entity.h"
 // #include "PhysicsManager.h"
 #include <vector>
@@ -65,6 +66,8 @@ public:
     void SetPhysicsManager(b2World *_physManager);
     std::list<Entity *> &GetAllDrawableObjects();
     std::list<Entity *> &GetAllPhysicsObjects();
+    void SetSpriteSheet(Texture2D _spriteSheet);
+    Texture2D GetSpriteSheet();
 
     void PrintDrawableEntities()
     {
@@ -97,6 +100,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<EntityContainer>> m_entityMap;
     std::list<Entity *> m_drawableEntities;
     std::list<Entity *> m_physicsEntities;
+    Texture2D spriteSheet;
     b2World *physManager;
 
     void PermanentlyDeleteEntity(const std::string id);

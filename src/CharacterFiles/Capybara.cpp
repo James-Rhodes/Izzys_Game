@@ -11,20 +11,16 @@ void Capy::Draw()
 {
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
-    int offsetX = ((currFrame) % 4) * frameSize.x;
-    int offsetY = 0;
-    if (GetTime() - currTime > frameTime)
-    {
-        currFrame++;
-        currTime = GetTime();
-    }
+    Texture2D texture = ecs->GetSpriteSheet();
+    Rectangle src = animManager.GetTextureRectangle();
+    // std::cout << src.x << " , " << src.y << " , " << src.width << " , " << src.height << std::endl;
     if (currDirection == 1)
     {
-        DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
+        DrawTexturePro(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
     }
     else
     {
-        DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
+        DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
     }
 }
 
@@ -36,6 +32,7 @@ Vector2 Capy::GetPosition()
 
 void Capy::UpdateController()
 {
+    bool keyWasPressed = false;
 
     if (IsKeyDown(KEY_LEFT))
     {
@@ -47,6 +44,8 @@ void Capy::UpdateController()
 
         physBody->SetAwake(true);
         currDirection = -1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
     }
 
     if (IsKeyDown(KEY_RIGHT))
@@ -58,6 +57,8 @@ void Capy::UpdateController()
         physBody->SetLinearVelocity(newVel);
         physBody->SetAwake(true);
         currDirection = 1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
     }
 
     if (IsKeyPressed(KEY_UP))
@@ -68,6 +69,7 @@ void Capy::UpdateController()
             float gravity = physBody->GetWorld()->GetGravity().y;
             float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
             physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+            keyWasPressed = true;
         }
     }
 
@@ -79,10 +81,15 @@ void Capy::UpdateController()
 
             physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
             timeOfLastDash = GetTime();
+            animManager.SetStateLock("Dash", 0.5);
+            keyWasPressed = true;
         }
     }
-
     physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+    if (!keyWasPressed || !isOnGround)
+    {
+        animManager.SetState("Stand_Still");
+    }
 }
 
 void Capy::OnCollision(Entity *collidedEntity)

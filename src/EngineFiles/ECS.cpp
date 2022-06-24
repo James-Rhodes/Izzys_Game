@@ -127,3 +127,12 @@ void ECS::PermanentlyDeleteEntity(const std::string id)
 
     m_entityMap.erase(id);
 }
+
+void ECS::SetSpriteSheet(Texture2D _spriteSheet)
+{
+    spriteSheet = _spriteSheet;
+}
+Texture2D ECS::GetSpriteSheet()
+{
+    return spriteSheet;
+};

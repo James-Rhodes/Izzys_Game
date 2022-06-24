@@ -208,6 +208,7 @@ public:
         physManager = new b2World(gravity);
         physManager->SetContactListener(&collisionManager);
         ecs.SetPhysicsManager(physManager);
+        ecs.SetSpriteSheet(LoadTexture("./assets/Capy_Sprite_Sheet.png"));
     };
     ~Scene()
     {
