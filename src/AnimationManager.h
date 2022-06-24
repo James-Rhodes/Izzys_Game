@@ -12,25 +12,20 @@ public:
     AnimationManager(Texture2D _spriteSheet, int _startPosX, int _startPosY, int _spriteWidth, int _spriteHeight) : spriteSheet(_spriteSheet), startPosX(_startPosX), startPosY(_startPosY), spriteWidth(_spriteWidth), spriteHeight(_spriteHeight){};
     AnimationManager() = default;
 
+    // State is the name of the animation, frames is a vector of indices that relates to which images to show in order going left to right top to bottom
+    // Accumulator limit is the amount for the accumulator to pass before transitioning to next frame
     void AddAnimation(std::string _state, std::vector<int> _frames, float accumulatorLimit = -1);
 
+    // Returns the Rectangle that is to be used as src for DrawTexturePro
     Rectangle GetTextureRectangle();
-    Rectangle GetTextureRectangleAtFrame(int frame);
-    void SetState(std::string _state, float valueToAddToAccumulator = 0);
-    void SetStateLock(std::string _state, float _lockTime);
-    std::string GetCurrentState();
 
-    Texture2D spriteSheet;
-    int startPosX;
-    int startPosY;
-    int spriteWidth;
-    int spriteHeight;
-    std::string currState = "";
-    float accumulator = 0;
-    int currFrameIndex = 0;
-    float lockStartTime = 0;
-    bool isLocked = false;
-    float lockTime = 0;
+    // Sets the current state if not currently locked. Also adds to the accumulator to fascilitate frame change
+    void SetState(std::string _state, float valueToAddToAccumulator = 0);
+
+    // Locks the state to a single state for a set amount of time lockTime. This time is updated on each call to GetTextureRectangle.
+    void SetStateLock(std::string _state, float _lockTime);
+
+    std::string GetCurrentState();
 
 private:
     struct AnimationInfo
@@ -42,4 +37,16 @@ private:
     };
 
     std::unordered_map<std::string, std::unique_ptr<AnimationInfo>> m_animMap;
+    Texture2D spriteSheet;
+    int startPosX;
+    int startPosY;
+    int spriteWidth;
+    int spriteHeight;
+    std::string currState = "";
+    float accumulator = 0;
+    int currFrameIndex = 0;
+    float lockStartTime = 0;
+    bool isLocked = false;
+    float lockTime = 0;
+    Rectangle GetTextureRectangleAtFrame(int frame);
 };
