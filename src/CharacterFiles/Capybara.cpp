@@ -18,7 +18,14 @@ void Capy::Draw()
         currFrame++;
         currTime = GetTime();
     }
-    DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
+    if (currDirection == 1)
+    {
+        DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
+    }
+    else
+    {
+        DrawTexturePro(texture, (Rectangle){offsetX, offsetY, frameSize.x, frameSize.y}, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
+    }
 }
 
 Vector2 Capy::GetPosition()
@@ -39,6 +46,7 @@ void Capy::UpdateController()
         physBody->SetLinearVelocity(newVel);
 
         physBody->SetAwake(true);
+        currDirection = -1;
     }
 
     if (IsKeyDown(KEY_RIGHT))
@@ -49,6 +57,7 @@ void Capy::UpdateController()
         b2Vec2 newVel = physBody->GetLinearVelocity().x >= 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
         physBody->SetLinearVelocity(newVel);
         physBody->SetAwake(true);
+        currDirection = 1;
     }
 
     if (IsKeyPressed(KEY_UP))
@@ -68,7 +77,7 @@ void Capy::UpdateController()
         {
             float dashForce = 10 * physBody->GetMass();
 
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(dashForce, 0), true);
+            physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
             timeOfLastDash = GetTime();
         }
     }

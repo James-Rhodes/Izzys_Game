@@ -53,4 +53,5 @@ public:
     float currTime = 0;
     float frameTime = 0.2;
     int currFrame = 0;
+    int currDirection = 1; // 1 = right facing, -1 = left facing
 };
