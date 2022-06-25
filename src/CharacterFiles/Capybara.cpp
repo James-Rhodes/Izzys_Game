@@ -38,11 +38,21 @@ void Capy::UpdateController()
 
     if (IsKeyDown(KEY_LEFT))
     {
-        b2Vec2 currentPos = physBody->GetPosition();
-        physBody->SetTransform(currentPos + b2Vec2(-speed * GetFrameTime(), 0), 0);
-        b2Vec2 newVel = physBody->GetLinearVelocity().x < 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
+        // physBody->SetLinearVelocity(b2Vec2(-speed + physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y));
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        bool speedLessThanMaxSpeed = (-currVel.x < speed);
+        if (speedLessThanMaxSpeed)
+        {
+            if (isOnGround || currVel.LengthSquared() > 0.001)
+            {
+                physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            }
+        }
+        // b2Vec2 currentPos = physBody->GetPosition();
+        // physBody->SetTransform(currentPos + b2Vec2(-speed * GetFrameTime(), 0), 0);
+        // b2Vec2 newVel = physBody->GetLinearVelocity().x < 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
 
-        physBody->SetLinearVelocity(newVel);
+        // physBody->SetLinearVelocity(newVel);
 
         physBody->SetAwake(true);
         currDirection = -1;
@@ -52,11 +62,21 @@ void Capy::UpdateController()
 
     if (IsKeyDown(KEY_RIGHT))
     {
-        b2Vec2 currentPos = physBody->GetPosition();
-        physBody->SetTransform(currentPos + b2Vec2(speed * GetFrameTime(), 0), 0);
+        // physBody->SetLinearVelocity(b2Vec2(speed + physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y));
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        bool speedLessThanMaxSpeed = (currVel.x < speed);
+        if (speedLessThanMaxSpeed)
+        {
+            if (isOnGround || currVel.LengthSquared() > 0.001)
+            {
+                physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            }
+        }
+        // b2Vec2 currentPos = physBody->GetPosition();
+        // physBody->SetTransform(currentPos + b2Vec2(speed * GetFrameTime(), 0), 0);
 
-        b2Vec2 newVel = physBody->GetLinearVelocity().x >= 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
-        physBody->SetLinearVelocity(newVel);
+        // b2Vec2 newVel = physBody->GetLinearVelocity().x >= 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
+        // physBody->SetLinearVelocity(newVel);
         physBody->SetAwake(true);
         currDirection = 1;
         animManager.SetState("Run", GetFrameTime());
@@ -94,6 +114,7 @@ void Capy::UpdateController()
     {
         animManager.SetState("Stand_Still");
     }
+    // std::cout << isOnGround << std::endl;
 }
 
 void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
