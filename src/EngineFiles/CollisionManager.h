@@ -15,8 +15,8 @@ public:
 
         if (ent1 && ent2)
         {
-            ent1->OnCollision(ent2);
-            ent2->OnCollision(ent1);
+            ent1->OnCollision(ent2, contact->GetFixtureA()->IsSensor());
+            ent2->OnCollision(ent1, contact->GetFixtureB()->IsSensor());
         }
     };
 
@@ -27,8 +27,8 @@ public:
 
         if (ent1 && ent2)
         {
-            ent1->OnCollisionEnd(ent2);
-            ent2->OnCollisionEnd(ent1);
+            ent1->OnCollisionEnd(ent2, contact->GetFixtureA()->IsSensor());
+            ent2->OnCollisionEnd(ent1, contact->GetFixtureB()->IsSensor());
         }
     };
 };

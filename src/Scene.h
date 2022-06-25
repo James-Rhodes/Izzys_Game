@@ -7,6 +7,8 @@
 #include "rlgl.h"
 
 #include "./CharacterFiles/Capybara.h"
+#include "./CharacterFiles/Frog.h"
+
 class Coin : public Entity
 {
 public:

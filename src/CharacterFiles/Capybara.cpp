@@ -5,6 +5,8 @@ void Capy::Update()
     // controller.Update(physBody);
     UpdateController();
     pos = GetPosition();
+
+    // std::cout<<feetSensor->
 }
 
 void Capy::Draw()
@@ -67,7 +69,9 @@ void Capy::UpdateController()
         if (isOnGround)
         {
             float gravity = physBody->GetWorld()->GetGravity().y;
-            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+            // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity);
+
             physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
             keyWasPressed = true;
         }
@@ -92,17 +96,20 @@ void Capy::UpdateController()
     }
 }
 
-void Capy::OnCollision(Entity *collidedEntity)
+void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
 {
-    if (collidedEntity->id.rfind("Ground", 0) == 0)
+
+    if (detectedBySensor)
     {
         isOnGround = true;
     }
 }
-void Capy::OnCollisionEnd(Entity *collidedEntity)
+void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
 {
-    if (collidedEntity->id.rfind("Ground", 0) == 0)
+
+    if (detectedBySensor)
     {
+        std::cout << "We Here" << std::endl;
         isOnGround = false;
     }
 }

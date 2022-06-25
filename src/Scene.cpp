@@ -13,6 +13,7 @@ void Scene::Init()
     ecs.CreateEntity<Ground>("Ground2", (Vector2){3, 0}, 2, 1);
 
     ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
+    ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
     // ecs.CreateEntity<Box>("Box", (Vector2){0, 0}, 1, 0.5); // Stand in Capy boi
 }
 
