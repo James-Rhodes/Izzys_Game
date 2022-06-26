@@ -56,6 +56,11 @@ void Scene::Draw()
         drawer->Draw();
     }
 
+    if (debugDrawer.enabled)
+    {
+        physManager->DebugDraw();
+    }
+
     EndMode2D();
 
     EndTextureMode();

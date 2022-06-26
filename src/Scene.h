@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "EngineFiles/ECS.h"
 #include "EngineFiles/CollisionManager.h"
+#include "EngineFiles/B2D_Debug_Drawer.h"
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
@@ -209,6 +210,10 @@ public:
         b2Vec2 gravity(0.0f, -10.0f);
         physManager = new b2World(gravity);
         physManager->SetContactListener(&collisionManager);
+        physManager->SetDebugDraw(&debugDrawer);
+        debugDrawer.SetFlags(b2Draw::e_shapeBit);
+        debugDrawer.enabled = true;
+
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Capy_Sprite_Sheet.png"));
     };
@@ -227,6 +232,7 @@ public:
     b2World *physManager;
     Camera2D camera = {};
     CollisionManager collisionManager;
+    DebugDrawer debugDrawer;
     RenderTexture2D screenBuffer;
     float aspectRatio;
     int minScreenWidth;
