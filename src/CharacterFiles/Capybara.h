@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include <math.h>
 #include "../EngineFiles/ECS.h"
-#include "../AnimationManager.h"
+#include "../EngineFiles/AnimationManager.h"
 class Capy : public Entity
 {
 public:
