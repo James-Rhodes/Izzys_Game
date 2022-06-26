@@ -60,8 +60,8 @@ public:
     Vector2 pos;
     float width = 1;
     float height = 0.5;
-    float speed = 3;
-    float jumpHeight = 3;
+    float speed = 5;
+    float jumpHeight = 1.5;
     float timeOfLastDash = 0;
     float dashRechargeTime = 0.8;
     int isOnGround = 0;

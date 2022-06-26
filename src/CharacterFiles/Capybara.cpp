@@ -82,7 +82,7 @@ void Capy::UpdateController()
     {
         if (GetTime() - timeOfLastDash > dashRechargeTime)
         {
-            float dashForce = 10 * physBody->GetMass();
+            float dashForce = 13 * physBody->GetMass();
 
             physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
             timeOfLastDash = GetTime();
