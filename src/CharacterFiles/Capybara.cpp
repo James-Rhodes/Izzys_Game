@@ -38,23 +38,13 @@ void Capy::UpdateController()
 
     if (IsKeyDown(KEY_LEFT))
     {
-        // physBody->SetLinearVelocity(b2Vec2(-speed + physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y));
         b2Vec2 currVel = physBody->GetLinearVelocity();
-        bool speedLessThanMaxSpeed = (-currVel.x < speed);
-        if (speedLessThanMaxSpeed)
+        if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
-            if (isOnGround || currVel.LengthSquared() > 0.001)
-            {
-                physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-            }
+
+            physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
         }
-        // b2Vec2 currentPos = physBody->GetPosition();
-        // physBody->SetTransform(currentPos + b2Vec2(-speed * GetFrameTime(), 0), 0);
-        // b2Vec2 newVel = physBody->GetLinearVelocity().x < 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
 
-        // physBody->SetLinearVelocity(newVel);
-
-        physBody->SetAwake(true);
         currDirection = -1;
         animManager.SetState("Run", GetFrameTime());
         keyWasPressed = true;
@@ -62,22 +52,13 @@ void Capy::UpdateController()
 
     if (IsKeyDown(KEY_RIGHT))
     {
-        // physBody->SetLinearVelocity(b2Vec2(speed + physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y));
         b2Vec2 currVel = physBody->GetLinearVelocity();
-        bool speedLessThanMaxSpeed = (currVel.x < speed);
-        if (speedLessThanMaxSpeed)
+        if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
-            if (isOnGround || currVel.LengthSquared() > 0.001)
-            {
-                physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-            }
-        }
-        // b2Vec2 currentPos = physBody->GetPosition();
-        // physBody->SetTransform(currentPos + b2Vec2(speed * GetFrameTime(), 0), 0);
 
-        // b2Vec2 newVel = physBody->GetLinearVelocity().x >= 0 ? b2Vec2(physBody->GetLinearVelocity().x, physBody->GetLinearVelocity().y) : b2Vec2(0, physBody->GetLinearVelocity().y);
-        // physBody->SetLinearVelocity(newVel);
-        physBody->SetAwake(true);
+            physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+        }
+
         currDirection = 1;
         animManager.SetState("Run", GetFrameTime());
         keyWasPressed = true;
@@ -90,7 +71,7 @@ void Capy::UpdateController()
         {
             float gravity = physBody->GetWorld()->GetGravity().y;
             // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity);
+            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
 
             physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
             keyWasPressed = true;
@@ -114,7 +95,6 @@ void Capy::UpdateController()
     {
         animManager.SetState("Stand_Still");
     }
-    // std::cout << isOnGround << std::endl;
 }
 
 void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
@@ -122,7 +102,7 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
 
     if (detectedBySensor)
     {
-        isOnGround = true;
+        isOnGround++;
     }
 }
 void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
@@ -130,7 +110,6 @@ void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
 
     if (detectedBySensor)
     {
-        std::cout << "We Here" << std::endl;
-        isOnGround = false;
+        isOnGround--;
     }
 }
