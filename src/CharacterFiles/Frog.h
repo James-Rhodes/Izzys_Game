@@ -29,7 +29,7 @@ public:
 
         ecs->RegisterEntityAsPhysicsObject(id, config);
         b2PolygonShape rect;
-        rect.SetAsBox(width / 4, height / 8, b2Vec2(0, -height / 2), 0);
+        rect.SetAsBox(width / 2 - 0.01, height / 8, b2Vec2(0, -height / 2), 0);
 
         b2FixtureDef feetSensorDef;
         feetSensorDef.isSensor = true;
@@ -64,7 +64,7 @@ public:
     float jumpHeight = 3;
     float timeOfLastDash = 0;
     float dashRechargeTime = 0.8;
-    bool isOnGround = false;
+    int isOnGround = 0;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;
