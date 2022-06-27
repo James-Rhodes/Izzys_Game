@@ -8,6 +8,12 @@ void Frog::Update()
 
 void Frog::Draw()
 {
+    if (isSwinging)
+    {
+        Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
+        DrawLineEx(pos, flyPos, 0.2, PINK);
+        DrawCircleV(flyPos, 0.1, PINK);
+    }
     DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
     // Texture2D texture = ecs->GetSpriteSheet();
@@ -39,7 +45,8 @@ void Frog::UpdateController()
         if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
 
-            physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            b2Vec2 force = isSwinging ? b2Vec2(0.25 * -physBody->GetMass() * (speed / GetFrameTime()), 0) : b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
+            physBody->ApplyForceToCenter(force, true);
         }
 
         currDirection = -1;
@@ -52,8 +59,8 @@ void Frog::UpdateController()
         b2Vec2 currVel = physBody->GetLinearVelocity();
         if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
-
-            physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            b2Vec2 force = isSwinging ? b2Vec2(0.25 * physBody->GetMass() * (speed / GetFrameTime()), 0) : b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
+            physBody->ApplyForceToCenter(force, true);
         }
 
         currDirection = 1;
@@ -84,7 +91,16 @@ void Frog::UpdateController()
         }
         else
         {
-            rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+            Entity *nearestFly = GetNearestFly();
+            if (nearestFly != nullptr)
+            {
+                jointDef.bodyB = nearestFly->physBody;
+                float distance = b2Distance(physBody->GetPosition(), nearestFly->physBody->GetPosition());
+                jointDef.length = distance;
+                jointDef.minLength = std::max(distance - 0.3, 0.0);
+                jointDef.maxLength = distance + 0.3;
+                rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+            }
         }
         isSwinging = !isSwinging;
     }
@@ -110,4 +126,24 @@ void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
     {
         isOnGround--;
     }
+}
+
+Entity *Frog::GetNearestFly()
+{
+    float minDistSquared = INFINITY;
+    Entity *closestEnt = nullptr;
+
+    for (auto ent : ecs->GetAllPhysicsObjects())
+    {
+        if (ent->id.rfind("Fly", 0) == 0)
+        {
+            float currentDistanceSq = b2DistanceSquared(physBody->GetPosition(), ent->physBody->GetPosition());
+            if (currentDistanceSq < minDistSquared)
+            {
+                minDistSquared = currentDistanceSq;
+                closestEnt = ent;
+            }
+        }
+    }
+    return closestEnt;
 }

@@ -41,16 +41,13 @@ public:
         physBody->SetBullet(true);
 
         jointDef.bodyA = physBody;
-        jointDef.bodyB = ecs->GetEntity<Ground>("SwingPoint").physBody;
-        jointDef.length = 1;
-        jointDef.minLength = 1;
-        jointDef.maxLength = 3;
-        jointDef.stiffness = 1.0;
+
+        jointDef.stiffness = 10000.0;
         jointDef.collideConnected = false;
         jointDef.localAnchorA = b2Vec2(0, 0);
         jointDef.localAnchorB = b2Vec2(0, 0);
 
-        // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+                // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
 
         physBody->SetLinearDamping(2);
 
@@ -72,6 +69,8 @@ public:
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor);
 
     Vector2 GetPosition();
+
+    Entity *GetNearestFly();
 
     Vector2 pos;
     float width = 1;
