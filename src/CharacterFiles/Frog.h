@@ -4,6 +4,8 @@
 #include <math.h>
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
+#include "../SceneFiles/Ground.h"
+
 class Frog : public Entity
 {
 public:
@@ -38,6 +40,20 @@ public:
         feetSensor = physBody->CreateFixture(&feetSensorDef);
         physBody->SetBullet(true);
 
+        jointDef.bodyA = physBody;
+        jointDef.bodyB = ecs->GetEntity<Ground>("SwingPoint").physBody;
+        jointDef.length = 1;
+        jointDef.minLength = 1;
+        jointDef.maxLength = 3;
+        jointDef.stiffness = 1.0;
+        jointDef.collideConnected = false;
+        jointDef.localAnchorA = b2Vec2(0, 0);
+        jointDef.localAnchorB = b2Vec2(0, 0);
+
+        // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+
+        physBody->SetLinearDamping(2);
+
         // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 0, 66, 32);
 
         // animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
@@ -60,13 +76,14 @@ public:
     Vector2 pos;
     float width = 1;
     float height = 0.5;
-    float speed = 3;
-    float jumpHeight = 3;
-    float timeOfLastDash = 0;
-    float dashRechargeTime = 0.8;
+    float speed = 4;
+    float jumpHeight = 4;
     int isOnGround = 0;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;
     b2Fixture *feetSensor;
+    b2DistanceJoint *rope;
+    b2DistanceJointDef jointDef;
+    bool isSwinging = false;
 };

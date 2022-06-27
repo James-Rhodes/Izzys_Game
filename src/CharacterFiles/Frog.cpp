@@ -77,15 +77,16 @@ void Frog::UpdateController()
 
     if (IsKeyPressed(KEY_C))
     {
-        if (GetTime() - timeOfLastDash > dashRechargeTime)
-        {
-            float dashForce = 10 * physBody->GetMass();
 
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
-            timeOfLastDash = GetTime();
-            // animManager.SetStateLock("Dash", 0.5);
-            keyWasPressed = true;
+        if (isSwinging)
+        {
+            ecs->GetPhysicsManager()->DestroyJoint(rope);
         }
+        else
+        {
+            rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+        }
+        isSwinging = !isSwinging;
     }
     physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
     if (!keyWasPressed || !isOnGround)

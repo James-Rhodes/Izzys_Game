@@ -64,6 +64,8 @@ public:
     void RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config);
 
     void SetPhysicsManager(b2World *_physManager);
+    b2World *GetPhysicsManager();
+
     std::list<Entity *> &GetAllDrawableObjects();
     std::list<Entity *> &GetAllPhysicsObjects();
     void SetSpriteSheet(Texture2D _spriteSheet);

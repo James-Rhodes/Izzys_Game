@@ -99,6 +99,11 @@ void ECS::SetPhysicsManager(b2World *_physManager)
     physManager = _physManager;
 }
 
+b2World *ECS::GetPhysicsManager()
+{
+    return physManager;
+}
+
 void ECS::RemoveEntity(const std::string &id)
 {
     EntityContainer *entContainer = m_entityMap[id].get();
