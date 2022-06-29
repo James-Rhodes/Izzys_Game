@@ -8,12 +8,13 @@ void Frog::Update()
 
 void Frog::Draw()
 {
-    // if (isSwinging)
-    // {
-    //     // Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
-    //     // DrawLineEx(pos, flyPos, 0.2, PINK);
-    //     DrawCircleV(flyPos, 0.1, PINK);
-    // }
+    if (isSwinging)
+    {
+        // Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
+        // DrawLineEx(pos, flyPos, 0.2, PINK);
+        // DrawCircleV(flyPos, 0.1, PINK);
+        tongue.Draw();
+    }
     DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
     // Texture2D texture = ecs->GetSpriteSheet();

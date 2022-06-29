@@ -4,6 +4,7 @@
 #include "raymath.h"
 #include "box2d.h"
 #include <vector>
+#include "CatmullRom.h"
 class Tongue
 {
 public:
@@ -12,12 +13,14 @@ public:
     {
         chainBodies.resize(numChainLinks);
         std::fill(chainBodies.begin(), chainBodies.end(), nullptr);
+
+        // splineDrawer = CatmullRomSplineDrawer()
     };
 
     void Create(b2World *world, b2Body *beginBody, b2Vec2 beginBodyLocalCoords, b2Body *endBody, b2Vec2 endBodyLocalCoords)
     {
-        Vector2 beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
-        Vector2 endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
+        beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
+        endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
 
         float distance = Vector2Distance(beginPos, endPos);
         Vector2 gradient = Vector2Divide(Vector2Subtract(endPos, beginPos), {distance, distance});
@@ -78,6 +81,7 @@ public:
         revoluteJointDef.bodyA = link;
         revoluteJointDef.bodyB = endBody;
         world->CreateJoint(&revoluteJointDef);
+        isActive = true;
     }
 
     void Delete(b2World *world)
@@ -87,13 +91,24 @@ public:
             world->DestroyBody(body);
             body = nullptr;
         }
+        isActive = false;
     };
 
-    void Draw(){
+    void Draw()
+    {
+        if (isActive)
+        {
+            splineDrawer.DrawCatmullRomSpline(chainBodies, beginPos, endPos, 0.1, PINK, true);
+        }
         // DrawLineEx(beginPt, endPt, 0.1, PINK);
     };
 
+private:
     // Vector2 beginPt, endPt;
     int numChainLinks;
     std::vector<b2Body *> chainBodies;
+    Vector2 beginPos;
+    Vector2 endPos;
+    bool isActive = false;
+    CatmullRomSplineDrawer splineDrawer;
 };
