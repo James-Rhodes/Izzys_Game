@@ -17,10 +17,13 @@ public:
         // splineDrawer = CatmullRomSplineDrawer()
     };
 
-    void Create(b2World *world, b2Body *beginBody, b2Vec2 beginBodyLocalCoords, b2Body *endBody, b2Vec2 endBodyLocalCoords)
+    void Create(b2World *world, b2Body *_beginBody, b2Vec2 beginBodyLocalCoords, b2Body *_endBody, b2Vec2 endBodyLocalCoords)
     {
-        beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
-        endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
+        beginBody = _beginBody;
+        endBody = _endBody;
+
+        Vector2 beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
+        Vector2 endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
 
         float distance = Vector2Distance(beginPos, endPos);
         Vector2 gradient = Vector2Divide(Vector2Subtract(endPos, beginPos), {distance, distance});
@@ -98,7 +101,9 @@ public:
     {
         if (isActive)
         {
-            splineDrawer.DrawCatmullRomSpline(chainBodies, beginPos, endPos, 0.1, PINK, true);
+            splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, endBody, 0.1, PINK, false);
+            Vector2 endPos = (Vector2){endBody->GetPosition().x, endBody->GetPosition().y};
+            DrawCircleV(endPos, 0.05, PINK);
         }
         // DrawLineEx(beginPt, endPt, 0.1, PINK);
     };
@@ -107,8 +112,8 @@ private:
     // Vector2 beginPt, endPt;
     int numChainLinks;
     std::vector<b2Body *> chainBodies;
-    Vector2 beginPos;
-    Vector2 endPos;
+    b2Body *beginBody;
+    b2Body *endBody;
     bool isActive = false;
     CatmullRomSplineDrawer splineDrawer;
 };
