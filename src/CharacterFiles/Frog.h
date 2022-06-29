@@ -6,6 +6,8 @@
 #include "../EngineFiles/AnimationManager.h"
 #include "../SceneFiles/Ground.h"
 
+#include "Tongue.h"
+
 class Frog : public Entity
 {
 public:
@@ -47,7 +49,7 @@ public:
         jointDef.localAnchorA = b2Vec2(0, 0);
         jointDef.localAnchorB = b2Vec2(0, 0);
 
-                // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+        // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
 
         physBody->SetLinearDamping(2);
 
@@ -57,6 +59,8 @@ public:
         // animManager.AddAnimation("Stand_Still", {0});
         // animManager.AddAnimation("Dash", {3});
         // animManager.SetState("Stand_Still");
+
+        tongue = Tongue(5);
     }
 
     void Update();
@@ -85,4 +89,6 @@ public:
     b2DistanceJoint *rope;
     b2DistanceJointDef jointDef;
     bool isSwinging = false;
+
+    Tongue tongue;
 };

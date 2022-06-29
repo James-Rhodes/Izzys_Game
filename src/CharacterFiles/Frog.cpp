@@ -8,12 +8,12 @@ void Frog::Update()
 
 void Frog::Draw()
 {
-    if (isSwinging)
-    {
-        Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
-        DrawLineEx(pos, flyPos, 0.2, PINK);
-        DrawCircleV(flyPos, 0.1, PINK);
-    }
+    // if (isSwinging)
+    // {
+    //     // Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
+    //     // DrawLineEx(pos, flyPos, 0.2, PINK);
+    //     DrawCircleV(flyPos, 0.1, PINK);
+    // }
     DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
     // Texture2D texture = ecs->GetSpriteSheet();
@@ -27,6 +27,7 @@ void Frog::Draw()
     // {
     //     DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
     // }
+    // tongue.Draw();
 }
 
 Vector2 Frog::GetPosition()
@@ -87,20 +88,22 @@ void Frog::UpdateController()
 
         if (isSwinging)
         {
-            ecs->GetPhysicsManager()->DestroyJoint(rope);
+            // ecs->GetPhysicsManager()->DestroyJoint(rope);
+            tongue.Delete(ecs->GetPhysicsManager());
         }
         else
         {
             Entity *nearestFly = GetNearestFly();
-            if (nearestFly != nullptr)
-            {
-                jointDef.bodyB = nearestFly->physBody;
-                float distance = b2Distance(physBody->GetPosition(), nearestFly->physBody->GetPosition());
-                jointDef.length = distance;
-                jointDef.minLength = std::max(distance - 0.3, 0.0);
-                jointDef.maxLength = distance + 0.3;
-                rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
-            }
+            // if (nearestFly != nullptr)
+            // {
+            //     jointDef.bodyB = nearestFly->physBody;
+            //     float distance = b2Distance(physBody->GetPosition(), nearestFly->physBody->GetPosition());
+            //     jointDef.length = distance;
+            //     jointDef.minLength = std::max(distance - 0.3, 0.0);
+            //     jointDef.maxLength = distance + 0.3;
+            //     rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
+            // }
+            tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 2}, nearestFly->physBody, (b2Vec2){0, 0});
         }
         isSwinging = !isSwinging;
     }
