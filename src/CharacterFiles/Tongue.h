@@ -89,12 +89,15 @@ public:
 
     void Delete(b2World *world)
     {
-        for (b2Body *body : chainBodies)
+        if (isActive)
         {
-            world->DestroyBody(body);
-            body = nullptr;
+            for (b2Body *body : chainBodies)
+            {
+                world->DestroyBody(body);
+                body = nullptr;
+            }
+            isActive = false;
         }
-        isActive = false;
     };
 
     void Draw()
@@ -108,8 +111,17 @@ public:
         // DrawLineEx(beginPt, endPt, 0.1, PINK);
     };
 
+    Vector2 GetBeginPos()
+    {
+        return {beginBody->GetPosition().x, beginBody->GetPosition().y};
+    }
+
+    Vector2 GetEndPos()
+    {
+        return {endBody->GetPosition().x, endBody->GetPosition().y};
+    }
+
 private:
-    // Vector2 beginPt, endPt;
     int numChainLinks;
     std::vector<b2Body *> chainBodies;
     b2Body *beginBody;

@@ -75,6 +75,7 @@ public:
     Vector2 GetPosition();
 
     Entity *GetNearestFly();
+    Vector2 GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter);
 
     Vector2 pos;
     float width = 1;
@@ -89,6 +90,8 @@ public:
     b2DistanceJoint *rope;
     b2DistanceJointDef jointDef;
     bool isSwinging = false;
+    bool isInSwingDismount = false;
+    float swingStrength = 0.8;
 
     Tongue tongue;
 };

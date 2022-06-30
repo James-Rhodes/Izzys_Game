@@ -46,8 +46,19 @@ void Frog::UpdateController()
         b2Vec2 currVel = physBody->GetLinearVelocity();
         if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
+            b2Vec2 force;
 
-            b2Vec2 force = isSwinging ? b2Vec2(0.25 * -physBody->GetMass() * (speed / GetFrameTime()), 0) : b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
+            if (isSwinging)
+            {
+                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), -swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
+
+                force = tangentialForce.x <= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
+            }
+            else
+            {
+                force = b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
+            }
+
             physBody->ApplyForceToCenter(force, true);
         }
 
@@ -61,7 +72,18 @@ void Frog::UpdateController()
         b2Vec2 currVel = physBody->GetLinearVelocity();
         if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
         {
-            b2Vec2 force = isSwinging ? b2Vec2(0.25 * physBody->GetMass() * (speed / GetFrameTime()), 0) : b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
+            b2Vec2 force;
+
+            if (isSwinging)
+            {
+                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
+
+                force = tangentialForce.x >= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
+            }
+            else
+            {
+                force = b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
+            }
             physBody->ApplyForceToCenter(force, true);
         }
 
@@ -90,25 +112,39 @@ void Frog::UpdateController()
         if (isSwinging)
         {
             // ecs->GetPhysicsManager()->DestroyJoint(rope);
+            b2Vec2 currentVel = physBody->GetPosition();
+            currentVel.Normalize();
+
             tongue.Delete(ecs->GetPhysicsManager());
+            // float swingStrength = 10; // Fix this, it is supposed to add a little hup to the tongue dismount
+            // physBody->ApplyLinearImpulseToCenter(b2Vec2(currentVel.x * swingStrength, currentVel.y * swingStrength), true);
+            isInSwingDismount = true;
         }
         else
         {
             Entity *nearestFly = GetNearestFly();
-            // if (nearestFly != nullptr)
-            // {
-            //     jointDef.bodyB = nearestFly->physBody;
-            //     float distance = b2Distance(physBody->GetPosition(), nearestFly->physBody->GetPosition());
-            //     jointDef.length = distance;
-            //     jointDef.minLength = std::max(distance - 0.3, 0.0);
-            //     jointDef.maxLength = distance + 0.3;
-            //     rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
-            // }
-            tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 2}, nearestFly->physBody, (b2Vec2){0, 0});
+            if (nearestFly != nullptr)
+            {
+                tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 2}, nearestFly->physBody, (b2Vec2){0, 0});
+            }
         }
         isSwinging = !isSwinging;
     }
-    physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+
+    if (isInSwingDismount && !isOnGround)
+    { // In air after dismount
+        physBody->SetGravityScale(7);
+    }
+    else if (isInSwingDismount && isOnGround) // landed after swing dismount
+    {
+        isInSwingDismount = false;
+    }
+    else
+    {
+        physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+    }
+    // physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+
     if (!keyWasPressed || !isOnGround)
     {
         // animManager.SetState("Stand_Still");
@@ -150,4 +186,14 @@ Entity *Frog::GetNearestFly()
         }
     }
     return closestEnt;
+}
+
+Vector2 Frog::GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter)
+{
+    Vector3 outOfScreen = {0, 0, 1};
+    Vector3 towardsCenter = {circleCenter.x - bodyPos.x, circleCenter.y - bodyPos.y, 0};
+
+    Vector3 cross = Vector3CrossProduct(towardsCenter, outOfScreen);
+    Vector2 result = {cross.x, cross.y};
+    return Vector2Normalize(result);
 }
