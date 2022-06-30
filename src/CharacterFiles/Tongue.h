@@ -50,6 +50,7 @@ public:
         link->CreateFixture(&fixtureDef);
 
         b2RevoluteJointDef revoluteJointDef;
+
         revoluteJointDef.localAnchorA.Set(beginBodyLocalCoords.x, beginBodyLocalCoords.y);
         revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
 
@@ -57,10 +58,12 @@ public:
         revoluteJointDef.bodyB = link;
         world->CreateJoint(&revoluteJointDef);
 
-        // revoluteJointDef.localAnchorA.Set(0.75 * boxWidth, 0);
-        // revoluteJointDef.localAnchorB.Set(-0.75 * boxWidth, 0);
         revoluteJointDef.localAnchorA.Set(boxWidth, 0);
         revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
+
+        revoluteJointDef.lowerAngle = -maxDeflectionAngle;
+        revoluteJointDef.upperAngle = maxDeflectionAngle;
+        revoluteJointDef.enableLimit = true;
 
         // use same definitions to create multiple bodies
         for (int i = 0; i < numChainLinks - 1; i++)
@@ -83,6 +86,8 @@ public:
         revoluteJointDef.localAnchorB.Set(endBodyLocalCoords.x, endBodyLocalCoords.y);
         revoluteJointDef.bodyA = link;
         revoluteJointDef.bodyB = endBody;
+        revoluteJointDef.enableLimit = false;
+
         world->CreateJoint(&revoluteJointDef);
         isActive = true;
     }
@@ -128,4 +133,5 @@ private:
     b2Body *endBody;
     bool isActive = false;
     CatmullRomSplineDrawer splineDrawer;
+    float maxDeflectionAngle = PI / 8;
 };

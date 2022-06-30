@@ -60,7 +60,7 @@ public:
         // animManager.AddAnimation("Dash", {3});
         // animManager.SetState("Stand_Still");
 
-        tongue = Tongue(5);
+        tongue = Tongue(3);
     }
 
     void Update();
@@ -91,7 +91,7 @@ public:
     b2DistanceJointDef jointDef;
     bool isSwinging = false;
     bool isInSwingDismount = false;
-    float swingStrength = 0.8;
+    float swingStrength = 0.5;
 
     Tongue tongue;
 };
