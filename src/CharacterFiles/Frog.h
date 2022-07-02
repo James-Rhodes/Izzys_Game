@@ -53,12 +53,12 @@ public:
 
         physBody->SetLinearDamping(2);
 
-        // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 0, 66, 32);
+        animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 34, 64);
 
-        // animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
-        // animManager.AddAnimation("Stand_Still", {0});
-        // animManager.AddAnimation("Dash", {3});
-        // animManager.SetState("Stand_Still");
+        animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+        animManager.AddAnimation("Stand_Still", {0});
+        animManager.AddAnimation("Swing", {3});
+        animManager.SetState("Stand_Still");
 
         tongue = Tongue(3);
     }
@@ -78,8 +78,8 @@ public:
     Vector2 GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter);
 
     Vector2 pos;
-    float width = 1;
-    float height = 0.5;
+    float width = 0.5;
+    float height = 1;
     float speed = 4;
     float jumpHeight = 4;
     int isOnGround = 0;

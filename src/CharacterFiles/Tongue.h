@@ -22,6 +22,9 @@ public:
         beginBody = _beginBody;
         endBody = _endBody;
 
+        beginBodyOffset = beginBodyLocalCoords;
+        endBodyOffset = endBodyLocalCoords;
+
         Vector2 beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
         Vector2 endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
 
@@ -109,7 +112,7 @@ public:
     {
         if (isActive)
         {
-            splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, endBody, 0.1, PINK, false);
+            splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, beginBodyOffset, endBody, endBodyOffset, 0.1, PINK, false);
             Vector2 endPos = (Vector2){endBody->GetPosition().x, endBody->GetPosition().y};
             DrawCircleV(endPos, 0.05, PINK);
         }
@@ -131,6 +134,8 @@ private:
     std::vector<b2Body *> chainBodies;
     b2Body *beginBody;
     b2Body *endBody;
+    b2Vec2 beginBodyOffset;
+    b2Vec2 endBodyOffset;
     bool isActive = false;
     CatmullRomSplineDrawer splineDrawer;
     float maxDeflectionAngle = PI / 8;

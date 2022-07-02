@@ -9,7 +9,7 @@ public:
     // CatmullRomSplineDrawer() = default;
     CatmullRomSplineDrawer(int _smoothness = 10, float _alpha = 0.5) : smoothness(_smoothness), alpha(_alpha){};
 
-    void DrawCatmullRomSpline(const std::vector<b2Body *> &P, b2Body *beginBod, b2Body *endBod, float thickness, Color col, bool drawControlPts = false)
+    void DrawCatmullRomSpline(const std::vector<b2Body *> &P, b2Body *beginBod, b2Vec2 beginBodyOffset, b2Body *endBod, b2Vec2 endBodyOffset, float thickness, Color col, bool drawControlPts = false)
     {
         int numPts = P.size();
         if (P.size() < 2)
@@ -17,8 +17,8 @@ public:
             throw std::invalid_argument("ERROR: Not enough points for drawing Catmull Rom Spline. At least 4 is required.");
             return;
         }
-        Vector2 beginPos = b2Vec2ToVector2(beginBod->GetPosition());
-        Vector2 endPos = b2Vec2ToVector2(endBod->GetPosition());
+        Vector2 beginPos = b2Vec2ToVector2(beginBod->GetPosition() + beginBodyOffset);
+        Vector2 endPos = b2Vec2ToVector2(endBod->GetPosition() + endBodyOffset);
 
         // Calculate Control Pts
         // Vector2 beginControlPt = b2Vec2ToVector2(P[0]->GetPosition() + (P[0]->GetPosition() - P[1]->GetPosition()));

@@ -8,6 +8,21 @@ void Frog::Update()
 
 void Frog::Draw()
 {
+
+    // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
+    // DrawTexture(texture, 0, 0, RAYWHITE);
+    Texture2D texture = ecs->GetSpriteSheet();
+    Rectangle src = animManager.GetTextureRectangle();
+    // // std::cout << src.x << " , " << src.y << " , " << src.width << " , " << src.height << std::endl;
+    if (currDirection == 1)
+    {
+        DrawTexturePro(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
+    }
+    else
+    {
+        DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
+    }
+    // tongue.Draw();
     if (isSwinging)
     {
         // Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
@@ -15,20 +30,6 @@ void Frog::Draw()
         // DrawCircleV(flyPos, 0.1, PINK);
         tongue.Draw();
     }
-    DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
-    // DrawTexture(texture, 0, 0, RAYWHITE);
-    // Texture2D texture = ecs->GetSpriteSheet();
-    // Rectangle src = animManager.GetTextureRectangle();
-    // // std::cout << src.x << " , " << src.y << " , " << src.width << " , " << src.height << std::endl;
-    // if (currDirection == 1)
-    // {
-    //     DrawTexturePro(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
-    // }
-    // else
-    // {
-    //     DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
-    // }
-    // tongue.Draw();
 }
 
 Vector2 Frog::GetPosition()
@@ -63,7 +64,7 @@ void Frog::UpdateController()
         }
 
         currDirection = -1;
-        // animManager.SetState("Run", GetFrameTime());
+        animManager.SetState("Run", GetFrameTime());
         keyWasPressed = true;
     }
 
@@ -88,7 +89,7 @@ void Frog::UpdateController()
         }
 
         currDirection = 1;
-        // animManager.SetState("Run", GetFrameTime());
+        animManager.SetState("Run", GetFrameTime());
         keyWasPressed = true;
     }
 
@@ -125,7 +126,7 @@ void Frog::UpdateController()
             Entity *nearestFly = GetNearestFly();
             if (nearestFly != nullptr)
             {
-                tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 2}, nearestFly->physBody, (b2Vec2){0, 0});
+                tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
             }
         }
         isSwinging = !isSwinging;
@@ -147,7 +148,11 @@ void Frog::UpdateController()
 
     if (!keyWasPressed || !isOnGround)
     {
-        // animManager.SetState("Stand_Still");
+        animManager.SetState("Stand_Still");
+    }
+    if (isSwinging)
+    {
+        animManager.SetState("Swing");
     }
 }
 

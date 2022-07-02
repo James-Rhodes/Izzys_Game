@@ -41,7 +41,7 @@ public:
         debugDrawer.enabled = false;
 
         ecs.SetPhysicsManager(physManager);
-        ecs.SetSpriteSheet(LoadTexture("./assets/Capy_Sprite_Sheet.png"));
+        ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
     };
     ~Scene()
     {
