@@ -10,10 +10,9 @@ void Frog::Draw()
 {
 
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
-    // DrawTexture(texture, 0, 0, RAYWHITE);
+
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
-    // // std::cout << src.x << " , " << src.y << " , " << src.width << " , " << src.height << std::endl;
     if (currDirection == 1)
     {
         DrawTexturePro(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
@@ -22,12 +21,8 @@ void Frog::Draw()
     {
         DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
     }
-    // tongue.Draw();
     if (isSwinging)
     {
-        // Vector2 flyPos = (Vector2){jointDef.bodyB->GetPosition().x, jointDef.bodyB->GetPosition().y};
-        // DrawLineEx(pos, flyPos, 0.2, PINK);
-        // DrawCircleV(flyPos, 0.1, PINK);
         tongue.Draw();
     }
 }
@@ -113,24 +108,29 @@ void Frog::UpdateController()
         {
             if (isSwinging)
             {
-                // ecs->GetPhysicsManager()->DestroyJoint(rope);
                 b2Vec2 currentVel = physBody->GetPosition();
                 currentVel.Normalize();
 
                 tongue.Delete(ecs->GetPhysicsManager());
-                // float swingStrength = 10; // Fix this, it is supposed to add a little hup to the tongue dismount
-                // physBody->ApplyLinearImpulseToCenter(b2Vec2(currentVel.x * swingStrength, currentVel.y * swingStrength), true);
+
                 isInSwingDismount = true;
+                isSwinging = false;
             }
             else
             {
                 Entity *nearestFly = GetNearestFly();
                 if (nearestFly != nullptr)
                 {
-                    tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
+                    float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
+                    int flyDirection = (flySign > 0) - (flySign < 0);
+
+                    if (flyDirection == currDirection)
+                    {
+                        tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
+                        isSwinging = !isSwinging;
+                    }
                 }
             }
-            isSwinging = !isSwinging;
         }
     }
 
@@ -146,7 +146,6 @@ void Frog::UpdateController()
     {
         physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
     }
-    // physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
 
     if (!keyWasPressed || !isOnGround)
     {
