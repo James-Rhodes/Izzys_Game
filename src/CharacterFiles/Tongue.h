@@ -106,15 +106,32 @@ public:
             }
             isActive = false;
         }
+        timeSinceTongueActivated = 0;
     };
 
     void Draw()
     {
         if (isActive)
         {
-            splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, beginBodyOffset, endBody, endBodyOffset, 0.1, PINK, false);
-            Vector2 endPos = (Vector2){endBody->GetPosition().x, endBody->GetPosition().y};
-            DrawCircleV(endPos, 0.05, PINK);
+            timeSinceTongueActivated += GetFrameTime();
+            Vector2 beginPos = {beginBody->GetPosition().x + beginBodyOffset.x, beginBody->GetPosition().y + beginBodyOffset.y};
+            Vector2 endPos = {endBody->GetPosition().x + endBodyOffset.x, endBody->GetPosition().y + endBodyOffset.y};
+
+            if (timeSinceTongueActivated > tongueExtendTime)
+            {
+                splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, beginBodyOffset, endBody, endBodyOffset, 0.1, PINK, false);
+                DrawCircleV(endPos, 0.05, PINK);
+            }
+            else
+            {
+                float extendPercent = timeSinceTongueActivated / tongueExtendTime;
+                Vector2 currentDrawPos = Vector2Lerp(beginPos, endPos, extendPercent);
+
+                DrawLineEx(beginPos, currentDrawPos, 0.1, PINK);
+                DrawCircleV(currentDrawPos, 0.05, PINK);
+            }
+
+            DrawCircleV(beginPos, 0.05, PINK);
         }
         // DrawLineEx(beginPt, endPt, 0.1, PINK);
     };
@@ -139,4 +156,7 @@ private:
     bool isActive = false;
     CatmullRomSplineDrawer splineDrawer;
     float maxDeflectionAngle = PI / 8;
+
+    float tongueExtendTime = 0.075;
+    float timeSinceTongueActivated = 0;
 };
