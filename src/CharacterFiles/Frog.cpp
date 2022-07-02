@@ -109,27 +109,29 @@ void Frog::UpdateController()
 
     if (IsKeyPressed(KEY_C))
     {
-
-        if (isSwinging)
+        if (!capybaraIsOnHead)
         {
-            // ecs->GetPhysicsManager()->DestroyJoint(rope);
-            b2Vec2 currentVel = physBody->GetPosition();
-            currentVel.Normalize();
-
-            tongue.Delete(ecs->GetPhysicsManager());
-            // float swingStrength = 10; // Fix this, it is supposed to add a little hup to the tongue dismount
-            // physBody->ApplyLinearImpulseToCenter(b2Vec2(currentVel.x * swingStrength, currentVel.y * swingStrength), true);
-            isInSwingDismount = true;
-        }
-        else
-        {
-            Entity *nearestFly = GetNearestFly();
-            if (nearestFly != nullptr)
+            if (isSwinging)
             {
-                tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
+                // ecs->GetPhysicsManager()->DestroyJoint(rope);
+                b2Vec2 currentVel = physBody->GetPosition();
+                currentVel.Normalize();
+
+                tongue.Delete(ecs->GetPhysicsManager());
+                // float swingStrength = 10; // Fix this, it is supposed to add a little hup to the tongue dismount
+                // physBody->ApplyLinearImpulseToCenter(b2Vec2(currentVel.x * swingStrength, currentVel.y * swingStrength), true);
+                isInSwingDismount = true;
             }
+            else
+            {
+                Entity *nearestFly = GetNearestFly();
+                if (nearestFly != nullptr)
+                {
+                    tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
+                }
+            }
+            isSwinging = !isSwinging;
         }
-        isSwinging = !isSwinging;
     }
 
     if (isInSwingDismount && !isOnGround)
@@ -163,6 +165,11 @@ void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor)
     {
         isOnGround++;
     }
+
+    if (collidedEntity->id == "Capy")
+    {
+        capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
+    }
 }
 void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
 {
@@ -170,6 +177,11 @@ void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
     if (detectedBySensor)
     {
         isOnGround--;
+    }
+
+    if (collidedEntity->id == "Capy")
+    {
+        capybaraIsOnHead = false;
     }
 }
 

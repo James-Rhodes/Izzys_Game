@@ -83,6 +83,7 @@ public:
     float speed = 4;
     float jumpHeight = 4;
     int isOnGround = 0;
+    bool capybaraIsOnHead = false;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;
