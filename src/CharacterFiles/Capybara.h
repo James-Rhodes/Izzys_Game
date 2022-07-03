@@ -43,6 +43,7 @@ public:
         animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
         animManager.AddAnimation("Stand_Still", {0});
         animManager.AddAnimation("Dash", {3});
+        animManager.AddAnimation("Dead", {4});
         animManager.SetState("Stand_Still");
     }
 
@@ -56,6 +57,10 @@ public:
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor);
 
     Vector2 GetPosition();
+    void SetIsAlive(bool _isAlive)
+    {
+        isAlive = _isAlive;
+    };
 
     Vector2 pos;
     float width = 1;
@@ -65,6 +70,7 @@ public:
     float timeOfLastDash = 0;
     float dashRechargeTime = 0.8;
     int isOnGround = 0;
+    bool isAlive = true;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;

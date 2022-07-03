@@ -58,6 +58,7 @@ public:
         animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
         animManager.AddAnimation("Stand_Still", {0});
         animManager.AddAnimation("Swing", {3});
+        animManager.AddAnimation("Dead", {4});
         animManager.SetState("Stand_Still");
 
         tongue = Tongue(3);
@@ -77,6 +78,10 @@ public:
 
     Entity *GetNearestFly();
     Vector2 GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter);
+    void SetIsAlive(bool _isAlive)
+    {
+        isAlive = _isAlive;
+    };
 
     Vector2 pos;
     float width = 0.5;
@@ -94,6 +99,8 @@ public:
     bool isSwinging = false;
     bool isInSwingDismount = false;
     float swingStrength = 0.5;
+
+    bool isAlive = true;
 
     Tongue tongue;
 };

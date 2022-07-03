@@ -36,64 +36,72 @@ void Capy::UpdateController()
 {
     bool keyWasPressed = false;
 
-    if (IsKeyDown(KEY_LEFT))
+    if (isAlive)
     {
-        b2Vec2 currVel = physBody->GetLinearVelocity();
-        if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+
+        if (IsKeyDown(KEY_LEFT))
         {
+            b2Vec2 currVel = physBody->GetLinearVelocity();
+            if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            {
 
-            physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-        }
+                physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            }
 
-        currDirection = -1;
-        animManager.SetState("Run", GetFrameTime());
-        keyWasPressed = true;
-    }
-
-    if (IsKeyDown(KEY_RIGHT))
-    {
-        b2Vec2 currVel = physBody->GetLinearVelocity();
-        if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
-        {
-
-            physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-        }
-
-        currDirection = 1;
-        animManager.SetState("Run", GetFrameTime());
-        keyWasPressed = true;
-    }
-
-    if (IsKeyPressed(KEY_UP))
-
-    {
-        if (isOnGround)
-        {
-            float gravity = physBody->GetWorld()->GetGravity().y;
-            // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
-
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+            currDirection = -1;
+            animManager.SetState("Run", GetFrameTime());
             keyWasPressed = true;
         }
-    }
 
-    if (IsKeyPressed(KEY_M))
-    {
-        if (GetTime() - timeOfLastDash > dashRechargeTime)
+        if (IsKeyDown(KEY_RIGHT))
         {
-            float dashForce = 13 * physBody->GetMass();
+            b2Vec2 currVel = physBody->GetLinearVelocity();
+            if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            {
 
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
-            timeOfLastDash = GetTime();
-            animManager.SetStateLock("Dash", 0.5);
+                physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
+            }
+
+            currDirection = 1;
+            animManager.SetState("Run", GetFrameTime());
             keyWasPressed = true;
         }
+
+        if (IsKeyPressed(KEY_UP))
+
+        {
+            if (isOnGround)
+            {
+                float gravity = physBody->GetWorld()->GetGravity().y;
+                // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+                float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
+
+                physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+                keyWasPressed = true;
+            }
+        }
+
+        if (IsKeyPressed(KEY_M))
+        {
+            if (GetTime() - timeOfLastDash > dashRechargeTime)
+            {
+                float dashForce = 13 * physBody->GetMass();
+
+                physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
+                timeOfLastDash = GetTime();
+                animManager.SetStateLock("Dash", 0.5);
+                keyWasPressed = true;
+            }
+        }
+        physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+        if (!keyWasPressed || !isOnGround)
+        {
+            animManager.SetState("Stand_Still");
+        }
     }
-    physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
-    if (!keyWasPressed || !isOnGround)
+    else
     {
-        animManager.SetState("Stand_Still");
+        animManager.SetState("Dead");
     }
 }
 

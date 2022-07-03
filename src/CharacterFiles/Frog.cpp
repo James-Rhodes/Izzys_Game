@@ -34,132 +34,139 @@ Vector2 Frog::GetPosition()
 void Frog::UpdateController()
 {
     bool keyWasPressed = false;
-
-    if (IsKeyDown(KEY_A))
+    if (isAlive)
     {
-        b2Vec2 currVel = physBody->GetLinearVelocity();
-        if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+
+        if (IsKeyDown(KEY_A))
         {
-            b2Vec2 force;
-
-            if (isSwinging)
+            b2Vec2 currVel = physBody->GetLinearVelocity();
+            if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
             {
-                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), -swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
+                b2Vec2 force;
 
-                force = tangentialForce.x <= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
+                if (isSwinging)
+                {
+                    Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), -swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
+
+                    force = tangentialForce.x <= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
+                }
+                else
+                {
+                    force = b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
+                }
+
+                physBody->ApplyForceToCenter(force, true);
             }
-            else
-            {
-                force = b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
-            }
 
-            physBody->ApplyForceToCenter(force, true);
-        }
-
-        currDirection = -1;
-        animManager.SetState("Run", GetFrameTime());
-        keyWasPressed = true;
-    }
-
-    if (IsKeyDown(KEY_D))
-    {
-        b2Vec2 currVel = physBody->GetLinearVelocity();
-        if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
-        {
-            b2Vec2 force;
-
-            if (isSwinging)
-            {
-                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
-
-                force = tangentialForce.x >= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
-            }
-            else
-            {
-                force = b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
-            }
-            physBody->ApplyForceToCenter(force, true);
-        }
-
-        currDirection = 1;
-        animManager.SetState("Run", GetFrameTime());
-        keyWasPressed = true;
-    }
-
-    if (IsKeyPressed(KEY_W))
-
-    {
-        if (isOnGround)
-        {
-            float gravity = physBody->GetWorld()->GetGravity().y;
-            // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
-
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+            currDirection = -1;
+            animManager.SetState("Run", GetFrameTime());
             keyWasPressed = true;
         }
-    }
 
-    if (IsKeyPressed(KEY_C))
-    {
-        if (!capybaraIsOnHead)
+        if (IsKeyDown(KEY_D))
         {
-            if (isSwinging)
+            b2Vec2 currVel = physBody->GetLinearVelocity();
+            if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
             {
-                b2Vec2 currentVel = physBody->GetPosition();
-                currentVel.Normalize();
+                b2Vec2 force;
 
-                tongue.Delete(ecs->GetPhysicsManager());
-
-                isInSwingDismount = true;
-                isSwinging = false;
-            }
-            else
-            {
-                bool succeededInTongueExtension = false;
-                Entity *nearestFly = GetNearestFly();
-                if (nearestFly != nullptr)
+                if (isSwinging)
                 {
-                    float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
-                    int flyDirection = (flySign > 0) - (flySign < 0);
+                    Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
 
-                    if (flyDirection == currDirection)
-                    {
-                        tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
-                        isSwinging = !isSwinging;
-                        succeededInTongueExtension = true;
-                    }
+                    force = tangentialForce.x >= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
                 }
-
-                if (!succeededInTongueExtension)
+                else
                 {
-                    tongue.SetDrawFalseExtension(currDirection);
-                    // To Fix.
+                    force = b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
+                }
+                physBody->ApplyForceToCenter(force, true);
+            }
+
+            currDirection = 1;
+            animManager.SetState("Run", GetFrameTime());
+            keyWasPressed = true;
+        }
+
+        if (IsKeyPressed(KEY_W))
+
+        {
+            if (isOnGround)
+            {
+                float gravity = physBody->GetWorld()->GetGravity().y;
+                // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+                float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
+
+                physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+                keyWasPressed = true;
+            }
+        }
+
+        if (IsKeyPressed(KEY_C))
+        {
+            if (!capybaraIsOnHead)
+            {
+                if (isSwinging)
+                {
+                    b2Vec2 currentVel = physBody->GetPosition();
+                    currentVel.Normalize();
+
+                    tongue.Delete(ecs->GetPhysicsManager());
+
+                    isInSwingDismount = true;
+                    isSwinging = false;
+                }
+                else
+                {
+                    bool succeededInTongueExtension = false;
+                    Entity *nearestFly = GetNearestFly();
+                    if (nearestFly != nullptr)
+                    {
+                        float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
+                        int flyDirection = (flySign > 0) - (flySign < 0);
+
+                        if (flyDirection == currDirection)
+                        {
+                            tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
+                            isSwinging = !isSwinging;
+                            succeededInTongueExtension = true;
+                        }
+                    }
+
+                    if (!succeededInTongueExtension)
+                    {
+                        tongue.SetDrawFalseExtension(currDirection);
+                        // To Fix.
+                    }
                 }
             }
         }
-    }
 
-    if (isInSwingDismount && !isOnGround)
-    { // In air after dismount
-        physBody->SetGravityScale(7);
-    }
-    else if (isInSwingDismount && isOnGround) // landed after swing dismount
-    {
-        isInSwingDismount = false;
+        if (isInSwingDismount && !isOnGround)
+        { // In air after dismount
+            physBody->SetGravityScale(7);
+        }
+        else if (isInSwingDismount && isOnGround) // landed after swing dismount
+        {
+            isInSwingDismount = false;
+        }
+        else
+        {
+            physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+        }
+
+        if (!keyWasPressed || !isOnGround)
+        {
+            animManager.SetState("Stand_Still");
+        }
+        if (isSwinging)
+        {
+            animManager.SetState("Swing");
+        }
     }
     else
     {
-        physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
-    }
-
-    if (!keyWasPressed || !isOnGround)
-    {
-        animManager.SetState("Stand_Still");
-    }
-    if (isSwinging)
-    {
-        animManager.SetState("Swing");
+        animManager.SetState("Dead");
     }
 }
 
