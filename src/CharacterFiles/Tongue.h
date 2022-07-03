@@ -13,20 +13,16 @@ public:
     {
         chainBodies.resize(numChainLinks);
         std::fill(chainBodies.begin(), chainBodies.end(), nullptr);
-
-        // splineDrawer = CatmullRomSplineDrawer()
     };
 
-    void Create(b2World *world, b2Body *_beginBody, b2Vec2 beginBodyLocalCoords, b2Body *_endBody, b2Vec2 endBodyLocalCoords)
+    void Create(b2World *world, b2Body *_endBody, b2Vec2 endBodyLocalCoords)
     {
-        beginBody = _beginBody;
         endBody = _endBody;
 
-        beginBodyOffset = beginBodyLocalCoords;
         endBodyOffset = endBodyLocalCoords;
 
-        Vector2 beginPos = (Vector2){beginBody->GetPosition().x + beginBodyLocalCoords.x, beginBody->GetPosition().y + beginBodyLocalCoords.y};
-        Vector2 endPos = (Vector2){endBody->GetPosition().x + endBodyLocalCoords.x, endBody->GetPosition().y + endBodyLocalCoords.y};
+        Vector2 beginPos = GetBeginPos();
+        Vector2 endPos = GetEndPos();
 
         float distance = Vector2Distance(beginPos, endPos);
         Vector2 gradient = Vector2Divide(Vector2Subtract(endPos, beginPos), {distance, distance});
@@ -54,7 +50,7 @@ public:
 
         b2RevoluteJointDef revoluteJointDef;
 
-        revoluteJointDef.localAnchorA.Set(beginBodyLocalCoords.x, beginBodyLocalCoords.y);
+        revoluteJointDef.localAnchorA.Set(beginBodyOffset.x, beginBodyOffset.y);
         revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
 
         revoluteJointDef.bodyA = beginBody;
@@ -114,8 +110,8 @@ public:
         if (isActive)
         {
             timeSinceTongueActivated += GetFrameTime();
-            Vector2 beginPos = {beginBody->GetPosition().x + beginBodyOffset.x, beginBody->GetPosition().y + beginBodyOffset.y};
-            Vector2 endPos = {endBody->GetPosition().x + endBodyOffset.x, endBody->GetPosition().y + endBodyOffset.y};
+            Vector2 beginPos = GetBeginPos();
+            Vector2 endPos = GetEndPos();
 
             if (timeSinceTongueActivated > tongueExtendTime)
             {
@@ -133,17 +129,50 @@ public:
 
             DrawCircleV(beginPos, 0.05, PINK);
         }
-        // DrawLineEx(beginPt, endPt, 0.1, PINK);
+        else if (currDirection != 0)
+        {
+            if (timeSinceFalseExtension < tongueExtendTime * 2)
+            {
+                timeSinceFalseExtension += GetFrameTime();
+                // Below function just makes t go from 0 -> 1 -> 0 by the time 2* tongueExtendTime is up
+                float t = -1 * std::abs((1 / tongueExtendTime) * (timeSinceFalseExtension - tongueExtendTime)) + 1;
+                Vector2 beginPos = GetBeginPos();
+                float sqrtTwo = 0.707;
+                Vector2 falseEndPos = Vector2Add(beginPos, Vector2Scale({currDirection * sqrtTwo, sqrtTwo}, falseExtensionLength));
+                Vector2 endPos = Vector2Lerp(beginPos, falseEndPos, t);
+
+                DrawLineEx(beginPos, endPos, 0.1, PINK);
+                DrawCircleV(endPos, 0.05, PINK);
+                DrawCircleV(beginPos, 0.05, PINK);
+            }
+            else
+            {
+                timeSinceFalseExtension = 0;
+                currDirection = 0;
+            }
+        }
+    };
+
+    void SetDrawFalseExtension(int direction)
+    {
+        // direction == 1 means right and -1 == left
+        currDirection = direction;
+    }
+
+    void SetBeginBody(b2Body *_beginBody, b2Vec2 beginBodyLocalCoords)
+    {
+        beginBody = _beginBody;
+        beginBodyOffset = beginBodyLocalCoords;
     };
 
     Vector2 GetBeginPos()
     {
-        return {beginBody->GetPosition().x, beginBody->GetPosition().y};
+        return {beginBody->GetPosition().x + beginBodyOffset.x, beginBody->GetPosition().y + beginBodyOffset.y};
     }
 
     Vector2 GetEndPos()
     {
-        return {endBody->GetPosition().x, endBody->GetPosition().y};
+        return {endBody->GetPosition().x + endBodyOffset.x, endBody->GetPosition().y + endBodyOffset.y};
     }
 
 private:
@@ -158,5 +187,10 @@ private:
     float maxDeflectionAngle = PI / 8;
 
     float tongueExtendTime = 0.075;
+
     float timeSinceTongueActivated = 0;
+
+    int currDirection = 0;
+    float falseExtensionLength = 1; // Extend tongue 1m for false extension
+    float timeSinceFalseExtension = 0;
 };

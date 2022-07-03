@@ -21,10 +21,8 @@ void Frog::Draw()
     {
         DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
     }
-    if (isSwinging)
-    {
-        tongue.Draw();
-    }
+
+    tongue.Draw();
 }
 
 Vector2 Frog::GetPosition()
@@ -118,6 +116,7 @@ void Frog::UpdateController()
             }
             else
             {
+                bool succeededInTongueExtension = false;
                 Entity *nearestFly = GetNearestFly();
                 if (nearestFly != nullptr)
                 {
@@ -126,9 +125,16 @@ void Frog::UpdateController()
 
                     if (flyDirection == currDirection)
                     {
-                        tongue.Create(ecs->GetPhysicsManager(), physBody, (b2Vec2){0, height / 6}, nearestFly->physBody, (b2Vec2){0, 0});
+                        tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
                         isSwinging = !isSwinging;
+                        succeededInTongueExtension = true;
                     }
+                }
+
+                if (!succeededInTongueExtension)
+                {
+                    tongue.SetDrawFalseExtension(currDirection);
+                    // To Fix.
                 }
             }
         }

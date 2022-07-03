@@ -6,7 +6,6 @@
 class CatmullRomSplineDrawer
 {
 public:
-    // CatmullRomSplineDrawer() = default;
     CatmullRomSplineDrawer(int _smoothness = 10, float _alpha = 0.5) : smoothness(_smoothness), alpha(_alpha){};
 
     void DrawCatmullRomSpline(const std::vector<b2Body *> &P, b2Body *beginBod, b2Vec2 beginBodyOffset, b2Body *endBod, b2Vec2 endBodyOffset, float thickness, Color col, bool drawControlPts = false)
@@ -21,8 +20,7 @@ public:
         Vector2 endPos = b2Vec2ToVector2(endBod->GetPosition() + endBodyOffset);
 
         // Calculate Control Pts
-        // Vector2 beginControlPt = b2Vec2ToVector2(P[0]->GetPosition() + (P[0]->GetPosition() - P[1]->GetPosition()));
-        // Vector2 endControlPt = b2Vec2ToVector2(P[numPts - 1]->GetPosition() + (P[numPts - 1]->GetPosition() - P[numPts - 2]->GetPosition()));
+
         Vector2 beginControlPt = Vector2Add(beginPos, Vector2Subtract(beginPos, b2Vec2ToVector2(P[0]->GetPosition())));
         Vector2 endControlPt = Vector2Add(endPos, Vector2Subtract(endPos, b2Vec2ToVector2(P[numPts - 1]->GetPosition())));
 
@@ -33,7 +31,6 @@ public:
         }
 
         Vector2 *spline;
-        // spline = CatmullRom4Pts(beginControlPt, b2Vec2ToVector2(P[0]->GetPosition()), b2Vec2ToVector2(P[1]->GetPosition()), b2Vec2ToVector2(P[2]->GetPosition()));
         spline = CatmullRom4Pts(beginControlPt, beginPos, b2Vec2ToVector2(P[0]->GetPosition()), b2Vec2ToVector2(P[1]->GetPosition()));
 
         for (int i = 0; i < smoothness - 1; i++)
@@ -62,7 +59,6 @@ public:
             }
             delete[] spline;
         }
-        // spline = CatmullRom4Pts(b2Vec2ToVector2(P[numPts - 3]->GetPosition()), b2Vec2ToVector2(P[numPts - 2]->GetPosition()), b2Vec2ToVector2(P[numPts - 1]->GetPosition()), endPos);
         spline = CatmullRom4Pts(b2Vec2ToVector2(P[numPts - 2]->GetPosition()), b2Vec2ToVector2(P[numPts - 1]->GetPosition()), endPos, endControlPt);
 
         for (int i = 0; i < smoothness - 1; i++)

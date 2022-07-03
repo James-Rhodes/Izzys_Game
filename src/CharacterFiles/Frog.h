@@ -61,6 +61,7 @@ public:
         animManager.SetState("Stand_Still");
 
         tongue = Tongue(3);
+        tongue.SetBeginBody(physBody, (b2Vec2){0, height / 6});
     }
 
     void Update();
