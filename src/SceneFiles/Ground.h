@@ -171,6 +171,20 @@ public:
     void Update()
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            shouldMove = !shouldMove;
+        }
+
+        if (shouldMove)
+        {
+            float speed = -8;
+            b2Vec2 diff;
+            diff.x = speed * GetFrameTime();
+            // physBody->SetTransform(physBody->GetPosition() + diff, 0);
+            physBody->SetLinearVelocity(diff);
+            physBody->SetAwake(true);
+        }
     };
 
     void Draw()
@@ -244,4 +258,5 @@ public:
     float width;
     float height;
     AnimationManager animManager;
+    bool shouldMove = false;
 };

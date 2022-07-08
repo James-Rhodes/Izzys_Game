@@ -39,7 +39,7 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body)
 void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObjectConfig config)
 {
     b2BodyDef bodyDef;
-    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_staticBody;
+    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_kinematicBody;
     bodyDef.position.Set(config.pos.x, config.pos.y);
     bodyDef.fixedRotation = !config.isRollable;
     bodyDef.userData.pointer = (uintptr_t)m_entityMap[id]->entityPointer;
@@ -63,7 +63,7 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObje
 void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config)
 {
     b2BodyDef bodyDef;
-    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_staticBody;
+    bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_kinematicBody;
     bodyDef.position.Set(config.pos.x, config.pos.y);
     bodyDef.fixedRotation = !config.isRollable;
     bodyDef.userData.pointer = (uintptr_t)m_entityMap[id]->entityPointer;
