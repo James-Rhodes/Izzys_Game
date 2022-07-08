@@ -10,7 +10,7 @@ void Scene::Run()
 void Scene::Init()
 {
     ecs.CreateEntity<Ground>("Ground", (Vector2){0, -3.3}, 10, 2);
-    ecs.CreateEntity<Ground>("Ground2", (Vector2){3, 0}, 1.7, 0.5);
+    ecs.CreateEntity<RockGround>("Ground2", (Vector2){3, 0}, 1.7, 0.5);
 
     ecs.CreateEntity<Ground>("Fly", (Vector2){-2, 2}, 0.3, 0.3);
     // ecs.CreateEntity<Ground>("Fly1", (Vector2){-1, 2}, 0.1, 0.1);

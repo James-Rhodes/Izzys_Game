@@ -38,7 +38,7 @@ public:
         physManager->SetDebugDraw(&debugDrawer);
         debugDrawer.SetFlags(b2Draw::e_shapeBit);
         debugDrawer.AppendFlags(b2Draw::e_jointBit);
-        debugDrawer.enabled = false;
+        debugDrawer.enabled = true;
 
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
