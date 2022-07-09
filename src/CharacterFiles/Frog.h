@@ -4,7 +4,6 @@
 #include <math.h>
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
-#include "../SceneFiles/Ground.h"
 
 #include "Tongue.h"
 

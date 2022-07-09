@@ -9,7 +9,7 @@
 
 #include "./CharacterFiles/Capybara.h"
 #include "./CharacterFiles/Frog.h"
-#include "./SceneFiles/Ground.h"
+#include "./SceneFiles/SceneComponents.h"
 
 class Scene
 {
