@@ -314,61 +314,6 @@ public:
         DrawTextureTiledWithinCamera(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -(height)}, {0, 0}, 0, 64, RAYWHITE);
     }
 
-    void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float cameraZoom, Color tint)
-    {
-        // Could probably be done better but this will do for now!
-
-        if ((texture.id <= 0) || (cameraZoom <= 0.0f))
-        {
-            return; // Wanna see a infinite loop?!...just delete this line!
-        }
-        if ((source.width == 0) || (source.height == 0))
-        {
-            return;
-        }
-        float invCameraZoom = 1 / cameraZoom;
-        float destWidthPixels = std::abs(dest.width * cameraZoom);
-        float destHeightPixels = std::abs(dest.height * cameraZoom);
-
-        int numXTiles = std::ceil(destWidthPixels / source.width);
-        int numYTiles = std::ceil(destHeightPixels / source.height);
-
-        float dx = source.width * invCameraZoom;
-        float dy = source.height * invCameraZoom;
-
-        Vector2 currentPos = {dest.x, dest.y};
-
-        Vector2 boundary = {dest.x + dest.width, dest.y + dest.height};
-
-        for (int y = -1; y < numYTiles; y++)
-        {
-            if (y == -1)
-            {
-                y = 0; // To make sure the loop runs at least once
-            }
-            currentPos.x = dest.x;
-            for (int x = -1; x < numXTiles; x++)
-            {
-                if (x == -1)
-                {
-                    x = 0; // To make sure the loop runs at least once
-                }
-                float remainderX = std::abs(boundary.x - currentPos.x);
-                float remainderY = std::abs(boundary.y - currentPos.y);
-                Rectangle tempSrc = source;
-                tempSrc.width = std::min(source.width, remainderX * cameraZoom);
-                tempSrc.height = std::min(source.height, remainderY * cameraZoom);
-
-                Rectangle tempDest = {currentPos.x, currentPos.y, std::min(dx, remainderX), -std::min(dy, remainderY)};
-                DrawTexturePro(texture, tempSrc, tempDest, origin, rotation, tint);
-                currentPos.x += dx;
-            }
-            currentPos.y -= dy;
-        }
-
-        // Tiling logic goes here
-        // DrawTexturePro(texture, source, dest, origin, rotation, RAYWHITE);
-    }
     Vector2 pos;
     float width;
     float height;

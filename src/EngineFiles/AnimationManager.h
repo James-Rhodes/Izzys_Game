@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <cmath>
 
 class AnimationManager
 {
@@ -50,3 +51,5 @@ private:
     float lockTime = 0;
     Rectangle GetTextureRectangleAtFrame(int frame);
 };
+
+void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float cameraZoom, Color tint);
