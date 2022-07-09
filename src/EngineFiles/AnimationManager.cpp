@@ -135,3 +135,14 @@ void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle
         currentPos.y -= dy;
     }
 }
+
+Rectangle AnimationManager::GetTextureRectangleAtState(std::string _state)
+{
+    std::string prevState = currState;
+
+    SetState(_state);
+    Rectangle result = GetTextureRectangle();
+    SetState(prevState);
+
+    return result;
+};

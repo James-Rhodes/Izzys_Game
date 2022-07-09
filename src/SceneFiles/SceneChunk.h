@@ -16,7 +16,8 @@ class SceneChunk
     // Create Oranges in below function but do not add them to scene components; This will allow them to roll in to the next scene if that occurs. Logic is within Orange to delete itself when needed
     virtual void GenerateChunk(Vector2 worldCenterPos) = 0;
 
-    void SetECS(ECS *_ecs) { ecs = _ecs; }
+    void SetECS(ECS *_ecs) { ecs = _ecs; };
+    void SetTerrainBlockAnimationManager(AnimationManager *_animManager) { terrainBlocks = _animManager; };
 
     void SetSceneMovementSpeed(float speed)
     {
@@ -29,7 +30,7 @@ class SceneChunk
             ent->physBody->SetLinearVelocity(diff);
             ent->physBody->SetAwake(true);
         }
-    }
+    };
 
     void DeleteChunk()
     {
@@ -37,9 +38,10 @@ class SceneChunk
         {
             ecs->RemoveEntity(ent->id);
         }
-    }
+    };
 
     float sceneMovementSpeed = 0;
     std::vector<Entity *> sceneComponents;
     ECS *ecs;
+    AnimationManager *terrainBlocks;
 };
