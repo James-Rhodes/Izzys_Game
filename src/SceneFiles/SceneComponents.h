@@ -60,19 +60,6 @@ public:
     void Update()
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
-        if (IsKeyPressed(KEY_SPACE))
-        {
-            shouldMove = !shouldMove;
-        }
-
-        if (shouldMove)
-        {
-            float speed = -8;
-            b2Vec2 diff;
-            diff.x = speed * GetFrameTime();
-            physBody->SetLinearVelocity(diff);
-            physBody->SetAwake(true);
-        }
     };
 
     void Draw()
@@ -86,7 +73,6 @@ public:
     Vector2 pos;
     float width;
     float height;
-    bool shouldMove = false;
     Rectangle srcRect;
     float friction;
 };
@@ -115,19 +101,6 @@ public:
     void Update()
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
-        if (IsKeyPressed(KEY_SPACE))
-        {
-            shouldMove = !shouldMove;
-        }
-
-        if (shouldMove)
-        {
-            float speed = -8;
-            b2Vec2 diff;
-            diff.x = speed * GetFrameTime();
-            physBody->SetLinearVelocity(diff);
-            physBody->SetAwake(true);
-        }
     };
 
     void Draw()
@@ -139,5 +112,4 @@ public:
 
     Vector2 pos;
     float width = 0.2;
-    bool shouldMove = false;
 };
