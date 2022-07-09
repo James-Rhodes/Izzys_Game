@@ -98,6 +98,7 @@ public:
     bool isSwinging = false;
     bool isInSwingDismount = false;
     float swingStrength = 0.5;
+    float maxDistFromFlyToSwing = 3.5; // Can change this to alter the maximum distance before attaching to a fly fails
 
     bool isAlive = true;
 

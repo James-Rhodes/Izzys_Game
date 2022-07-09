@@ -214,7 +214,7 @@ Entity *Frog::GetNearestFly()
             }
         }
     }
-    return closestEnt;
+    return minDistSquared < maxDistFromFlyToSwing * maxDistFromFlyToSwing ? closestEnt : nullptr;
 }
 
 Vector2 Frog::GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter)
