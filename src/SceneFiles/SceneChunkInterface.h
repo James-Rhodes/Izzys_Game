@@ -22,7 +22,7 @@ public:
 
     void SetSceneMovementSpeed(float speed)
     {
-        sceneMovementSpeed = speed;
+        sceneMovementSpeed = -speed;
         for (auto ent : sceneComponents)
         {
 
