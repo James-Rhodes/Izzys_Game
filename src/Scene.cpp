@@ -20,10 +20,17 @@ void Scene::Init()
     ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
     ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
     // ecs.CreateEntity<Box>("Box", (Vector2){0, 0}, 1, 0.5); // Stand in Capy boi
+
+    sceneToReset = false;
 }
 
 void Scene::Update()
 {
+    if (IsKeyPressed(KEY_R))
+    {
+        ResetScene();
+    }
+
     for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
     {
 
@@ -38,6 +45,11 @@ void Scene::Update()
             it++;
             ecs.PermanentlyDeleteEntity(key);
         }
+    }
+
+    if (sceneToReset)
+    {
+        Init();
     }
 }
 
@@ -92,4 +104,15 @@ void Scene::Draw()
     DrawFPS(10, 10);
 
     EndDrawing();
+}
+
+void Scene::ResetScene()
+{
+    for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
+    {
+        ecs.RemoveEntity(it->second->entityPointer->id);
+        ++it;
+    }
+
+    sceneToReset = true;
 }

@@ -76,8 +76,6 @@ SceneChunk *TerrainManager::GetChunk()
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     SceneChunk *newChunk = nullptr;
 
-    return new LadderJumpChunk(&terrainCounter);
-
     switch (randChunkIndex)
     {
     case (0):
@@ -86,6 +84,10 @@ SceneChunk *TerrainManager::GetChunk()
     case (1):
         newChunk = new GapChunk(&terrainCounter);
         break;
+    case (2):
+        newChunk = new LadderJumpChunk(&terrainCounter);
+        break;
     }
+
     return newChunk;
 }

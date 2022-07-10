@@ -54,6 +54,7 @@ public:
     void Update();
     void Draw();
     void UpdatePhysics();
+    void ResetScene();
 
     ECS ecs;
     b2World *physManager;
@@ -66,4 +67,5 @@ public:
     int minScreenHeight;
     int currScreenWidth;
     int currScreenHeight;
+    bool sceneToReset = false;
 };

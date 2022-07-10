@@ -28,5 +28,5 @@ public:
 
     int terrainCounter = 0;
 
-    int numChunkTypes = 2;
+    int numChunkTypes = 3;
 };
