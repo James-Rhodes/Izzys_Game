@@ -9,7 +9,8 @@
 
 #include "./CharacterFiles/Capybara.h"
 #include "./CharacterFiles/Frog.h"
-#include "./SceneFiles/SceneComponents.h"
+// #include "./SceneFiles/SceneComponents.h"
+#include "./SceneFiles/TerrainManager.h"
 
 class Scene
 {
@@ -38,7 +39,7 @@ public:
         physManager->SetDebugDraw(&debugDrawer);
         debugDrawer.SetFlags(b2Draw::e_shapeBit);
         debugDrawer.AppendFlags(b2Draw::e_jointBit);
-        debugDrawer.enabled = true;
+        debugDrawer.enabled = false;
 
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
