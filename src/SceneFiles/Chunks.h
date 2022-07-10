@@ -15,3 +15,15 @@ public:
 
     int *terrainCounter;
 };
+
+class GapChunk : public SceneChunk
+// Just two pieces of ground with a gap between. Fly in the gap for frog and capy can make the leap
+{
+public:
+    GapChunk(int *counter) : terrainCounter(counter){};
+    ~GapChunk(){};
+
+    void GenerateChunk(Vector2 worldCenterPos) override;
+
+    int *terrainCounter;
+};

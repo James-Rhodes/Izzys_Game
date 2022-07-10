@@ -14,6 +14,7 @@ public:
     void Update();
 
     SceneChunk *GenerateNextChunk(bool firstChunk = false);
+    SceneChunk *GetChunk();
 
     SceneChunk *currentChunk;
     SceneChunk *nextChunk;
@@ -24,4 +25,6 @@ public:
     Vector2 nextChunkPos;
 
     int terrainCounter = 0;
+
+    int numChunkTypes = 2;
 };

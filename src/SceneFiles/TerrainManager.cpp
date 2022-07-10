@@ -22,6 +22,12 @@ void TerrainManager::Update()
     currentChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, currentChunkPos);
     nextChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, nextChunkPos);
 
+    if (terrainCounter > 100)
+    {
+        // There should never be more than one hundred scene components on the screen at once
+        terrainCounter = 0;
+    }
+
     if (currentChunkPos.x <= -10)
     {
         currentChunk->DeleteChunk();
@@ -29,7 +35,6 @@ void TerrainManager::Update()
         currentChunk = nextChunk;
 
         currentChunkPos = nextChunkPos;
-        nextChunkPos = {10, 0};
 
         nextChunk = GenerateNextChunk();
         nextChunk->SetSceneMovementSpeed(sceneScrollSpeed);
@@ -38,19 +43,43 @@ void TerrainManager::Update()
 
 SceneChunk *TerrainManager::GenerateNextChunk(bool firstChunk)
 {
-    // For now just generate flat chunk
-    FlatChunk *flatChunk = new FlatChunk(&terrainCounter);
-    flatChunk->SetECS(ecs);
-    flatChunk->SetTerrainBlockAnimationManager(&terrainBlocks);
+    SceneChunk *chunk;
     if (firstChunk)
     {
-        flatChunk->GenerateChunk((Vector2){0, 0}); // Center of screen position for chunk?
+        // chunk = new FlatChunk(&terrainCounter);
+        chunk = GetChunk();
+        chunk->SetECS(ecs);
+        chunk->SetTerrainBlockAnimationManager(&terrainBlocks);
+
         currentChunkPos = {0, 0};
+        chunk->GenerateChunk(currentChunkPos); // Center of screen position for chunk?
     }
     else
     {
-        flatChunk->GenerateChunk((Vector2){10, 0}); // Next position for chunk?
+        chunk = GetChunk();
+        chunk->SetECS(ecs);
+        chunk->SetTerrainBlockAnimationManager(&terrainBlocks);
         nextChunkPos = {10, 0};
+        chunk->GenerateChunk(nextChunkPos); // Next position for chunk?
     }
-    return flatChunk;
+    // chunk->GenerateChunk((Vector2){10, 0}); // Next position for chunk?
+
+    return chunk;
+}
+
+SceneChunk *TerrainManager::GetChunk()
+{
+    int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
+    SceneChunk *newChunk = nullptr;
+
+    switch (randChunkIndex)
+    {
+    case (0):
+        newChunk = new FlatChunk(&terrainCounter);
+        break;
+    case (1):
+        newChunk = new GapChunk(&terrainCounter);
+        break;
+    }
+    return newChunk;
 }
