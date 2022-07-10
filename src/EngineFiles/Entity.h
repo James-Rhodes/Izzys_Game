@@ -12,6 +12,7 @@ struct PhysicsConfig
 {
     Vector2 pos = {};
     bool isDynamic = false;
+    bool isSensor = false;
     bool isRollable = false;
     float density = 1.0f;
     float friction = 0.3f;

@@ -27,3 +27,15 @@ public:
 
     int *terrainCounter;
 };
+
+class LadderJumpChunk : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    LadderJumpChunk(int *counter) : terrainCounter(counter){};
+    ~LadderJumpChunk(){};
+
+    void GenerateChunk(Vector2 worldCenterPos) override;
+
+    int *terrainCounter;
+};

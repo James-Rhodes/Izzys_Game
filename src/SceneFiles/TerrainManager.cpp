@@ -20,7 +20,7 @@ void TerrainManager::Update()
 {
     if (IsKeyPressed(KEY_SPACE))
     {
-        sceneScrollSpeed = 2;
+        sceneScrollSpeed = 1;
         currentChunk->SetSceneMovementSpeed(sceneScrollSpeed);
         nextChunk->SetSceneMovementSpeed(sceneScrollSpeed);
     }
@@ -75,6 +75,8 @@ SceneChunk *TerrainManager::GetChunk()
 {
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     SceneChunk *newChunk = nullptr;
+
+    return new LadderJumpChunk(&terrainCounter);
 
     switch (randChunkIndex)
     {

@@ -54,6 +54,7 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObje
     fixture.density = config.density;
     fixture.friction = config.friction;
     fixture.restitution = config.restitution;
+    fixture.isSensor = config.isSensor;
 
     body->CreateFixture(&fixture);
 
@@ -63,6 +64,7 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObje
 void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config)
 {
     b2BodyDef bodyDef;
+
     bodyDef.type = config.isDynamic ? b2_dynamicBody : b2_kinematicBody;
     bodyDef.position.Set(config.pos.x, config.pos.y);
     bodyDef.fixedRotation = !config.isRollable;
@@ -78,6 +80,7 @@ void ECS::RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsO
     fixture.density = config.density;
     fixture.friction = config.friction;
     fixture.restitution = config.restitution;
+    fixture.isSensor = config.isSensor;
 
     body->CreateFixture(&fixture);
 

@@ -94,6 +94,7 @@ public:
         config.isDynamic = false;
         config.restitution = 0;
         config.friction = 1;
+        config.isSensor = true;
 
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
