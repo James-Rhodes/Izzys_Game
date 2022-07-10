@@ -18,7 +18,10 @@ public:
     SceneChunk *currentChunk;
     SceneChunk *nextChunk;
     AnimationManager terrainBlocks;
-    float sceneScrollSpeed = 20;
+    float sceneScrollSpeed = 0;
+
+    Vector2 currentChunkPos;
+    Vector2 nextChunkPos;
 
     int terrainCounter = 0;
 };

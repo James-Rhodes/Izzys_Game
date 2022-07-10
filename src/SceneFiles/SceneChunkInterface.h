@@ -27,7 +27,7 @@ public:
         {
 
             b2Vec2 diff;
-            diff.x = sceneMovementSpeed * GetFrameTime();
+            diff.x = sceneMovementSpeed;
             ent->physBody->SetLinearVelocity(diff);
             ent->physBody->SetAwake(true);
         }
