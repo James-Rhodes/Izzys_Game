@@ -9,7 +9,9 @@
 class TerrainManager : public Entity
 {
 public:
-    TerrainManager() = default;
+    TerrainManager(){
+
+    };
     void Register();
     void Update();
 

@@ -2,6 +2,12 @@
 
 void TerrainManager::Register()
 {
+
+    terrainBlocks = AnimationManager(ecs->GetSpriteSheet(), 0, 97, 32, 36);
+    terrainBlocks.AddAnimation("Rock and Grass", {0});
+    terrainBlocks.AddAnimation("Rock", {1});
+    terrainBlocks.SetState("Rock and Grass");
+
     // Initialise Current Scene and Next Scene
     currentChunk = GenerateNextChunk(true);
     nextChunk = GenerateNextChunk();
@@ -46,8 +52,7 @@ SceneChunk *TerrainManager::GenerateNextChunk(bool firstChunk)
     SceneChunk *chunk;
     if (firstChunk)
     {
-        // chunk = new FlatChunk(&terrainCounter);
-        chunk = GetChunk();
+        chunk = new FlatChunk(&terrainCounter);
         chunk->SetECS(ecs);
         chunk->SetTerrainBlockAnimationManager(&terrainBlocks);
 
@@ -62,7 +67,6 @@ SceneChunk *TerrainManager::GenerateNextChunk(bool firstChunk)
         nextChunkPos = {10, 0};
         chunk->GenerateChunk(nextChunkPos); // Next position for chunk?
     }
-    // chunk->GenerateChunk((Vector2){10, 0}); // Next position for chunk?
 
     return chunk;
 }
