@@ -6,7 +6,7 @@
 class Orange : public Entity
 {
 public:
-    Orange(Vector2 _pos, float _radius) : pos(_pos), radius(_radius){};
+    Orange(Vector2 _pos) : pos(_pos){};
 
     void Register()
     {
@@ -30,8 +30,17 @@ public:
         DrawCircleV(pos, radius, ORANGE);
     }
 
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor)
+    {
+        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog")
+        {
+            ecs->RemoveEntity(id);
+            // Add logic for increasing the score of players perhaps in character manager
+        }
+    }
+
     Vector2 pos;
-    float radius;
+    float radius = 0.1;
 };
 
 class Ground : public Entity
