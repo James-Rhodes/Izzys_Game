@@ -42,15 +42,6 @@ public:
         feetSensor = physBody->CreateFixture(&feetSensorDef);
         physBody->SetBullet(true);
 
-        jointDef.bodyA = physBody;
-
-        jointDef.stiffness = 10000.0;
-        jointDef.collideConnected = false;
-        jointDef.localAnchorA = b2Vec2(0, 0);
-        jointDef.localAnchorB = b2Vec2(0, 0);
-
-        // rope = (b2DistanceJoint *)ecs->GetPhysicsManager()->CreateJoint(&jointDef);
-
         physBody->SetLinearDamping(2);
 
         animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 34, 64);
@@ -96,8 +87,6 @@ public:
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;
     b2Fixture *feetSensor;
-    b2DistanceJoint *rope;
-    b2DistanceJointDef jointDef;
     bool isSwinging = false;
     bool isInSwingDismount = false;
     float swingStrength = 0.5;

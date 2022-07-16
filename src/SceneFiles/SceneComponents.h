@@ -69,6 +69,7 @@ public:
     void Update()
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+        // physBody->GetFixtureList()->SetFriction(0);
     };
 
     void Draw()
@@ -77,6 +78,13 @@ public:
         float alphaDetailOffset = 5.0 / 64.0f; // 5 pixel offset for some more detail that has alpha back ground (can be walked through)
 
         DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){pos.x - (width / 2), pos.y + (height / 2) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
+    }
+
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor)
+    {
+        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog")
+        {
+        }
     }
 
     Vector2 pos;
