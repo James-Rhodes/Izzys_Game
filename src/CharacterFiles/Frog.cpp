@@ -40,7 +40,7 @@ void Frog::UpdateController()
         if (IsKeyDown(KEY_A))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            if ((-currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
             {
                 b2Vec2 force;
 
@@ -66,7 +66,7 @@ void Frog::UpdateController()
         if (IsKeyDown(KEY_D))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            if ((currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
             {
                 b2Vec2 force;
 

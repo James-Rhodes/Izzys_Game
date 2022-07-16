@@ -42,7 +42,7 @@ void Capy::UpdateController()
         if (IsKeyDown(KEY_LEFT))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((-currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            if ((-currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
             {
 
                 physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
@@ -56,7 +56,7 @@ void Capy::UpdateController()
         if (IsKeyDown(KEY_RIGHT))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((currVel.x < speed) && (isOnGround || currVel.LengthSquared() > 0.001))
+            if ((currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
             {
 
                 physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);

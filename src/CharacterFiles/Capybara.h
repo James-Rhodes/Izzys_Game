@@ -4,6 +4,7 @@
 #include <math.h>
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
+#include "../SceneFiles/TerrainManager.h"
 class Capy : public Entity
 {
 public:
@@ -45,6 +46,8 @@ public:
         animManager.AddAnimation("Dash", {3});
         animManager.AddAnimation("Dead", {4});
         animManager.SetState("Stand_Still");
+
+        screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
     }
 
     void Update();
@@ -71,6 +74,8 @@ public:
     float dashRechargeTime = 0.8;
     int isOnGround = 0;
     bool isAlive = true;
+
+    float *screenScrollSpeed = nullptr;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing
     AnimationManager animManager;

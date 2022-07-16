@@ -4,6 +4,7 @@
 #include <math.h>
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
+#include "../SceneFiles/TerrainManager.h"
 
 #include "Tongue.h"
 
@@ -62,6 +63,8 @@ public:
 
         tongue = Tongue(3);
         tongue.SetBeginBody(physBody, (b2Vec2){0, height / 6});
+
+        screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
     }
 
     void Update();
@@ -101,6 +104,7 @@ public:
     float maxDistFromFlyToSwing = 3.5; // Can change this to alter the maximum distance before attaching to a fly fails
 
     bool isAlive = true;
+    float *screenScrollSpeed = nullptr;
 
     Tongue tongue;
 };
