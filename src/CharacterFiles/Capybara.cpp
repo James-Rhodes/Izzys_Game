@@ -1,5 +1,41 @@
 #include "Capybara.h"
 
+void Capy::Register()
+{
+    ecs->RegisterEntityAsDrawable(id);
+
+    RectanglePhysicsObjectConfig config;
+    // config.density =
+    config.friction = 1.0f;
+    config.isDynamic = true;
+    config.isRollable = false;
+    config.restitution = 0;
+    config.pos = pos;
+    config.width = width;
+    config.height = height;
+
+    ecs->RegisterEntityAsPhysicsObject(id, config);
+    b2PolygonShape rect;
+    rect.SetAsBox(width / 2 - 0.02, height / 8, b2Vec2(0, -height / 2), 0);
+
+    b2FixtureDef feetSensorDef;
+    feetSensorDef.isSensor = true;
+    feetSensorDef.shape = &rect;
+
+    feetSensor = physBody->CreateFixture(&feetSensorDef);
+    physBody->SetBullet(true);
+
+    animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 0, 66, 32);
+
+    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    animManager.AddAnimation("Stand_Still", {0});
+    animManager.AddAnimation("Dash", {3});
+    animManager.AddAnimation("Dead", {4});
+    animManager.SetState("Stand_Still");
+
+    screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
+}
+
 void Capy::Update()
 {
     // controller.Update(physBody);
@@ -39,10 +75,10 @@ void Capy::UpdateController()
     if (isAlive)
     {
 
-        if (IsKeyDown(KEY_LEFT))
+        if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((-currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
+            if (-currVel.x < speed)
             {
 
                 physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
@@ -53,10 +89,10 @@ void Capy::UpdateController()
             keyWasPressed = true;
         }
 
-        if (IsKeyDown(KEY_RIGHT))
+        if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
+            if (currVel.x < speed)
             {
 
                 physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);

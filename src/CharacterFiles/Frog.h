@@ -17,46 +17,7 @@ public:
         // frameSize = {(float)texture.width / 4.0f, (float)texture.height};
     }
 
-    void Register()
-    {
-        ecs->RegisterEntityAsDrawable(id);
-
-        RectanglePhysicsObjectConfig config;
-        // config.density =
-        config.friction = 1.0f;
-        config.isDynamic = true;
-        config.isRollable = false;
-        config.restitution = 0;
-        config.pos = pos;
-        config.width = width;
-        config.height = height;
-
-        ecs->RegisterEntityAsPhysicsObject(id, config);
-        b2PolygonShape rect;
-        rect.SetAsBox(width / 2 - 0.01, height / 8, b2Vec2(0, -height / 2), 0);
-
-        b2FixtureDef feetSensorDef;
-        feetSensorDef.isSensor = true;
-        feetSensorDef.shape = &rect;
-
-        feetSensor = physBody->CreateFixture(&feetSensorDef);
-        physBody->SetBullet(true);
-
-        physBody->SetLinearDamping(2);
-
-        animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 34, 64);
-
-        animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
-        animManager.AddAnimation("Stand_Still", {0});
-        animManager.AddAnimation("Swing", {3});
-        animManager.AddAnimation("Dead", {4});
-        animManager.SetState("Stand_Still");
-
-        tongue = Tongue(3);
-        tongue.SetBeginBody(physBody, (b2Vec2){0, height / 6});
-
-        screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
-    }
+    void Register() override;
 
     void Update();
 
@@ -94,6 +55,8 @@ public:
 
     bool isAlive = true;
     float *screenScrollSpeed = nullptr;
+
+    bool isTouchingSideOfTerrain = false;
 
     Tongue tongue;
 };

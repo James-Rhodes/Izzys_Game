@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
+#include "../CharacterFiles/Capybara.h"
+#include "../CharacterFiles/Frog.h"
 
 class Orange : public Entity
 {
@@ -49,49 +51,23 @@ public:
     // Pos is in world coords
     Ground(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : pos(_pos), width(_width), height(_height), srcRect(src), friction(_friction){};
 
-    void Register()
-    {
-        ecs->RegisterEntityAsDrawable(id);
-        RectanglePhysicsObjectConfig config;
+    void Register();
 
-        config.pos = pos;
-        config.width = width;
-        config.height = height;
-        config.isDynamic = false;
-        config.restitution = 0;
-        config.friction = friction;
+    void Update();
 
-        ecs->RegisterEntityAsPhysicsObject(id, config);
-        // Below are the coords for the start pos for future reference
-        // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 97, 32, 36);
-    }
+    void Draw();
 
-    void Update()
-    {
-        pos = {physBody->GetPosition().x, physBody->GetPosition().y};
-        // physBody->GetFixtureList()->SetFriction(0);
-    };
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor) override;
 
-    void Draw()
-    {
-
-        float alphaDetailOffset = 5.0 / 64.0f; // 5 pixel offset for some more detail that has alpha back ground (can be walked through)
-
-        DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){pos.x - (width / 2), pos.y + (height / 2) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
-    }
-
-    void OnCollision(Entity *collidedEntity, bool detectedBySensor)
-    {
-        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog")
-        {
-        }
-    }
+    void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor) override;
 
     Vector2 pos;
     float width;
     float height;
     Rectangle srcRect;
     float friction;
+    int numSidePlayerCollisions = 0;
+    b2Fixture *groundFixture;
 };
 
 class Fly : public Entity

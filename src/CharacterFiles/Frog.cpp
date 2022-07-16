@@ -1,5 +1,46 @@
 #include "Frog.h"
 
+void Frog::Register()
+{
+    ecs->RegisterEntityAsDrawable(id);
+
+    RectanglePhysicsObjectConfig config;
+    // config.density =
+    config.friction = 1.0f;
+    config.isDynamic = true;
+    config.isRollable = false;
+    config.restitution = 0;
+    config.pos = pos;
+    config.width = width;
+    config.height = height;
+
+    ecs->RegisterEntityAsPhysicsObject(id, config);
+    b2PolygonShape rect;
+    rect.SetAsBox(width / 2 - 0.02, height / 8, b2Vec2(0, -height / 2), 0);
+
+    b2FixtureDef feetSensorDef;
+    feetSensorDef.isSensor = true;
+    feetSensorDef.shape = &rect;
+
+    feetSensor = physBody->CreateFixture(&feetSensorDef);
+    physBody->SetBullet(true);
+
+    physBody->SetLinearDamping(2);
+
+    animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 34, 64);
+
+    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    animManager.AddAnimation("Stand_Still", {0});
+    animManager.AddAnimation("Swing", {3});
+    animManager.AddAnimation("Dead", {4});
+    animManager.SetState("Stand_Still");
+
+    tongue = Tongue(3);
+    tongue.SetBeginBody(physBody, (b2Vec2){0, height / 6});
+
+    screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
+}
+
 void Frog::Update()
 {
     UpdateController();
@@ -37,10 +78,10 @@ void Frog::UpdateController()
     if (isAlive)
     {
 
-        if (IsKeyDown(KEY_A))
+        if (IsKeyDown(KEY_A) && (!isTouchingSideOfTerrain || isOnGround))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((-currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
+            if (-currVel.x < speed)
             {
                 b2Vec2 force;
 
@@ -63,10 +104,10 @@ void Frog::UpdateController()
             keyWasPressed = true;
         }
 
-        if (IsKeyDown(KEY_D))
+        if (IsKeyDown(KEY_D) && (!isTouchingSideOfTerrain || isOnGround))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
-            if ((currVel.x < speed) && (isOnGround || std::abs(currVel.LengthSquared() - *screenScrollSpeed) > 0.001))
+            if (currVel.x < speed)
             {
                 b2Vec2 force;
 
