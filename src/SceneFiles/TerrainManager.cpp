@@ -74,7 +74,10 @@ SceneChunk *TerrainManager::GenerateNextChunk(bool firstChunk)
 SceneChunk *TerrainManager::GetChunk()
 {
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
-    SceneChunk *newChunk = nullptr;
+    SceneChunk *newChunk = currentChunk->GetMandatoryNeighboringChunk();
+
+    if (newChunk != nullptr)
+        return newChunk;
 
     switch (randChunkIndex)
     {

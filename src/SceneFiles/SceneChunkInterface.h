@@ -41,6 +41,11 @@ public:
         }
     };
 
+    virtual SceneChunk *GetMandatoryNeighboringChunk()
+    {
+        return nullptr;
+    }
+
     float sceneMovementSpeed = 0;
     std::vector<Entity *> sceneComponents;
     ECS *ecs;
