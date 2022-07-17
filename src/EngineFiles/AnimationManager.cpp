@@ -109,6 +109,8 @@ void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle
 
     Vector2 boundary = {dest.x + dest.width, dest.y + dest.height};
 
+    int alphaOffset = 5; // Specific to only Izzys game as the top 5 pixels are always alpha for detail on terrain
+
     for (int y = -1; y < numYTiles; y++)
     {
         if (y == -1)
@@ -121,6 +123,12 @@ void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle
             if (x == -1)
             {
                 x = 0; // To make sure the loop runs at least once
+            }
+
+            if (y == 1)
+            {
+                source.y += alphaOffset;
+                source.height -= alphaOffset;
             }
             float remainderX = std::abs(boundary.x - currentPos.x);
             float remainderY = std::abs(boundary.y - currentPos.y);
