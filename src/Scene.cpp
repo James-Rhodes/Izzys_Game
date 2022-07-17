@@ -55,7 +55,11 @@ void Scene::Update()
 
 void Scene::UpdatePhysics()
 {
-    physManager->Step(1 / 60.0f, 6, 2);
+    while (physicsAccumulator >= physTime)
+    {
+        physicsAccumulator -= physTime;
+        physManager->Step(physTime, 6, 2);
+    }
 }
 
 void Scene::Draw()
@@ -102,6 +106,8 @@ void Scene::Draw()
     DrawTexturePro(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Rectangle){0, 0, (float)currScreenWidth, (float)currScreenHeight}, {0, 0}, 0, RAYWHITE);
 
     DrawFPS(10, 10);
+
+    physicsAccumulator += GetFrameTime();
 
     EndDrawing();
 }

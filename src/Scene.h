@@ -68,4 +68,7 @@ public:
     int currScreenWidth;
     int currScreenHeight;
     bool sceneToReset = false;
+
+    float physicsAccumulator = 0;
+    float physTime = 1 / 60.0f;
 };
