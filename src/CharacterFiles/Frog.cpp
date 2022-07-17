@@ -27,7 +27,7 @@ void Frog::Register()
 
     physBody->SetLinearDamping(2);
 
-    animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 34, 64);
+    animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 32, 64);
 
     animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
     animManager.AddAnimation("Stand_Still", {0});
