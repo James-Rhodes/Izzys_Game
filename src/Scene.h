@@ -71,4 +71,5 @@ public:
 
     float physicsAccumulator = 0;
     float physTime = 1 / 60.0f;
+    int maxNumPhysicsSteps = 5;
 };

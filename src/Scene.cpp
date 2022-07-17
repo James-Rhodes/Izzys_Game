@@ -55,10 +55,15 @@ void Scene::Update()
 
 void Scene::UpdatePhysics()
 {
+    int numPhysicsIterations = 0;
     while (physicsAccumulator >= physTime)
     {
         physicsAccumulator -= physTime;
         physManager->Step(physTime, 6, 2);
+        numPhysicsIterations++;
+
+        if (numPhysicsIterations >= maxNumPhysicsSteps)
+            break;
     }
 }
 
