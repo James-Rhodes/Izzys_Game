@@ -90,20 +90,30 @@ public:
         config.isSensor = true;
 
         ecs->RegisterEntityAsPhysicsObject(id, config);
+
+        animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 133, 16, 16);
+        animManager.AddAnimation("Fly", {0, 1, 2, 3, 2, 1}, 0.1);
+        animManager.SetState("Fly", GetFrameTime());
     }
 
     void Update()
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+        animManager.SetState("Fly", GetFrameTime());
     };
 
     void Draw()
     {
         // DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){pos.x - (width / 2), pos.y + (height / 2) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
-        DrawRectanglePro((Rectangle){pos.x, pos.y, width, width}, {width / 2, width / 2}, 0, BLACK);
+        // DrawRectanglePro((Rectangle){pos.x, pos.y, width, width}, {width / 2, width / 2}, 0, BLACK);
+        Texture2D texture = ecs->GetSpriteSheet();
+        Rectangle src = animManager.GetTextureRectangle();
+
+        DrawTexturePro(texture, src, (Rectangle){pos.x - (-width / 2), pos.y + (width / 2), -width, -width}, {0, 0}, 0, RAYWHITE);
         // Will eventually need an animation Manager once I have drawn the fly sprite
     }
 
     Vector2 pos;
     float width = 0.2;
+    AnimationManager animManager;
 };

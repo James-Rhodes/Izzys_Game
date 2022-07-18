@@ -40,7 +40,12 @@ void Ground::Register()
 
 void Ground::Update()
 {
-    pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+    Vector2 nextPos = {physBody->GetPosition().x, physBody->GetPosition().y};
+
+    // if (id == "Ground0")
+    // std::cout << "currentPos: " << pos.x << " , " << pos.y << " Next Pos: " << nextPos.x << " , " << nextPos.y << " Delta: " << nextPos.x - pos.x << " , " << nextPos.y - pos.y << std::endl;
+
+    pos = nextPos;
 
     if (numSidePlayerCollisions != 0)
     {
