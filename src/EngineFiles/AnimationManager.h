@@ -31,6 +31,8 @@ public:
     // Returns the texture rectangle for a given state. Does not set the state of the object. Will also restart any animations currently running as well as will fail if state is currently locked. Be Warned
     Rectangle GetTextureRectangleAtState(std::string _state);
 
+    bool GetIsStateLocked();
+
 private:
     struct AnimationInfo
     {

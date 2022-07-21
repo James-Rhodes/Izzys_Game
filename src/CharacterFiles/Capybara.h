@@ -40,6 +40,7 @@ public:
     float dashRechargeTime = 0.8;
     int isOnGround = 0;
     bool isAlive = true;
+    bool stateWasPreviouslyLocked = false;
 
     float *screenScrollSpeed = nullptr;
 

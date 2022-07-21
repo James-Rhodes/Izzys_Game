@@ -69,7 +69,7 @@ void Capy::UpdateController()
     if (isAlive)
     {
 
-        if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround))
+        if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
             if (-currVel.x < speed)
@@ -83,7 +83,7 @@ void Capy::UpdateController()
             keyWasPressed = true;
         }
 
-        if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround))
+        if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
             if (currVel.x < speed)
@@ -115,15 +115,30 @@ void Capy::UpdateController()
         {
             if (GetTime() - timeOfLastDash > dashRechargeTime)
             {
-                float dashForce = 13 * physBody->GetMass();
-
+                float dashForce = 20 * physBody->GetMass();
+                b2Vec2 newVel = b2Vec2(0, 0);
+                physBody->SetLinearVelocity(newVel);
                 physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
                 timeOfLastDash = GetTime();
-                animManager.SetStateLock("Dash", 0.5);
+                animManager.SetStateLock("Dash", 0.2);
                 keyWasPressed = true;
+                stateWasPreviouslyLocked = true;
             }
         }
+
+        if (stateWasPreviouslyLocked && !animManager.GetIsStateLocked())
+        {
+            // State just unlocked
+            stateWasPreviouslyLocked = false;
+            physBody->SetLinearVelocity({0, 0});
+        }
+
         physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+        if (animManager.GetCurrentState() == "Dash")
+        {
+            physBody->SetGravityScale(0);
+        }
+
         if (!keyWasPressed || !isOnGround)
         {
             animManager.SetState("Stand_Still");

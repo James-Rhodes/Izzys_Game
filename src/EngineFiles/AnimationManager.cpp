@@ -94,6 +94,11 @@ Rectangle AnimationManager::GetTextureRectangleAtState(std::string _state)
     return result;
 };
 
+bool AnimationManager::GetIsStateLocked()
+{
+    return isLocked;
+}
+
 void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float cameraZoom, Color tint)
 {
     // Could probably be done better but this will do for now!
