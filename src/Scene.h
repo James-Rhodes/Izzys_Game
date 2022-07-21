@@ -19,6 +19,7 @@ public:
     {
         minScreenWidth = 640;
         minScreenHeight = 360;
+
         currScreenWidth = minScreenWidth;
         currScreenHeight = minScreenHeight;
 
@@ -43,6 +44,8 @@ public:
 
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
+
+        ecs.SetFrameData(&physAlpha);
     };
     ~Scene()
     {
@@ -72,4 +75,5 @@ public:
     float physicsAccumulator = 0;
     float physTime = 1 / 60.0f;
     int maxNumPhysicsSteps = 5;
+    float physAlpha = 0; // Percentage of remaining physics time for physics steps each frame
 };

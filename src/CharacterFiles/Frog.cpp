@@ -1,5 +1,10 @@
 #include "Frog.h"
 
+// void PrintVector2(Vector2 vec)
+// {
+//     std::cout << vec.x << " , " << vec.y << std::endl;
+// }
+
 void Frog::Register()
 {
     ecs->RegisterEntityAsDrawable(id);
@@ -44,23 +49,35 @@ void Frog::Register()
 void Frog::Update()
 {
     UpdateController();
-    pos = GetPosition();
+    Vector2 nextPos = GetPosition();
+    float remainingPhysTime = *ecs->GetFrameData<float>();
+    renderPos = Vector2Add(Vector2Scale(nextPos, remainingPhysTime), Vector2Scale(pos, 1.0 - remainingPhysTime));
+
+    // renderPos = Vector2Lerp(nextPos, pos, remainingPhysTime);
+    // std::cout << "Vectors:" << std::endl;
+    // PrintVector2(pos);
+    // PrintVector2(nextPos);
+
+    // PrintVector2(renderPos);
+
+    pos = nextPos;
 }
 
 void Frog::Draw()
 {
 
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
+    renderPos = PixelPerfectClamp(renderPos, 64);
 
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
     if (currDirection == 1)
     {
-        DrawTexturePro(texture, src, (Rectangle){pos.x - (width / 2), pos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
+        DrawTexturePro(texture, src, (Rectangle){renderPos.x - (width / 2), renderPos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
     }
     else
     {
-        DrawTexturePro(texture, src, (Rectangle){pos.x - (currDirection * width / 2), pos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
+        DrawTexturePro(texture, src, (Rectangle){renderPos.x - (currDirection * width / 2), renderPos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
     }
 
     tongue.Draw();

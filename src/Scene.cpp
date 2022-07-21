@@ -65,6 +65,8 @@ void Scene::UpdatePhysics()
         if (numPhysicsIterations >= maxNumPhysicsSteps)
             break;
     }
+
+    physAlpha = physicsAccumulator / physTime;
 }
 
 void Scene::Draw()

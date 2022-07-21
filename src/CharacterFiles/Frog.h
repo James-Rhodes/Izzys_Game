@@ -38,6 +38,7 @@ public:
     };
 
     Vector2 pos;
+    Vector2 renderPos;
     float width = 0.5;
     float height = 1;
     float speed = 4;

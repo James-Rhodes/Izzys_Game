@@ -40,15 +40,26 @@ void Capy::Update()
 {
     // controller.Update(physBody);
     UpdateController();
-    pos = GetPosition();
 
-    // std::cout<<feetSensor->
+    Vector2 nextPos = GetPosition();
+    float remainingPhysTime = *ecs->GetFrameData<float>();
+    renderPos = Vector2Add(Vector2Scale(nextPos, remainingPhysTime), Vector2Scale(pos, 1.0 - remainingPhysTime));
+
+    // renderPos = Vector2Lerp(nextPos, pos, remainingPhysTime);
+    // std::cout << "Vectors:" << std::endl;
+    // PrintVector2(pos);
+    // PrintVector2(nextPos);
+
+    // PrintVector2(renderPos);
+
+    pos = nextPos;
 }
 
 void Capy::Draw()
 {
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
+    renderPos = PixelPerfectClamp(renderPos, 64);
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
     // std::cout << src.x << " , " << src.y << " , " << src.width << " , " << src.height << std::endl;

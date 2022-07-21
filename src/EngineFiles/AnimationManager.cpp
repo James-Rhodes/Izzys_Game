@@ -83,6 +83,17 @@ std::string AnimationManager::GetCurrentState()
     return currState;
 }
 
+Rectangle AnimationManager::GetTextureRectangleAtState(std::string _state)
+{
+    std::string prevState = currState;
+
+    SetState(_state);
+    Rectangle result = GetTextureRectangle();
+    SetState(prevState);
+
+    return result;
+};
+
 void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float cameraZoom, Color tint)
 {
     // Could probably be done better but this will do for now!
@@ -109,7 +120,7 @@ void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle
 
     Vector2 boundary = {dest.x + dest.width, dest.y + dest.height};
 
-    int alphaOffset = 5; // Specific to only Izzys game as the top 5 pixels are always alpha for detail on terrain
+    int alphaOffset = 4; // Specific to only Izzys game as the top 5 pixels are always alpha for detail on terrain
 
     for (int y = -1; y < numYTiles; y++)
     {
@@ -144,13 +155,9 @@ void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle
     }
 }
 
-Rectangle AnimationManager::GetTextureRectangleAtState(std::string _state)
+Vector2 PixelPerfectClamp(Vector2 vec, int pixelsPerUnit)
 {
-    std::string prevState = currState;
+    Vector2 vectorInPixels = {std::round(vec.x * pixelsPerUnit), std::round(vec.y * pixelsPerUnit)};
 
-    SetState(_state);
-    Rectangle result = GetTextureRectangle();
-    SetState(prevState);
-
-    return result;
+    return {vectorInPixels.x / pixelsPerUnit, vectorInPixels.y / pixelsPerUnit};
 };

@@ -56,3 +56,4 @@ private:
 };
 
 void DrawTextureTiledWithinCamera(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float cameraZoom, Color tint);
+Vector2 PixelPerfectClamp(Vector2 vec, int pixelsPerUnit);

@@ -71,6 +71,20 @@ public:
     void SetSpriteSheet(Texture2D _spriteSheet);
     Texture2D GetSpriteSheet();
 
+    void SetFrameData(void *data)
+    {
+        frameData = data;
+    };
+    template <typename T>
+    T *GetFrameData()
+    {
+        if (frameData != nullptr)
+        {
+            return (T *)frameData;
+        }
+        return nullptr;
+    }
+
     void PrintDrawableEntities()
     {
         std::cout << "Drawable Entities: " << std::endl;
@@ -104,6 +118,8 @@ private:
     std::list<Entity *> m_physicsEntities;
     Texture2D spriteSheet;
     b2World *physManager;
+
+    void *frameData = nullptr; // Ptr to memory that contains any data I want passed around each frame
 
     void PermanentlyDeleteEntity(const std::string id);
 
