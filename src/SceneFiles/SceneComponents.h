@@ -62,7 +62,6 @@ public:
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor) override;
 
     Vector2 pos;
-    Vector2 renderPos;
     float width;
     float height;
     Rectangle srcRect;

@@ -36,22 +36,12 @@ void Ground::Register()
 
     // Below are the coords for the start pos for future reference
     // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 97, 32, 36);
-
-    renderPos = pos;
 }
 
 void Ground::Update()
 {
-    Vector2 nextPos = {physBody->GetPosition().x, physBody->GetPosition().y};
 
-    // if (id == "Ground0")
-    // std::cout << "currentPos: " << renderPos.x << " , " << renderPos.y << " Next Pos: " << nextPos.x << " , " << nextPos.y << " Delta: " << nextPos.x - pos.x << " , " << nextPos.y - pos.y << std::endl;
-    float remainingPhysTime = *ecs->GetFrameData<float>();
-
-    renderPos = Vector2Add(Vector2Scale(nextPos, remainingPhysTime), Vector2Scale(pos, 1.0 - remainingPhysTime));
-
-    pos = nextPos;
-    // renderPos = pos;
+    pos = {physBody->GetPosition().x, physBody->GetPosition().y};
 
     if (numSidePlayerCollisions != 0)
     {
@@ -67,8 +57,7 @@ void Ground::Draw()
 {
 
     float alphaDetailOffset = 5.0 / 64.0f; // 5 pixel offset for some more detail that has alpha back ground (can be walked through)
-    // std::cout << renderPos.x - (width / 2.0f) << " , " << renderPos.y + (height / 2.0f) + alphaDetailOffset << std::endl;
-    renderPos = PixelPerfectClamp(renderPos, 64);
+    Vector2 renderPos = PixelPerfectClamp(pos, 64);
     DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){renderPos.x - (width / 2.0f), renderPos.y + (height / 2.0f) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
 }
 
