@@ -47,17 +47,13 @@ void Capy::Draw()
 {
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
-    Vector2 renderPos = PixelPerfectClamp(pos, 64);
+    Vector2 renderPos = PixelPerfectClamp({pos.x - (currDirection * width / 2), pos.y + (height / 2)}, 64);
+    Vector2 renderDimensions = PixelPerfectClamp({currDirection * width, -height}, 64);
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
-    if (currDirection == 1)
-    {
-        DrawTexturePro(texture, src, (Rectangle){renderPos.x - (width / 2), renderPos.y + (height / 2), width, -height}, {0, 0}, 0, RAYWHITE);
-    }
-    else
-    {
-        DrawTexturePro(texture, src, (Rectangle){renderPos.x - (currDirection * width / 2), renderPos.y + (height / 2), -width, -height}, {0, 0}, 0, RAYWHITE);
-    }
+
+    DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
+                   {0, 0}, 0, RAYWHITE);
 }
 
 Vector2 Capy::GetPosition()
