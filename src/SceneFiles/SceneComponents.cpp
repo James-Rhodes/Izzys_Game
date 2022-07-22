@@ -134,9 +134,16 @@ void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact 
 {
     if (collidedEntity->id == "Capy")
     {
-        contact->SetEnabled(false);
+        Capy *capy = (Capy *)collidedEntity;
+        float minDistBetween = capy->height * 0.5 + height * 0.5;
+        bool contactResult = capy->pos.y - physBody->GetPosition().y >= minDistBetween;
+        contact->SetEnabled(contactResult);
     }
     else if (collidedEntity->id == "Frog")
     {
+        Frog *frog = (Frog *)collidedEntity;
+        float minDistBetween = frog->height * 0.5 + height * 0.5;
+        bool contactResult = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        contact->SetEnabled(contactResult);
     };
 }
