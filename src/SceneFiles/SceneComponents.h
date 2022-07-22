@@ -66,7 +66,9 @@ public:
     float height;
     Rectangle srcRect;
     float friction;
-    int numSidePlayerCollisions = 0;
+    int numSidePlayerCollisionsCapy = 0;
+    int numSidePlayerCollisionsFrog = 0;
+
     b2Fixture *groundFixture;
 };
 

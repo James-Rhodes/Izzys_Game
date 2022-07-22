@@ -43,7 +43,7 @@ void Ground::Update()
 
     pos = {physBody->GetPosition().x, physBody->GetPosition().y};
 
-    if (numSidePlayerCollisions != 0)
+    if (numSidePlayerCollisionsCapy != 0 && numSidePlayerCollisionsFrog != 0)
     {
         groundFixture->SetFriction(0);
     }
@@ -68,12 +68,12 @@ void Ground::OnCollision(Entity *collidedEntity, bool detectedBySensor)
         if (collidedEntity->id == "Capy")
         {
             ((Capy *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisions++;
+            numSidePlayerCollisionsCapy++;
         }
         else if (collidedEntity->id == "Frog")
         {
             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisions++;
+            numSidePlayerCollisionsFrog++;
         }
     }
 }
@@ -86,12 +86,12 @@ void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
         if (collidedEntity->id == "Capy")
         {
             ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
-            numSidePlayerCollisions--;
+            numSidePlayerCollisionsCapy--;
         }
         else if (collidedEntity->id == "Frog")
         {
             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
-            numSidePlayerCollisions--;
+            numSidePlayerCollisionsFrog--;
         }
     }
 }
