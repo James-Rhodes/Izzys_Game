@@ -72,6 +72,12 @@ public:
     b2Fixture *groundFixture;
 };
 
+class Ice : public Ground
+{
+public:
+    Ice(Vector2 _pos, float _width, float _height, Rectangle src) : Ground(_pos, _width, _height, src, 0){};
+};
+
 class Fly : public Entity
 {
 public:

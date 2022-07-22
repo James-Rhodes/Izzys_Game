@@ -6,6 +6,10 @@ void TerrainManager::Register()
     terrainBlocks = AnimationManager(ecs->GetSpriteSheet(), 0, 97, 32, 36);
     terrainBlocks.AddAnimation("Rock and Grass", {0});
     terrainBlocks.AddAnimation("Rock", {1});
+    terrainBlocks.AddAnimation("Plank", {2});
+    terrainBlocks.AddAnimation("Ice", {3});
+    terrainBlocks.AddAnimation("Bouncy", {4});
+
     terrainBlocks.SetState("Rock and Grass");
 
     // Initialise Current Scene and Next Scene
