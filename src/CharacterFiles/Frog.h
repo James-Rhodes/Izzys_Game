@@ -25,8 +25,8 @@ public:
 
     void UpdateController();
 
-    void OnCollision(Entity *collidedEntity, bool detectedBySensor);
-    void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor);
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
+    void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
 
     Vector2 GetPosition();
 

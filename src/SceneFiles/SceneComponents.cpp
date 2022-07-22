@@ -61,7 +61,7 @@ void Ground::Draw()
     DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){renderPos.x - (width / 2.0f), renderPos.y + (height / 2.0f) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
 }
 
-void Ground::OnCollision(Entity *collidedEntity, bool detectedBySensor)
+void Ground::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
     if (detectedBySensor)
     {
@@ -78,7 +78,7 @@ void Ground::OnCollision(Entity *collidedEntity, bool detectedBySensor)
     }
 }
 
-void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
+void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
     if (detectedBySensor)
     {
@@ -94,4 +94,49 @@ void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
             numSidePlayerCollisionsFrog--;
         }
     }
+}
+
+void Plank::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    if (detectedBySensor)
+    {
+        if (collidedEntity->id == "Capy")
+        {
+            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = true;
+            numSidePlayerCollisionsCapy++;
+        }
+        else if (collidedEntity->id == "Frog")
+        {
+            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
+            numSidePlayerCollisionsFrog++;
+        }
+    }
+}
+void Plank::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    if (detectedBySensor)
+    {
+
+        if (collidedEntity->id == "Capy")
+        {
+            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
+            numSidePlayerCollisionsCapy--;
+        }
+        else if (collidedEntity->id == "Frog")
+        {
+            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
+            numSidePlayerCollisionsFrog--;
+        }
+    }
+};
+
+void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    if (collidedEntity->id == "Capy")
+    {
+        contact->SetEnabled(false);
+    }
+    else if (collidedEntity->id == "Frog")
+    {
+    };
 }

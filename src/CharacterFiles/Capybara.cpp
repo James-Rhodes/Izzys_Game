@@ -150,7 +150,7 @@ void Capy::UpdateController()
     }
 }
 
-void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
+void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)
@@ -158,7 +158,7 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor)
         isOnGround++;
     }
 }
-void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
+void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)

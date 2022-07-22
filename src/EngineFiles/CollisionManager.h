@@ -15,8 +15,8 @@ public:
 
         if (ent1 && ent2)
         {
-            ent1->OnCollision(ent2, contact->GetFixtureA()->IsSensor());
-            ent2->OnCollision(ent1, contact->GetFixtureB()->IsSensor());
+            ent1->OnCollision(ent2, contact->GetFixtureA()->IsSensor(), contact);
+            ent2->OnCollision(ent1, contact->GetFixtureB()->IsSensor(), contact);
         }
     };
 
@@ -27,8 +27,20 @@ public:
 
         if (ent1 && ent2)
         {
-            ent1->OnCollisionEnd(ent2, contact->GetFixtureA()->IsSensor());
-            ent2->OnCollisionEnd(ent1, contact->GetFixtureB()->IsSensor());
+            ent1->OnCollisionEnd(ent2, contact->GetFixtureA()->IsSensor(), contact);
+            ent2->OnCollisionEnd(ent1, contact->GetFixtureB()->IsSensor(), contact);
         }
     };
+
+    void PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
+    {
+        Entity *ent1 = (Entity *)contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+        Entity *ent2 = (Entity *)contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+
+        if (ent1 && ent2)
+        {
+            ent1->OnPreSolve(ent2, contact->GetFixtureA()->IsSensor(), contact);
+            ent2->OnPreSolve(ent1, contact->GetFixtureB()->IsSensor(), contact);
+        }
+    }
 };

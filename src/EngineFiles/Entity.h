@@ -42,8 +42,9 @@ public:
     virtual void Update() = 0;
     virtual void Draw(){};
     virtual void Register(){};
-    virtual void OnCollision(Entity *collidedEntity, bool detectedBySensor){};
-    virtual void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor){};
+    virtual void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact){};
+    virtual void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact){};
+    virtual void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact){};
 
     void SetID(const std::string _id)
     {

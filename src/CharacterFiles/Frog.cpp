@@ -211,7 +211,7 @@ void Frog::UpdateController()
     }
 }
 
-void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor)
+void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)
@@ -224,7 +224,7 @@ void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor)
         capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
     }
 }
-void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor)
+void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)

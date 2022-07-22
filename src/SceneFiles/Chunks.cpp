@@ -3,7 +3,7 @@
 void FlatChunk::GenerateChunk(Vector2 worldCenterPos)
 {
     sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {0, -2.8}), 10.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
-    sceneComponents.push_back(&ecs->CreateEntity<Ice>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {2, -0.5}), 3, 0.5, terrainBlocks->GetTextureRectangleAtState("Ice")));
+    sceneComponents.push_back(&ecs->CreateEntity<Plank>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {2, -0.5}), 3, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank")));
 };
 
 void GapChunk::GenerateChunk(Vector2 worldCenterPos)
