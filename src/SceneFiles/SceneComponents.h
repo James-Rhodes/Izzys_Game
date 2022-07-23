@@ -143,3 +143,18 @@ public:
 
     b2Vec2 bounceForce = {0, 20};
 };
+
+class Tree : public Ground
+{
+public:
+    // Pos is
+    Tree(Vector2 _pos, Rectangle src) : Ground(_pos, 0.5, 0.5, src, 1){};
+
+    void Update() override;
+
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
+
+    void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
+
+    bool isSmashed = false;
+};

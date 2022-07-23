@@ -146,3 +146,32 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         }
     };
 }
+
+void Tree::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    contact->SetEnabled(!isSmashed);
+}
+
+void Tree::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    Ground::OnCollision(collidedEntity, detectedBySensor, contact);
+
+    if (collidedEntity->id == "Capy")
+    {
+        Capy *capy = (Capy *)collidedEntity;
+        if (capy->stateWasPreviouslyLocked)
+        { // Dashing
+            isSmashed = true;
+        }
+    }
+}
+
+void Tree::Update()
+{
+    Ground::Update();
+
+    if (isSmashed)
+    {
+        ecs->RemoveEntity(id);
+    }
+}

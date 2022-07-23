@@ -4,6 +4,7 @@ void FlatChunk::GenerateChunk(Vector2 worldCenterPos)
 {
     sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {0, -2.8}), 10.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
     sceneComponents.push_back(&ecs->CreateEntity<BouncyPlatform>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {2, -1.4}), 3, 0.3, terrainBlocks->GetTextureRectangleAtState("Bouncy")));
+    sceneComponents.push_back(&ecs->CreateEntity<Tree>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-2, -1.4}), terrainBlocks->GetTextureRectangleAtState("Tree")));
 };
 
 void GapChunk::GenerateChunk(Vector2 worldCenterPos)

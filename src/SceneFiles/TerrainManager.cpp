@@ -9,6 +9,7 @@ void TerrainManager::Register()
     terrainBlocks.AddAnimation("Plank", {2});
     terrainBlocks.AddAnimation("Ice", {3});
     terrainBlocks.AddAnimation("Bouncy", {4});
+    terrainBlocks.AddAnimation("Tree", {5});
 
     terrainBlocks.SetState("Rock and Grass");
 
