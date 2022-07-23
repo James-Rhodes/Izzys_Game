@@ -96,40 +96,6 @@ void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Con
     }
 }
 
-void Plank::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
-{
-    if (detectedBySensor)
-    {
-        if (collidedEntity->id == "Capy")
-        {
-            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisionsCapy++;
-        }
-        else if (collidedEntity->id == "Frog")
-        {
-            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisionsFrog++;
-        }
-    }
-}
-void Plank::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
-{
-    if (detectedBySensor)
-    {
-
-        if (collidedEntity->id == "Capy")
-        {
-            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
-            numSidePlayerCollisionsCapy--;
-        }
-        else if (collidedEntity->id == "Frog")
-        {
-            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
-            numSidePlayerCollisionsFrog--;
-        }
-    }
-};
-
 void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
     if (collidedEntity->id == "Capy")
@@ -147,3 +113,65 @@ void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact 
         contact->SetEnabled(contactResult);
     };
 }
+
+void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+{
+    if (detectedBySensor)
+    {
+        if (collidedEntity->id == "Capy")
+        {
+            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = true;
+            numSidePlayerCollisionsCapy++;
+        }
+        else if (collidedEntity->id == "Frog")
+        {
+            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
+            numSidePlayerCollisionsFrog++;
+        }
+    }
+
+    if (collidedEntity->id == "Capy")
+    {
+        Capy *capy = (Capy *)collidedEntity;
+        float minDistBetween = capy->height * 0.5 + height * 0.5;
+        bool contactFromAbove = capy->pos.y - physBody->GetPosition().y >= minDistBetween;
+        if (contactFromAbove)
+        {
+            b2Vec2 capyVel = capy->physBody->GetLinearVelocity();
+            capyVel.y *= 0;
+            capy->physBody->SetLinearVelocity(capyVel);
+            capy->physBody->ApplyLinearImpulseToCenter(capy->physBody->GetMass() * bounceForce, true);
+        }
+    }
+    else if (collidedEntity->id == "Frog")
+    {
+        Frog *frog = (Frog *)collidedEntity;
+        float minDistBetween = frog->height * 0.5 + height * 0.5;
+        bool contactFromAbove = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        if (contactFromAbove)
+        {
+            b2Vec2 frogVel = frog->physBody->GetLinearVelocity();
+            frogVel.y *= 0;
+            frog->physBody->SetLinearVelocity(frogVel);
+            frog->physBody->ApplyLinearImpulseToCenter(frog->physBody->GetMass() * bounceForce, true);
+        }
+    };
+}
+
+// void BouncyPlatform::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+// {
+//     if (detectedBySensor)
+//     {
+
+//         if (collidedEntity->id == "Capy")
+//         {
+//             ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
+//             numSidePlayerCollisionsCapy--;
+//         }
+//         else if (collidedEntity->id == "Frog")
+//         {
+//             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
+//             numSidePlayerCollisionsFrog--;
+//         }
+//     }
+// }

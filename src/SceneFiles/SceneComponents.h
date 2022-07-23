@@ -130,16 +130,20 @@ class Plank : public Ground
 {
 public:
     Plank(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : Ground(_pos, _width, _height, src, _friction){};
+    void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
+};
+
+class BouncyPlatform : public Ground
+{
+public:
+    // Pos is in world coords
+    BouncyPlatform(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : Ground(_pos, _width, _height, src, _friction){};
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 
-    void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
+    // void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 
-    void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
+    // void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 
-    Vector2 pos;
-    float width;
-    float height;
-    Rectangle srcRect;
-    float friction = 1;
+    b2Vec2 bounceForce = {0, 20};
 };
