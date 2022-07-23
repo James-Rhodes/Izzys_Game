@@ -157,21 +157,3 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         }
     };
 }
-
-// void BouncyPlatform::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
-// {
-//     if (detectedBySensor)
-//     {
-
-//         if (collidedEntity->id == "Capy")
-//         {
-//             ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
-//             numSidePlayerCollisionsCapy--;
-//         }
-//         else if (collidedEntity->id == "Frog")
-//         {
-//             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
-//             numSidePlayerCollisionsFrog--;
-//         }
-//     }
-// }

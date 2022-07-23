@@ -141,9 +141,5 @@ public:
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 
-    // void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
-
-    // void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
-
     b2Vec2 bounceForce = {0, 20};
 };
