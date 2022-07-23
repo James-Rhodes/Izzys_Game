@@ -116,19 +116,8 @@ void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact 
 
 void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
-    if (detectedBySensor)
-    {
-        if (collidedEntity->id == "Capy")
-        {
-            ((Capy *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisionsCapy++;
-        }
-        else if (collidedEntity->id == "Frog")
-        {
-            ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
-            numSidePlayerCollisionsFrog++;
-        }
-    }
+
+    Ground::OnCollision(collidedEntity, detectedBySensor, contact);
 
     if (collidedEntity->id == "Capy")
     {
