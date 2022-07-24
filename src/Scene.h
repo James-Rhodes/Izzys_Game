@@ -7,8 +7,9 @@
 #include <cmath>
 #include "rlgl.h"
 
-#include "./CharacterFiles/Capybara.h"
-#include "./CharacterFiles/Frog.h"
+#include "./CharacterFiles/CharacterManager.h"
+// #include "./CharacterFiles/Capybara.h"
+// #include "./CharacterFiles/Frog.h"
 // #include "./SceneFiles/SceneComponents.h"
 #include "./SceneFiles/TerrainManager.h"
 
@@ -42,10 +43,12 @@ public:
         debugDrawer.AppendFlags(b2Draw::e_jointBit);
         debugDrawer.enabled = false;
 
+        font = LoadFont("./assets/Romulus_Font.png");
+
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
         ecs.SetCamera(&camera);
-
+        ecs.SetFont(&font);
         ecs.SetFrameData(&physAlpha);
     };
     ~Scene()
@@ -66,6 +69,7 @@ public:
     CollisionManager collisionManager;
     DebugDrawer debugDrawer;
     RenderTexture2D screenBuffer;
+    Font font;
     float aspectRatio;
     int minScreenWidth;
     int minScreenHeight;

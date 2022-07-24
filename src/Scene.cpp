@@ -9,18 +9,12 @@ void Scene::Run()
 
 void Scene::Init()
 {
-    // ecs.CreateEntity<Ground>("Ground", (Vector2){0, -2.8}, 10, 0.5, (Rectangle){0, 97, 32, 36});
-    // ecs.CreateEntity<Orange>("Orange", (Vector2){1, 1}, 0.2);
-    // ecs.CreateEntity<Ground>("Ground2", (Vector2){3, 0}, 1.7, 0.5, (Rectangle){32, 97, 32, 36});
-
-    // ecs.CreateEntity<Fly>("Fly", (Vector2){-2, 2});
-    // ecs.CreateEntity<Ground>("Fly1", (Vector2){-1, 2}, 0.1, 0.1);
     ecs.CreateEntity<TerrainManager>("TerrainManager");
 
-    ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
-    ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
-    // ecs.CreateEntity<Box>("Box", (Vector2){0, 0}, 1, 0.5); // Stand in Capy boi
+    // ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
+    // ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
 
+    ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){0, 0}, (Vector2){-2, 0});
     sceneToReset = false;
 }
 
@@ -113,6 +107,12 @@ void Scene::Draw()
     DrawTexturePro(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Rectangle){0, 0, (float)currScreenWidth, (float)currScreenHeight}, {0, 0}, 0, RAYWHITE);
 
     DrawFPS(10, 10);
+    // Draws the screen space objects
+    auto screenSpaceDrawables = ecs.GetAllScreenSpaceDrawableObjects();
+    for (auto drawer : screenSpaceDrawables)
+    {
+        drawer->Draw();
+    }
 
     physicsAccumulator += GetFrameTime();
 

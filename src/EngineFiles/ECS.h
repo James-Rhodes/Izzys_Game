@@ -13,9 +13,13 @@
 struct EntityContainer
 {
     Entity *entityPointer;
+
     std::list<Entity *>::iterator drawableIterator;
+    std::list<Entity *>::iterator screenSpaceDrawableIterator;
+
     std::list<Entity *>::iterator physicsObjectIterator;
     bool isDrawable = false;
+    bool isScreenSpaceDrawable = false;
     bool isPhysicsObject = false;
     bool toBeDeleted = false;
 
@@ -59,6 +63,8 @@ public:
     void RegisterEntity(Entity &entity);
     void RegisterEntityAsDrawable(const std::string &id);
 
+    void RegisterEntityAsScreenSpaceDrawable(const std::string &id);
+
     void RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body);
     void RegisterEntityAsPhysicsObject(const std::string &id, CirclePhysicsObjectConfig config);
     void RegisterEntityAsPhysicsObject(const std::string &id, RectanglePhysicsObjectConfig config);
@@ -67,11 +73,14 @@ public:
     b2World *GetPhysicsManager();
 
     std::list<Entity *> &GetAllDrawableObjects();
+    std::list<Entity *> &GetAllScreenSpaceDrawableObjects();
     std::list<Entity *> &GetAllPhysicsObjects();
     void SetSpriteSheet(Texture2D _spriteSheet);
     Texture2D GetSpriteSheet();
     void SetCamera(Camera2D *cam);
     Camera2D *GetCamera();
+    void SetFont(Font *_font);
+    Font *GetFont();
 
     void SetFrameData(void *data)
     {
@@ -117,10 +126,12 @@ public:
 private:
     std::unordered_map<std::string, std::unique_ptr<EntityContainer>> m_entityMap;
     std::list<Entity *> m_drawableEntities;
+    std::list<Entity *> m_screenSpaceDrawableEntities;
     std::list<Entity *> m_physicsEntities;
     Texture2D spriteSheet;
     b2World *physManager;
     Camera2D *camera;
+    Font *font;
 
     void *frameData = nullptr; // Ptr to memory that contains any data I want passed around each frame
 

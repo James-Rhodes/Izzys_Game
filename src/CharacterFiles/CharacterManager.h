@@ -12,6 +12,8 @@ class CharacterManager : public Entity
 public:
     CharacterManager(Vector2 _initCapyPos, Vector2 _initFrogPos) : initCapyPos(_initCapyPos), initFrogPos(_initFrogPos){};
 
+    void Register() override;
+
     void Update() override;
 
     void Draw() override; // Draw text for score etc
@@ -30,4 +32,5 @@ public:
 
     Capy *capy = nullptr;
     Frog *frog = nullptr;
+    Camera2D *camera;
 };

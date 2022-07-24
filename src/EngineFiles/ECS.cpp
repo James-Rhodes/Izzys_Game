@@ -23,6 +23,18 @@ void ECS::RegisterEntityAsDrawable(const std::string &id)
     entContainer->drawableIterator = --m_drawableEntities.end();
 }
 
+void ECS::RegisterEntityAsScreenSpaceDrawable(const std::string &id)
+{
+    EntityContainer *entContainer = m_entityMap[id].get();
+    entContainer->isScreenSpaceDrawable = true;
+
+    // Add to screen space drawable entities
+    m_screenSpaceDrawableEntities.push_back(entContainer->entityPointer);
+
+    // Set the iterator in the EntityContainer so that it can be easily removed later. it is the iterator one before the end
+    entContainer->screenSpaceDrawableIterator = --m_screenSpaceDrawableEntities.end();
+}
+
 void ECS::RegisterEntityAsPhysicsObject(const std::string &id, b2Body *body)
 {
     EntityContainer *entContainer = m_entityMap[id].get();
@@ -92,6 +104,11 @@ std::list<Entity *> &ECS::GetAllDrawableObjects()
     return m_drawableEntities;
 };
 
+std::list<Entity *> &ECS::GetAllScreenSpaceDrawableObjects()
+{
+    return m_screenSpaceDrawableEntities;
+}
+
 std::list<Entity *> &ECS::GetAllPhysicsObjects()
 {
     return m_physicsEntities;
@@ -125,6 +142,11 @@ void ECS::PermanentlyDeleteEntity(const std::string id)
         m_drawableEntities.erase(entContainer->drawableIterator);
     }
 
+    if (entContainer->isScreenSpaceDrawable)
+    {
+        m_screenSpaceDrawableEntities.erase(entContainer->screenSpaceDrawableIterator);
+    }
+
     if (entContainer->isPhysicsObject)
     {
         physManager->DestroyBody(entContainer->entityPointer->physBody);
@@ -153,4 +175,14 @@ void ECS::SetCamera(Camera2D *cam)
 Camera2D *ECS::GetCamera()
 {
     return camera;
+}
+
+void ECS::SetFont(Font *_font)
+{
+    font = _font;
+}
+
+Font *ECS::GetFont()
+{
+    return font;
 }
