@@ -56,7 +56,7 @@ void CapyFrogHybrid::Draw()
 
     // DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
     //                {0, 0}, 0, RAYWHITE);
-    // tongue.Draw();
+    tongue.Draw();
 }
 
 Vector2 CapyFrogHybrid::GetPosition()

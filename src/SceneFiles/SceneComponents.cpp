@@ -75,6 +75,11 @@ void Ground::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contac
             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = true;
             numSidePlayerCollisionsFrog++;
         }
+        else if (collidedEntity->id == "CapyFrogHybrid")
+        {
+            ((CapyFrogHybrid *)collidedEntity)->isTouchingSideOfTerrain = true;
+            numSidePlayerCollisionsCapyFrogHybrid++;
+        }
     }
 }
 
@@ -92,6 +97,11 @@ void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Con
         {
             ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
             numSidePlayerCollisionsFrog--;
+        }
+        else if (collidedEntity->id == "CapyFrogHybrid")
+        {
+            ((CapyFrogHybrid *)collidedEntity)->isTouchingSideOfTerrain = false;
+            numSidePlayerCollisionsCapyFrogHybrid--;
         }
     }
 }
@@ -111,7 +121,14 @@ void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact 
         float minDistBetween = frog->height * 0.5 + height * 0.5;
         bool contactResult = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
         contact->SetEnabled(contactResult);
-    };
+    }
+    else if (collidedEntity->id == "CapyFrogHybrid")
+    {
+        CapyFrogHybrid *capyFrog = (CapyFrogHybrid *)collidedEntity;
+        float minDistBetween = capyFrog->height * 0.5 + height * 0.5;
+        bool contactResult = capyFrog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        contact->SetEnabled(contactResult);
+    }
 }
 
 void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
@@ -144,7 +161,20 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
             frog->physBody->SetLinearVelocity(frogVel);
             frog->physBody->ApplyLinearImpulseToCenter(frog->physBody->GetMass() * bounceForce, true);
         }
-    };
+    }
+    else if (collidedEntity->id == "CapyFrogHybrid")
+    {
+        CapyFrogHybrid *capyFrogHybrid = (CapyFrogHybrid *)collidedEntity;
+        float minDistBetween = capyFrogHybrid->height * 0.5 + height * 0.5;
+        bool contactFromAbove = capyFrogHybrid->pos.y - physBody->GetPosition().y >= minDistBetween;
+        if (contactFromAbove)
+        {
+            b2Vec2 capyFrogHybridVel = capyFrogHybrid->physBody->GetLinearVelocity();
+            capyFrogHybridVel.y *= 0;
+            capyFrogHybrid->physBody->SetLinearVelocity(capyFrogHybridVel);
+            capyFrogHybrid->physBody->ApplyLinearImpulseToCenter(capyFrogHybrid->physBody->GetMass() * bounceForce, true);
+        }
+    }
 }
 
 void Tree::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)

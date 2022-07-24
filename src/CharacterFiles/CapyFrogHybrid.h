@@ -4,6 +4,7 @@
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
 #include "../SceneFiles/TerrainManager.h"
+#include "Tongue.h"
 
 class CapyFrogHybrid : public Entity
 {

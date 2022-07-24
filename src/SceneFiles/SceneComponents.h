@@ -4,6 +4,7 @@
 #include "../EngineFiles/AnimationManager.h"
 #include "../CharacterFiles/Capybara.h"
 #include "../CharacterFiles/Frog.h"
+#include "../CharacterFiles/CapyFrogHybrid.h"
 
 class Orange : public Entity
 {
@@ -34,7 +35,7 @@ public:
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor)
     {
-        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog")
+        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog" || collidedEntity->id == "CapyFrogHybrid")
         {
             ecs->RemoveEntity(id);
             // Add logic for increasing the score of players perhaps in character manager
@@ -68,6 +69,7 @@ public:
     float friction;
     int numSidePlayerCollisionsCapy = 0;
     int numSidePlayerCollisionsFrog = 0;
+    int numSidePlayerCollisionsCapyFrogHybrid = 0;
 
     b2Fixture *groundFixture;
 };
