@@ -23,7 +23,7 @@ void TerrainManager::Register()
 
 void TerrainManager::Update()
 {
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyPressed(KEY_B))
     {
         sceneScrollSpeed = sceneScrollSpeed == 0 ? 1 : 0;
         currentChunk->SetSceneMovementSpeed(sceneScrollSpeed);

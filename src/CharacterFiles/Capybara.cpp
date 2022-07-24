@@ -32,8 +32,6 @@ void Capy::Register()
     animManager.AddAnimation("Dash", {3});
     animManager.AddAnimation("Dead", {4});
     animManager.SetState("Stand_Still");
-
-    screenScrollSpeed = &ecs->GetEntity<TerrainManager>("TerrainManager").sceneScrollSpeed;
 }
 
 void Capy::Update()
@@ -157,6 +155,11 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     {
         isOnGround++;
     }
+
+    if (collidedEntity->id == "Frog")
+    {
+        isTouchingFrog = true;
+    }
 }
 void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
@@ -164,5 +167,10 @@ void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
     if (detectedBySensor)
     {
         isOnGround--;
+    }
+
+    if (collidedEntity->id == "Frog")
+    {
+        isTouchingFrog = false;
     }
 }

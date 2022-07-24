@@ -1,6 +1,6 @@
-#include "Frog.h"
+#include "CapyFrogHybrid.h"
 
-void Frog::Register()
+void CapyFrogHybrid::Register()
 {
     ecs->RegisterEntityAsDrawable(id);
 
@@ -27,51 +27,51 @@ void Frog::Register()
 
     physBody->SetLinearDamping(2);
 
-    animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 32, 64);
+    // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 32, 64);
 
-    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
-    animManager.AddAnimation("Stand_Still", {0});
-    animManager.AddAnimation("Swing", {3});
-    animManager.AddAnimation("Dead", {4});
-    animManager.SetState("Stand_Still");
+    // animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    // animManager.AddAnimation("Stand_Still", {0});
+    // animManager.AddAnimation("Swing", {3});
+    // animManager.AddAnimation("Dead", {4});
+    // animManager.SetState("Stand_Still");
 
     tongue = Tongue(3);
     tongue.SetBeginBody(physBody, (b2Vec2){0, height / 6});
 }
 
-void Frog::Update()
+void CapyFrogHybrid::Update()
 {
     UpdateController();
     pos = GetPosition();
 }
 
-void Frog::Draw()
+void CapyFrogHybrid::Draw()
 {
 
-    // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
-    Vector2 renderPos = PixelPerfectClamp({pos.x - (currDirection * width / 2), pos.y + (height / 2)}, 64);
-    Vector2 renderDimensions = PixelPerfectClamp({currDirection * width, -height}, 64);
-    Texture2D texture = ecs->GetSpriteSheet();
-    Rectangle src = animManager.GetTextureRectangle();
+    DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BLUE);
+    // Vector2 renderPos = PixelPerfectClamp({pos.x - (currDirection * width / 2), pos.y + (height / 2)}, 64);
+    // Vector2 renderDimensions = PixelPerfectClamp({currDirection * width, -height}, 64);
+    // Texture2D texture = ecs->GetSpriteSheet();
+    // Rectangle src = animManager.GetTextureRectangle();
 
-    DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
-                   {0, 0}, 0, RAYWHITE);
-    tongue.Draw();
+    // DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
+    //                {0, 0}, 0, RAYWHITE);
+    // tongue.Draw();
 }
 
-Vector2 Frog::GetPosition()
+Vector2 CapyFrogHybrid::GetPosition()
 {
     b2Vec2 tempPos = physBody->GetPosition();
     return {tempPos.x, tempPos.y};
 }
 
-void Frog::UpdateController()
+void CapyFrogHybrid::UpdateController()
 {
     bool keyWasPressed = false;
     if (isAlive)
     {
 
-        if (IsKeyDown(KEY_A) && (!isTouchingSideOfTerrain || isOnGround))
+        if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
             if (-currVel.x < speed)
@@ -93,11 +93,11 @@ void Frog::UpdateController()
             }
 
             currDirection = -1;
-            animManager.SetState("Run", GetFrameTime());
+            // animManager.SetState("Run", GetFrameTime());
             keyWasPressed = true;
         }
 
-        if (IsKeyDown(KEY_D) && (!isTouchingSideOfTerrain || isOnGround))
+        if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
         {
             b2Vec2 currVel = physBody->GetLinearVelocity();
             if (currVel.x < speed)
@@ -118,13 +118,14 @@ void Frog::UpdateController()
             }
 
             currDirection = 1;
-            animManager.SetState("Run", GetFrameTime());
+            // animManager.SetState("Run", GetFrameTime());
             keyWasPressed = true;
         }
 
         if (IsKeyPressed(KEY_W) && isOnGround)
 
         {
+
             float gravity = physBody->GetWorld()->GetGravity().y;
             // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
             float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
@@ -135,41 +136,53 @@ void Frog::UpdateController()
 
         if (IsKeyPressed(KEY_C))
         {
-            if (!capybaraIsOnHead)
+            if (isSwinging)
             {
-                if (isSwinging)
+                b2Vec2 currentVel = physBody->GetPosition();
+                currentVel.Normalize();
+
+                tongue.Delete(ecs->GetPhysicsManager());
+
+                isInSwingDismount = true;
+                isSwinging = false;
+            }
+            else
+            {
+                bool succeededInTongueExtension = false;
+                Entity *nearestFly = GetNearestFly();
+                if (nearestFly != nullptr)
                 {
-                    b2Vec2 currentVel = physBody->GetPosition();
-                    currentVel.Normalize();
+                    float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
+                    int flyDirection = (flySign > 0) - (flySign < 0);
 
-                    tongue.Delete(ecs->GetPhysicsManager());
-
-                    isInSwingDismount = true;
-                    isSwinging = false;
-                }
-                else
-                {
-                    bool succeededInTongueExtension = false;
-                    Entity *nearestFly = GetNearestFly();
-                    if (nearestFly != nullptr)
+                    if (flyDirection == currDirection)
                     {
-                        float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
-                        int flyDirection = (flySign > 0) - (flySign < 0);
-
-                        if (flyDirection == currDirection)
-                        {
-                            tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
-                            isSwinging = !isSwinging;
-                            succeededInTongueExtension = true;
-                        }
-                    }
-
-                    if (!succeededInTongueExtension)
-                    {
-                        tongue.SetDrawFalseExtension(currDirection);
-                        // To Fix.
+                        tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
+                        isSwinging = !isSwinging;
+                        succeededInTongueExtension = true;
                     }
                 }
+
+                if (!succeededInTongueExtension)
+                {
+                    tongue.SetDrawFalseExtension(currDirection);
+                    // To Fix.
+                }
+            }
+        }
+
+        if (IsKeyPressed(KEY_M))
+        {
+            if (GetTime() - timeOfLastDash > dashRechargeTime)
+            {
+                float dashForce = 20 * physBody->GetMass();
+                b2Vec2 newVel = b2Vec2(0, 0);
+                physBody->SetLinearVelocity(newVel);
+                physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
+                timeOfLastDash = GetTime();
+                // animManager.SetStateLock("Dash", 0.2);
+                keyWasPressed = true;
+                stateWasPreviouslyLocked = true;
             }
         }
 
@@ -188,49 +201,48 @@ void Frog::UpdateController()
 
         if (!keyWasPressed || !isOnGround)
         {
-            animManager.SetState("Stand_Still");
+            // animManager.SetState("Stand_Still");
         }
         if (isSwinging)
         {
-            animManager.SetState("Swing");
+            // animManager.SetState("Swing");
+        }
+        if (animManager.GetCurrentState() == "Dash")
+        {
+            physBody->SetGravityScale(0);
+        }
+
+        if (stateWasPreviouslyLocked && !animManager.GetIsStateLocked())
+        {
+            // State just unlocked
+            stateWasPreviouslyLocked = false;
+            physBody->SetLinearVelocity({0, 0});
         }
     }
     else
     {
-        animManager.SetState("Dead");
+        // animManager.SetState("Dead");
     }
 }
 
-void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+void CapyFrogHybrid::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)
     {
         isOnGround++;
     }
-
-    if (collidedEntity->id == "Capy")
-    {
-        isTouchingCapy = true;
-        capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
-    }
 }
-void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
+void CapyFrogHybrid::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
     if (detectedBySensor)
     {
         isOnGround--;
     }
-
-    if (collidedEntity->id == "Capy")
-    {
-        isTouchingCapy = false;
-        capybaraIsOnHead = false;
-    }
 }
 
-Entity *Frog::GetNearestFly()
+Entity *CapyFrogHybrid::GetNearestFly()
 {
     float minDistSquared = INFINITY;
     Entity *closestEnt = nullptr;
@@ -250,7 +262,7 @@ Entity *Frog::GetNearestFly()
     return minDistSquared < maxDistFromFlyToSwing * maxDistFromFlyToSwing ? closestEnt : nullptr;
 }
 
-Vector2 Frog::GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter)
+Vector2 CapyFrogHybrid::GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter)
 {
     Vector3 outOfScreen = {0, 0, 1};
     Vector3 towardsCenter = {circleCenter.x - bodyPos.x, circleCenter.y - bodyPos.y, 0};

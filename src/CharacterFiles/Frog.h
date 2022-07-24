@@ -54,9 +54,10 @@ public:
     float maxDistFromFlyToSwing = 3.5; // Can change this to alter the maximum distance before attaching to a fly fails
 
     bool isAlive = true;
-    float *screenScrollSpeed = nullptr;
 
     bool isTouchingSideOfTerrain = false;
+
+    bool isTouchingCapy = false;
 
     Tongue tongue;
 };
