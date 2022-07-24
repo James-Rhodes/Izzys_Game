@@ -70,6 +70,8 @@ public:
     std::list<Entity *> &GetAllPhysicsObjects();
     void SetSpriteSheet(Texture2D _spriteSheet);
     Texture2D GetSpriteSheet();
+    void SetCamera(Camera2D *cam);
+    Camera2D *GetCamera();
 
     void SetFrameData(void *data)
     {
@@ -118,6 +120,7 @@ private:
     std::list<Entity *> m_physicsEntities;
     Texture2D spriteSheet;
     b2World *physManager;
+    Camera2D *camera;
 
     void *frameData = nullptr; // Ptr to memory that contains any data I want passed around each frame
 

@@ -144,3 +144,13 @@ Texture2D ECS::GetSpriteSheet()
 {
     return spriteSheet;
 };
+
+void ECS::SetCamera(Camera2D *cam)
+{
+    camera = cam;
+}
+
+Camera2D *ECS::GetCamera()
+{
+    return camera;
+}

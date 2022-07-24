@@ -44,6 +44,7 @@ public:
 
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
+        ecs.SetCamera(&camera);
 
         ecs.SetFrameData(&physAlpha);
     };
