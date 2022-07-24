@@ -32,6 +32,7 @@ void TerrainManager::Update()
 
     currentChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, currentChunkPos);
     nextChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, nextChunkPos);
+    distanceTravelled += GetFrameTime() * sceneScrollSpeed;
 
     if (terrainCounter > 100)
     {
@@ -98,4 +99,9 @@ SceneChunk *TerrainManager::GetChunk()
     }
 
     return newChunk;
+}
+
+float TerrainManager::GetDistanceTravelled()
+{
+    return distanceTravelled;
 }

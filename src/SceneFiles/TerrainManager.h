@@ -18,6 +18,8 @@ public:
     SceneChunk *GenerateNextChunk(bool firstChunk = false);
     SceneChunk *GetChunk();
 
+    float GetDistanceTravelled();
+
     SceneChunk *currentChunk;
     SceneChunk *nextChunk;
     AnimationManager terrainBlocks;
@@ -29,4 +31,6 @@ public:
     int terrainCounter = 0;
 
     int numChunkTypes = 3;
+
+    float distanceTravelled = 0;
 };

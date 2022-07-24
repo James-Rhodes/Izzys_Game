@@ -4,6 +4,7 @@
 #include "../EngineFiles/ECS.h"
 #include "../CharacterFiles/Capybara.h"
 #include "../CharacterFiles/Frog.h"
+#include "../SceneFiles/TerrainManager.h"
 
 // This should facilitate the joining of capy and frog. Potentially deleting frog and capy and replacing with joined sprite/class
 
@@ -27,7 +28,6 @@ public:
     Vector2 initCapyPos;
     Vector2 initFrogPos;
 
-    float currDistanceTravelled = 0;
     float numOrangesCollected = 0;
 
     Capy *capy = nullptr;
