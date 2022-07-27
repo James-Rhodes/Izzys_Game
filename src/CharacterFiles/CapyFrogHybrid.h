@@ -34,7 +34,7 @@ public:
 
     Vector2 pos;
     float width = 1;
-    float height = 1;
+    float height = 1.375;
     float speed = 5;
     float jumpHeight = 4;
     float timeOfLastDash = 0;
