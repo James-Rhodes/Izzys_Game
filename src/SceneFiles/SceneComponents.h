@@ -21,7 +21,7 @@ public:
         config.isDynamic = false;
         config.isRollable = false;
         config.restitution = 0.5;
-        // config.isSensor = true;
+        config.isSensor = true;
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
     void Update() override
@@ -36,13 +36,9 @@ public:
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override
     {
-        std::cout << "Collided yall" << std::endl;
         if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog" || collidedEntity->id == "CapyFrogHybrid")
         {
-            std::cout << "Collided and worked out it was a capy" << std::endl;
-
             ecs->RemoveEntity(id);
-            // Add logic for increasing the score of players perhaps in character manager
         }
     }
 
