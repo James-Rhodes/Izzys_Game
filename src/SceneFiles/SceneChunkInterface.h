@@ -11,11 +11,18 @@
 class SceneChunk
 {
 public:
-    SceneChunk() = default;
+    SceneChunk(int *counter) : terrainCounter(counter){};
+    SceneChunk() = delete;
     virtual ~SceneChunk() = default;
 
     // Create Oranges in below function but do not add them to scene components; This will allow them to roll in to the next scene if that occurs. Logic is within Orange to delete itself when needed
-    virtual void GenerateChunk(Vector2 worldCenterPos) = 0;
+    void GenerateChunk(Vector2 _worldCenterPos)
+    {
+        SetWorldCenterPos(_worldCenterPos);
+        GenerateChunk();
+    };
+
+    virtual void GenerateChunk() = 0;
 
     void SetECS(ECS *_ecs) { ecs = _ecs; };
     void SetTerrainBlockAnimationManager(AnimationManager *_animManager) { terrainBlocks = _animManager; };
@@ -46,8 +53,23 @@ public:
         return nullptr;
     }
 
+    template <typename T, typename... Args>
+    void AddSceneComponent(const std::string &id, const Vector2 &pos, Args &&...args)
+    {
+        // Helper function to automatically add components to the scene and ensure they have unique ID's
+        std::string terrainId = id + std::to_string((*terrainCounter)++);
+        sceneComponents.push_back(&ecs->CreateEntity<T>(terrainId, Vector2Add(worldCenterPos, pos), std::forward<Args>(args)...));
+    }
+
+    void SetWorldCenterPos(Vector2 _worldCenterPos)
+    {
+        worldCenterPos = _worldCenterPos;
+    };
+
     float sceneMovementSpeed = 0;
     std::vector<Entity *> sceneComponents;
     ECS *ecs;
     AnimationManager *terrainBlocks;
+    Vector2 worldCenterPos;
+    int *terrainCounter;
 };

@@ -18,9 +18,10 @@ public:
         CirclePhysicsObjectConfig config;
         config.radius = radius;
         config.pos = pos;
-        config.isDynamic = true;
+        config.isDynamic = false;
         config.isRollable = false;
         config.restitution = 0.5;
+        config.isSensor = true;
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
     void Update()

@@ -1,27 +1,27 @@
 #include "Chunks.h"
 
-void FlatChunk::GenerateChunk(Vector2 worldCenterPos)
+void FlatChunk::GenerateChunk()
 {
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {0, -2.8}), 10.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
-    sceneComponents.push_back(&ecs->CreateEntity<BouncyPlatform>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {2, -1.4}), 3, 0.3, terrainBlocks->GetTextureRectangleAtState("Bouncy")));
-    sceneComponents.push_back(&ecs->CreateEntity<Tree>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-2, -1.4}), terrainBlocks->GetTextureRectangleAtState("Tree")));
+    AddSceneComponent<Ground>("Ground", {0, -2.8}, 10.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
 };
 
-void GapChunk::GenerateChunk(Vector2 worldCenterPos)
+void GapChunk::GenerateChunk()
 {
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-3.75, -2.8}), 2.52, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {3.75, -2.8}), 2.52, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
-    sceneComponents.push_back(&ecs->CreateEntity<Fly>("Fly" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {0, 1.5})));
+    AddSceneComponent<Ground>("Ground", {-3.75, -2.8}, 2.52, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {3.75, -2.8}, 2.52, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Fly>("Fly", {0, 1.5});
 };
 
-void LadderJumpChunk::GenerateChunk(Vector2 worldCenterPos)
+void LadderJumpChunk::GenerateChunk()
 {
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-4.5, -2.8}), 1.02, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {4, -2.8}), 2.02, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass")));
+    AddSceneComponent<Ground>("Ground", {-4.5, -2.8}, 1.02, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
 
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-3.3, -1.6}), 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Rock")));
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-4.6, -0.4}), 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Rock")));
-    sceneComponents.push_back(&ecs->CreateEntity<Ground>("Ground" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {-3.3, 0.8}), 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Rock")));
+    AddSceneComponent<Ground>("Ground", {4, -2.8}, 2.02, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
 
-    sceneComponents.push_back(&ecs->CreateEntity<Fly>("Fly" + std::to_string((*terrainCounter)++), Vector2Add(worldCenterPos, {2, 2})));
+    AddSceneComponent<Plank>("Ground", {-3.3, -1.6}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
+    AddSceneComponent<Plank>("Ground", {-4.6, -0.4}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
+    AddSceneComponent<Plank>("Ground", {-3.3, 0.8}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
+
+    AddSceneComponent<Fly>("Fly", {2, 2});
 };
