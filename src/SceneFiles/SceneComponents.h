@@ -11,7 +11,7 @@ class Orange : public Entity
 public:
     Orange(Vector2 _pos) : pos(_pos){};
 
-    void Register()
+    void Register() override
     {
         ecs->RegisterEntityAsDrawable(id);
 
@@ -21,23 +21,26 @@ public:
         config.isDynamic = false;
         config.isRollable = false;
         config.restitution = 0.5;
-        config.isSensor = true;
+        // config.isSensor = true;
         ecs->RegisterEntityAsPhysicsObject(id, config);
     }
-    void Update()
+    void Update() override
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
     }
 
-    void Draw()
+    void Draw() override
     {
         DrawCircleV(pos, radius, ORANGE);
     }
 
-    void OnCollision(Entity *collidedEntity, bool detectedBySensor)
+    void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override
     {
+        std::cout << "Collided yall" << std::endl;
         if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog" || collidedEntity->id == "CapyFrogHybrid")
         {
+            std::cout << "Collided and worked out it was a capy" << std::endl;
+
             ecs->RemoveEntity(id);
             // Add logic for increasing the score of players perhaps in character manager
         }
@@ -87,7 +90,7 @@ public:
     // Pos is in world coords
     Fly(Vector2 _pos) : pos(_pos){};
 
-    void Register()
+    void Register() override
     {
         ecs->RegisterEntityAsDrawable(id);
         RectanglePhysicsObjectConfig config;
@@ -107,13 +110,13 @@ public:
         animManager.SetState("Fly", GetFrameTime());
     }
 
-    void Update()
+    void Update() override
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
         animManager.SetState("Fly", GetFrameTime());
     };
 
-    void Draw()
+    void Draw() override
     {
         // DrawTextureTiledWithinCamera(ecs->GetSpriteSheet(), srcRect, (Rectangle){pos.x - (width / 2), pos.y + (height / 2) + alphaDetailOffset, width, -(height + alphaDetailOffset)}, {0, 0}, 0, 64, RAYWHITE);
         // DrawRectanglePro((Rectangle){pos.x, pos.y, width, width}, {width / 2, width / 2}, 0, BLACK);

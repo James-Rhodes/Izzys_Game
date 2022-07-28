@@ -21,6 +21,7 @@ void LadderJumpChunk::GenerateChunk()
 
     AddSceneComponent<Plank>("Ground", {-3.3, -1.6}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
     AddSceneComponent<Plank>("Ground", {-4.6, -0.4}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
+    AddSceneComponent<Orange>("Orange", {-4.6, -0.1});
     AddSceneComponent<Plank>("Ground", {-3.3, 0.8}, 1, 0.2, terrainBlocks->GetTextureRectangleAtState("Plank"));
 
     AddSceneComponent<Fly>("Fly", {2, 2});

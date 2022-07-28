@@ -15,7 +15,6 @@ public:
     SceneChunk() = delete;
     virtual ~SceneChunk() = default;
 
-    // Create Oranges in below function but do not add them to scene components; This will allow them to roll in to the next scene if that occurs. Logic is within Orange to delete itself when needed
     void GenerateChunk(Vector2 _worldCenterPos)
     {
         SetWorldCenterPos(_worldCenterPos);
