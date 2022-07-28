@@ -33,3 +33,13 @@ public:
 
     void GenerateChunk() override;
 };
+
+class BouncePyramid : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    BouncePyramid(int *counter) : SceneChunk(counter){};
+    ~BouncePyramid(){};
+
+    void GenerateChunk() override;
+};

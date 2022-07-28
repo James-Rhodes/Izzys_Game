@@ -5,6 +5,7 @@
 #include "../CharacterFiles/Capybara.h"
 #include "../CharacterFiles/Frog.h"
 #include "../CharacterFiles/CapyFrogHybrid.h"
+#include <math.h>
 
 class Orange : public Entity
 {
@@ -148,9 +149,10 @@ public:
     // Pos is in world coords
     BouncyPlatform(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : Ground(_pos, _width, _height, src, _friction){};
 
+    void Register();
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
-
-    b2Vec2 bounceForce = {0, 20};
+    float jumpHeight = 3;
+    float bounceForce = 0;
 };
 
 class Tree : public Ground

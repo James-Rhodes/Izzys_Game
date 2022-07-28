@@ -82,6 +82,8 @@ SceneChunk *TerrainManager::GetChunk()
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     SceneChunk *newChunk = currentChunk->GetMandatoryNeighboringChunk();
 
+    return new BouncePyramid(&terrainCounter);
+
     if (newChunk != nullptr)
         return newChunk;
 
@@ -95,6 +97,9 @@ SceneChunk *TerrainManager::GetChunk()
         break;
     case (2):
         newChunk = new LadderJumpChunk(&terrainCounter);
+        break;
+    case (3):
+        newChunk = new BouncePyramid(&terrainCounter);
         break;
     }
 

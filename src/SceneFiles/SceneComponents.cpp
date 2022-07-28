@@ -131,6 +131,12 @@ void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     }
 }
 
+void BouncyPlatform::Register()
+{
+    Ground::Register();
+    bounceForce = sqrt(jumpHeight * -2 * 8 * physBody->GetWorld()->GetGravity().y);
+}
+
 void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
 
@@ -146,7 +152,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
             b2Vec2 capyVel = capy->physBody->GetLinearVelocity();
             capyVel.y *= 0;
             capy->physBody->SetLinearVelocity(capyVel);
-            capy->physBody->ApplyLinearImpulseToCenter(capy->physBody->GetMass() * bounceForce, true);
+            capy->physBody->ApplyLinearImpulseToCenter(capy->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
     else if (collidedEntity->id == "Frog")
@@ -159,7 +165,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
             b2Vec2 frogVel = frog->physBody->GetLinearVelocity();
             frogVel.y *= 0;
             frog->physBody->SetLinearVelocity(frogVel);
-            frog->physBody->ApplyLinearImpulseToCenter(frog->physBody->GetMass() * bounceForce, true);
+            frog->physBody->ApplyLinearImpulseToCenter(frog->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
     else if (collidedEntity->id == "CapyFrogHybrid")
@@ -172,7 +178,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
             b2Vec2 capyFrogHybridVel = capyFrogHybrid->physBody->GetLinearVelocity();
             capyFrogHybridVel.y *= 0;
             capyFrogHybrid->physBody->SetLinearVelocity(capyFrogHybridVel);
-            capyFrogHybrid->physBody->ApplyLinearImpulseToCenter(capyFrogHybrid->physBody->GetMass() * bounceForce, true);
+            capyFrogHybrid->physBody->ApplyLinearImpulseToCenter(capyFrogHybrid->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
 }
