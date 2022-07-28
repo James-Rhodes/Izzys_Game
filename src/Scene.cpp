@@ -14,7 +14,7 @@ void Scene::Init()
     // ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
     // ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
 
-    ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){0, 0}, (Vector2){-2, 0});
+    ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){2, 0}, (Vector2){-2, 0});
     sceneToReset = false;
 }
 

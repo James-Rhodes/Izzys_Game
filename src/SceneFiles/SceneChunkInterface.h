@@ -43,6 +43,7 @@ public:
     {
         for (auto ent : sceneComponents)
         {
+
             ecs->RemoveEntity(ent->id);
         }
     };

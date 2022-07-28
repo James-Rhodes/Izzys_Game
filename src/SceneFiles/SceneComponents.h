@@ -31,19 +31,26 @@ public:
 
     void Draw() override
     {
-        DrawCircleV(pos, radius, ORANGE);
+        if (!isConsumed) // Rather than deleting the orange when there is a collision, simply stop drawing it. The scene will then delete it once it moves outside of the bounds
+        {
+            DrawCircleV(pos, radius, ORANGE);
+        }
     }
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override
     {
-        if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog" || collidedEntity->id == "CapyFrogHybrid")
+        if (!isConsumed)
         {
-            ecs->RemoveEntity(id);
+            if (collidedEntity->id == "Capy" || collidedEntity->id == "Frog" || collidedEntity->id == "CapyFrogHybrid")
+            {
+                isConsumed = true;
+            }
         }
     }
 
     Vector2 pos;
     float radius = 0.1;
+    bool isConsumed = false;
 };
 
 class Ground : public Entity
