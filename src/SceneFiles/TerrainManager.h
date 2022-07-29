@@ -33,4 +33,6 @@ public:
     int numChunkTypes = 5;
 
     float distanceTravelled = 0;
+
+    int prevRandChunkIndex = -1;
 };
