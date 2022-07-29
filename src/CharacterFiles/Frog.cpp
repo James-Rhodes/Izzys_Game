@@ -25,7 +25,7 @@ void Frog::Register()
     feetSensor = physBody->CreateFixture(&feetSensorDef);
     physBody->SetBullet(true);
 
-    // physBody->SetLinearDamping(2);
+    physBody->SetLinearDamping(2);
 
     animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 32, 64);
 

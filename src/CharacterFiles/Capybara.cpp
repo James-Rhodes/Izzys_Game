@@ -25,6 +25,8 @@ void Capy::Register()
     feetSensor = physBody->CreateFixture(&feetSensorDef);
     physBody->SetBullet(true);
 
+    physBody->SetLinearDamping(2);
+
     animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 0, 64, 32);
 
     animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
