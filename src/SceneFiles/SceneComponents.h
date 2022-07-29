@@ -7,6 +7,8 @@
 #include "../CharacterFiles/CapyFrogHybrid.h"
 #include <math.h>
 
+#define DEBUG_POSITION
+
 class Orange : public Entity
 {
 public:
@@ -80,6 +82,11 @@ public:
     int numSidePlayerCollisionsCapyFrogHybrid = 0;
 
     b2Fixture *groundFixture;
+
+#ifdef DEBUG_POSITION
+    bool isSelected = false;
+    Vector2 chunkWorldCenter = {10, 0};
+#endif
 };
 
 class Ice : public Ground

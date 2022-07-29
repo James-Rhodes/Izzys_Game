@@ -51,6 +51,39 @@ void Ground::Update()
     {
         groundFixture->SetFriction(friction);
     }
+
+#ifdef DEBUG_POSITION
+
+    Camera2D *cam = ecs->GetCamera();
+
+    Vector2 clickPos = GetScreenToWorld2D(GetMousePosition(), *cam);
+    clickPos.y *= -1;
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        if (isSelected)
+        {
+            isSelected = false;
+            std::cout << "Placed " << id << " at " << clickPos.x - chunkWorldCenter.x << " , " << clickPos.y << std::endl;
+        }
+        else
+        {
+            float hWidth = width / 2;
+            float hHeight = height / 2;
+            if (clickPos.x < (pos.x + hWidth) && clickPos.x > (pos.x - hWidth) && clickPos.y < (pos.y + hHeight) && clickPos.y > (pos.y - hHeight))
+            {
+                isSelected = true;
+                std::cout << id << " is selected" << std::endl;
+            }
+        }
+    }
+
+    if (isSelected)
+    {
+        physBody->SetTransform({clickPos.x, clickPos.y}, 0);
+    }
+
+    chunkWorldCenter.x += physBody->GetLinearVelocity().x * GetFrameTime();
+#endif
 };
 
 void Ground::Draw()
