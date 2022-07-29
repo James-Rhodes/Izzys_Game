@@ -141,7 +141,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
 {
 
     Ground::OnCollision(collidedEntity, detectedBySensor, contact);
-
+    b2Vec2 sceneMovementSpeed = physBody->GetLinearVelocity();
     if (collidedEntity->id == "Capy")
     {
         Capy *capy = (Capy *)collidedEntity;
@@ -149,9 +149,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         bool contactFromAbove = capy->pos.y - physBody->GetPosition().y >= minDistBetween;
         if (contactFromAbove)
         {
-            b2Vec2 capyVel = capy->physBody->GetLinearVelocity();
-            capyVel.y *= 0;
-            capy->physBody->SetLinearVelocity(capyVel);
+            capy->physBody->SetLinearVelocity(sceneMovementSpeed);
             capy->physBody->ApplyLinearImpulseToCenter(capy->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
@@ -162,9 +160,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         bool contactFromAbove = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
         if (contactFromAbove)
         {
-            b2Vec2 frogVel = frog->physBody->GetLinearVelocity();
-            frogVel.y *= 0;
-            frog->physBody->SetLinearVelocity(frogVel);
+            frog->physBody->SetLinearVelocity(sceneMovementSpeed);
             frog->physBody->ApplyLinearImpulseToCenter(frog->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
@@ -175,9 +171,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         bool contactFromAbove = capyFrogHybrid->pos.y - physBody->GetPosition().y >= minDistBetween;
         if (contactFromAbove)
         {
-            b2Vec2 capyFrogHybridVel = capyFrogHybrid->physBody->GetLinearVelocity();
-            capyFrogHybridVel.y *= 0;
-            capyFrogHybrid->physBody->SetLinearVelocity(capyFrogHybridVel);
+            capyFrogHybrid->physBody->SetLinearVelocity(sceneMovementSpeed);
             capyFrogHybrid->physBody->ApplyLinearImpulseToCenter(capyFrogHybrid->physBody->GetMass() * b2Vec2(0, bounceForce), true);
         }
     }
