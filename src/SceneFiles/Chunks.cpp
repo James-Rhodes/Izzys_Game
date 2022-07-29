@@ -59,4 +59,7 @@ void CapyTreeGap::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {0, -2.2});
     AddSceneComponent<Orange>("Orange", {0.5, -2.2});
     AddSceneComponent<Orange>("Orange", {-0.5, -2.2});
+
+    AddSceneComponent<Fly>("Fly", {-2.6, 1.65});
+    AddSceneComponent<Orange>("Orange", {-4.6, 1.65});
 }

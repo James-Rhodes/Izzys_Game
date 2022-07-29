@@ -161,6 +161,37 @@ public:
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
         animManager.SetState("Fly", GetFrameTime());
+
+#ifdef DEBUG_POSITION
+
+        Camera2D *cam = ecs->GetCamera();
+
+        Vector2 clickPos = GetScreenToWorld2D(GetMousePosition(), *cam);
+        clickPos.y *= -1;
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            if (isSelected)
+            {
+                isSelected = false;
+                std::cout << "Placed " << id << " at " << clickPos.x - chunkWorldCenter.x << " , " << clickPos.y << std::endl;
+            }
+            else
+            {
+                if (Vector2Distance(clickPos, pos) <= width)
+                {
+                    isSelected = true;
+                    std::cout << id << " is selected" << std::endl;
+                }
+            }
+        }
+
+        if (isSelected)
+        {
+            physBody->SetTransform({clickPos.x, clickPos.y}, 0);
+        }
+
+        chunkWorldCenter.x += physBody->GetLinearVelocity().x * GetFrameTime();
+#endif
     };
 
     void Draw() override
@@ -177,6 +208,11 @@ public:
     Vector2 pos;
     float width = 0.2;
     AnimationManager animManager;
+
+#ifdef DEBUG_POSITION
+    bool isSelected = false;
+    Vector2 chunkWorldCenter = {10, 0};
+#endif
 };
 
 class Plank : public Ground
