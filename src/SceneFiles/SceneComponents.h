@@ -151,7 +151,7 @@ public:
 
     void Register();
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
-    float jumpHeight = 3;
+    float jumpHeight = 5;
     float bounceForce = 0;
 };
 

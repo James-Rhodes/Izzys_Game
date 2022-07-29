@@ -134,9 +134,11 @@ void Capy::UpdateController()
         }
 
         physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+        physBody->SetLinearDamping(2);
         if (animManager.GetCurrentState() == "Dash")
         {
             physBody->SetGravityScale(0);
+            physBody->SetLinearDamping(0);
         }
 
         if (!keyWasPressed || !isOnGround)
