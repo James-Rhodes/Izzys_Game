@@ -229,12 +229,10 @@ void Tree::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     }
 }
 
-void Tree::Update()
+void Tree::Draw()
 {
-    Ground::Update();
-
-    if (isSmashed)
+    if (!isSmashed)
     {
-        ecs->RemoveEntity(id);
+        Ground::Draw();
     }
 }

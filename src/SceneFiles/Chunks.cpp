@@ -44,3 +44,19 @@ void BouncePyramid::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {0.5, -0.6});
     AddSceneComponent<Orange>("Orange", {-0.5, -0.6});
 }
+
+void CapyTreeGap::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-3, -2.8}, 4.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {3, -2.8}, 4.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Tree>("Tree", {-1.25, -2.3}, terrainBlocks->GetTextureRectangleAtState("Tree"));
+    AddSceneComponent<Tree>("Tree", {1.25, -2.3}, terrainBlocks->GetTextureRectangleAtState("Tree"));
+
+    AddSceneComponent<Ice>("Ice", {0, -1.7}, 3, 0.5, terrainBlocks->GetTextureRectangleAtState("Ice"));
+    AddSceneComponent<Ice>("Ice", {2, -1}, 3, 0.5, terrainBlocks->GetTextureRectangleAtState("Ice"));
+
+    AddSceneComponent<Orange>("Orange", {0, -2.2});
+    AddSceneComponent<Orange>("Orange", {0.5, -2.2});
+    AddSceneComponent<Orange>("Orange", {-0.5, -2.2});
+}

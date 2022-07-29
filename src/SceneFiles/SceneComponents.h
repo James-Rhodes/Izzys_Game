@@ -30,6 +30,37 @@ public:
     void Update() override
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+
+#ifdef DEBUG_POSITION
+
+        Camera2D *cam = ecs->GetCamera();
+
+        Vector2 clickPos = GetScreenToWorld2D(GetMousePosition(), *cam);
+        clickPos.y *= -1;
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            if (isSelected)
+            {
+                isSelected = false;
+                std::cout << "Placed " << id << " at " << clickPos.x - chunkWorldCenter.x << " , " << clickPos.y << std::endl;
+            }
+            else
+            {
+                if (Vector2Distance(clickPos, pos) <= radius)
+                {
+                    isSelected = true;
+                    std::cout << id << " is selected" << std::endl;
+                }
+            }
+        }
+
+        if (isSelected)
+        {
+            physBody->SetTransform({clickPos.x, clickPos.y}, 0);
+        }
+
+        chunkWorldCenter.x += physBody->GetLinearVelocity().x * GetFrameTime();
+#endif
     }
 
     void Draw() override
@@ -54,6 +85,11 @@ public:
     Vector2 pos;
     float radius = 0.1;
     bool isConsumed = false;
+
+#ifdef DEBUG_POSITION
+    bool isSelected = false;
+    Vector2 chunkWorldCenter = {10, 0};
+#endif
 };
 
 class Ground : public Entity
@@ -168,7 +204,7 @@ public:
     // Pos is
     Tree(Vector2 _pos, Rectangle src) : Ground(_pos, 0.5, 0.5, src, 1){};
 
-    void Update() override;
+    void Draw() override;
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 

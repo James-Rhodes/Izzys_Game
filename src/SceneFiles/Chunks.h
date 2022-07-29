@@ -43,3 +43,13 @@ public:
 
     void GenerateChunk() override;
 };
+
+class CapyTreeGap : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    CapyTreeGap(int *counter) : SceneChunk(counter){};
+    ~CapyTreeGap(){};
+
+    void GenerateChunk() override;
+};
