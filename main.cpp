@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+// #define PLATFORM_WEB
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
 #endif
