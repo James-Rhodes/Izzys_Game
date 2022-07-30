@@ -81,11 +81,10 @@ SceneChunk *TerrainManager::GetChunk()
 {
     SceneChunk *newChunk = currentChunk->GetMandatoryNeighboringChunk();
 
-    // return new CapyTreeGap(&terrainCounter);
-
     if (newChunk != nullptr)
         return newChunk;
 
+    return new LongFlyBounceChain1(&terrainCounter);
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)
     {

@@ -53,3 +53,35 @@ public:
 
     void GenerateChunk() override;
 };
+
+class LongFlyBounceChain1 : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    LongFlyBounceChain1(int *counter) : SceneChunk(counter){};
+    ~LongFlyBounceChain1(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class LongFlyBounceChain2 : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    LongFlyBounceChain2(int *counter) : SceneChunk(counter){};
+    ~LongFlyBounceChain2(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class LongFlyBounceChain3 : public SceneChunk
+// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
+{
+public:
+    LongFlyBounceChain3(int *counter) : SceneChunk(counter){};
+    ~LongFlyBounceChain3(){};
+
+    void GenerateChunk() override;
+};

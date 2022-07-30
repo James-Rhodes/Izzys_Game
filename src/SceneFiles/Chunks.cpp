@@ -63,3 +63,48 @@ void CapyTreeGap::GenerateChunk()
     AddSceneComponent<Fly>("Fly", {-2.6, 1.65});
     AddSceneComponent<Orange>("Orange", {-4.6, 1.65});
 }
+
+void LongFlyBounceChain1::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-4, -2.8}, 2.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<BouncyPlatform>("Bouncy", {1.5, -1.9}, 2, 0.2, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
+
+    AddSceneComponent<Fly>("Fly", {0, 2});
+
+    AddSceneComponent<Orange>("Orange", {-1.25, 0});
+    AddSceneComponent<Orange>("Orange", {4.5, 0});
+}
+
+SceneChunk *LongFlyBounceChain1::GetMandatoryNeighboringChunk()
+{
+    return new LongFlyBounceChain2(terrainCounter);
+}
+
+void LongFlyBounceChain2::GenerateChunk()
+{
+    AddSceneComponent<BouncyPlatform>("Bouncy", {-2.5, -1.9}, 2, 0.2, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
+    AddSceneComponent<BouncyPlatform>("Bouncy", {4, -1.9}, 2, 0.2, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
+
+    AddSceneComponent<Fly>("Fly", {-4, 2});
+    AddSceneComponent<Fly>("Fly", {2, 2});
+
+    AddSceneComponent<Orange>("Orange", {0.75, 0});
+}
+
+SceneChunk *LongFlyBounceChain2::GetMandatoryNeighboringChunk()
+{
+    return new LongFlyBounceChain3(terrainCounter);
+}
+
+void LongFlyBounceChain3::GenerateChunk()
+{
+    AddSceneComponent<BouncyPlatform>("Bouncy", {0, -1.9}, 2, 0.2, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
+
+    AddSceneComponent<Fly>("Fly", {-2, 2});
+
+    AddSceneComponent<Ground>("Ground", {4, -2.8}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-3, 0});
+    AddSceneComponent<Orange>("Orange", {2, 0});
+}
