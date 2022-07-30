@@ -5,8 +5,8 @@ void CharacterManager::Register()
     ecs->RegisterEntityAsScreenSpaceDrawable(id);
 
     camera = ecs->GetCamera();
-    capy = &ecs->CreateEntity<Capy>("Capy", initCapyPos);
-    frog = &ecs->CreateEntity<Frog>("Frog", initFrogPos);
+    capy = &ecs->CreateEntity<Capy>("Capy", initCapyPos, &numOrangesCollected);
+    frog = &ecs->CreateEntity<Frog>("Frog", initFrogPos, &numOrangesCollected);
 }
 
 void CharacterManager::Update()
@@ -27,7 +27,7 @@ void CharacterManager::Update()
 void CharacterManager::Draw()
 {
     float distanceTravelled = ecs->GetEntity<TerrainManager>("TerrainManager").GetDistanceTravelled();
-    const char *text = TextFormat("Distance: %.2f", distanceTravelled);
+    const char *text = TextFormat("Distance: %.2f  Oranges: %d", distanceTravelled, numOrangesCollected);
     int textWidth = MeasureText(text, 20);
 
     DrawText(text, GetScreenWidth() * 0.5 - textWidth * 0.5, 10, 20, BLACK);
@@ -54,7 +54,7 @@ void CharacterManager::JoinCapyAndFrog()
         capy = nullptr;
         frog = nullptr;
 
-        capyFrogHybrid = &ecs->CreateEntity<CapyFrogHybrid>("CapyFrogHybrid", spawnPoint);
+        capyFrogHybrid = &ecs->CreateEntity<CapyFrogHybrid>("CapyFrogHybrid", spawnPoint, &numOrangesCollected);
 
         capyAndFrogAreJoined = true;
     }
@@ -67,7 +67,7 @@ void CharacterManager::SeperateCapyAndFrog()
     ecs->RemoveEntity("CapyFrogHybrid");
     capyFrogHybrid = nullptr;
 
-    frog = &ecs->CreateEntity<Frog>("Frog", Vector2Add(spawnPoint, {0.5, 0}));
-    capy = &ecs->CreateEntity<Capy>("Capy", Vector2Add(spawnPoint, {-0.5, 0}));
+    frog = &ecs->CreateEntity<Frog>("Frog", Vector2Add(spawnPoint, {0.5, 0}), &numOrangesCollected);
+    capy = &ecs->CreateEntity<Capy>("Capy", Vector2Add(spawnPoint, {-0.5, 0}), &numOrangesCollected);
     capyAndFrogAreJoined = false;
 }

@@ -29,7 +29,7 @@ public:
     Vector2 initCapyPos;
     Vector2 initFrogPos;
 
-    float numOrangesCollected = 0;
+    int numOrangesCollected = 0;
 
     bool capyAndFrogAreJoined = false;
 

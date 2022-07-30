@@ -164,6 +164,14 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     {
         isTouchingFrog = true;
     }
+    else if (collidedEntity->id.rfind("Orange", 0) == 0)
+    {
+        Orange *orange = (Orange *)collidedEntity;
+        if (!orange->isConsumed)
+        {
+            (*orangeScore)++;
+        }
+    }
 }
 void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {

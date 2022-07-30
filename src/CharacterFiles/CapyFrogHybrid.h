@@ -9,7 +9,7 @@
 class CapyFrogHybrid : public Entity
 {
 public:
-    CapyFrogHybrid(Vector2 initPos) : pos(initPos){};
+    CapyFrogHybrid(Vector2 initPos, int *orangeScoreKeeper) : pos(initPos), orangeScore(orangeScoreKeeper){};
 
     void Register() override;
 
@@ -58,4 +58,6 @@ public:
     bool isAlive = true;
 
     Tongue tongue;
+
+    int *orangeScore = nullptr;
 };

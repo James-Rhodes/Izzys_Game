@@ -234,6 +234,15 @@ void CapyFrogHybrid::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
     {
         isOnGround++;
     }
+
+    if (collidedEntity->id.rfind("Orange", 0) == 0)
+    {
+        Orange *orange = (Orange *)collidedEntity;
+        if (!orange->isConsumed)
+        {
+            (*orangeScore)++;
+        }
+    }
 }
 void CapyFrogHybrid::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {

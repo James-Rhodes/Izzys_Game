@@ -11,7 +11,7 @@
 class Frog : public Entity
 {
 public:
-    Frog(Vector2 initPosition) : pos(initPosition)
+    Frog(Vector2 initPosition, int *orangeScoreKeeper) : pos(initPosition), orangeScore(orangeScoreKeeper)
     {
         // texture = LoadTexture("./assets/Capy_Sprite_Sheet.png");
         // frameSize = {(float)texture.width / 4.0f, (float)texture.height};
@@ -60,4 +60,6 @@ public:
     bool isTouchingCapy = false;
 
     Tongue tongue;
+
+    int *orangeScore = nullptr;
 };
