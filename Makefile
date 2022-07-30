@@ -17,6 +17,9 @@ LDLIBS = -Llib/ -lraylib -lopengl32 -lgdi32 -lwinmm -lbox2d
 CPP_VERSION = -std=c++17
 BUILD_MODE ?= RELEASE
 
+EMSCRYPTEN_PATH := C:/emsdk
+EMSCRYPTEN_BAT_PATH := C:/emsdk/emcmdprompt.bat
+
 ifeq ($(BUILD_MODE),DEBUG)
 	OPTIMISE_FLAG = -g -O0
 else
@@ -36,3 +39,7 @@ output: $(OBJS)
 
 clean:
 	rm $(OBJS) ./output $(DEPENDS)
+
+web:
+	echo off $(EMSCRYPTEN_BAT_PATH)
+	emcc -o game.html $(SRCS) -Os -Wall ./lib/libraylib_web.a ./lib/libbox2d_web.a -I. -I./include/ -L. -L./lib/ -s USE_GLFW=3 --shell-file ./shell.html -DPLATFORM_WEB --preload-file assets

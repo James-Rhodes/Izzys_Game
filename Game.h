@@ -5,16 +5,26 @@
 class Game
 {
 public:
-    Game()
-    {
+    Game(){
 
-        scene.Init();
+        // scene.Init();
     };
+
+    ~Game()
+    {
+        delete scene;
+    }
+
+    void Init()
+    {
+        scene = new Scene();
+        scene->Init();
+    }
 
     void Run()
     {
-        scene.Run();
+        scene->Run();
     };
 
-    Scene scene;
+    Scene *scene;
 };
