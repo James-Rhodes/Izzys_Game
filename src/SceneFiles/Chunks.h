@@ -45,7 +45,6 @@ public:
 };
 
 class CapyTreeGap : public SceneChunk
-// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
 {
 public:
     CapyTreeGap(int *counter) : SceneChunk(counter){};
@@ -55,7 +54,6 @@ public:
 };
 
 class LongFlyBounceChain1 : public SceneChunk
-// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
 {
 public:
     LongFlyBounceChain1(int *counter) : SceneChunk(counter){};
@@ -66,7 +64,6 @@ public:
 };
 
 class LongFlyBounceChain2 : public SceneChunk
-// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
 {
 public:
     LongFlyBounceChain2(int *counter) : SceneChunk(counter){};
@@ -77,11 +74,39 @@ public:
 };
 
 class LongFlyBounceChain3 : public SceneChunk
-// A ladder of terrain that can be jumped up and then you can jump from the top to the other side
 {
 public:
     LongFlyBounceChain3(int *counter) : SceneChunk(counter){};
     ~LongFlyBounceChain3(){};
+
+    void GenerateChunk() override;
+};
+
+class LongFlyChain1 : public SceneChunk
+{
+public:
+    LongFlyChain1(int *counter) : SceneChunk(counter){};
+    ~LongFlyChain1(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class LongFlyChain2 : public SceneChunk
+{
+public:
+    LongFlyChain2(int *counter) : SceneChunk(counter){};
+    ~LongFlyChain2(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class LongFlyChain3 : public SceneChunk
+{
+public:
+    LongFlyChain3(int *counter) : SceneChunk(counter){};
+    ~LongFlyChain3(){};
 
     void GenerateChunk() override;
 };

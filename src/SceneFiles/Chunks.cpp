@@ -108,3 +108,43 @@ void LongFlyBounceChain3::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {-3, 0});
     AddSceneComponent<Orange>("Orange", {2, 0});
 }
+
+void LongFlyChain1::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-4, -2.8}, 2.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Fly>("Fly", {0, 2});
+
+    AddSceneComponent<Orange>("Orange", {-1.25, 0});
+    AddSceneComponent<Orange>("Orange", {4.5, 0});
+}
+
+SceneChunk *LongFlyChain1::GetMandatoryNeighboringChunk()
+{
+    return new LongFlyChain2(terrainCounter);
+}
+
+void LongFlyChain2::GenerateChunk()
+{
+
+    AddSceneComponent<Fly>("Fly", {-4, 2});
+    AddSceneComponent<Fly>("Fly", {2, 2});
+
+    AddSceneComponent<Orange>("Orange", {0.75, 0});
+}
+
+SceneChunk *LongFlyChain2::GetMandatoryNeighboringChunk()
+{
+    return new LongFlyChain3(terrainCounter);
+}
+
+void LongFlyChain3::GenerateChunk()
+{
+
+    AddSceneComponent<Fly>("Fly", {-2, 2});
+
+    AddSceneComponent<Ground>("Ground", {4, -2.8}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-3, 0});
+    AddSceneComponent<Orange>("Orange", {2, 0});
+}
