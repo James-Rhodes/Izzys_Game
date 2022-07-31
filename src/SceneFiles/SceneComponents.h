@@ -31,6 +31,7 @@ public:
 
         animManager.AddAnimation("Float", {0, 1, 2, 3, 2, 1}, 0.15);
         animManager.SetState("Float", GetFrameTime());
+        phaseShift = PI * GetRandomValue(0, 10);
     }
     void Update() override
     {
@@ -74,9 +75,11 @@ public:
         if (!isConsumed) // Rather than deleting the orange when there is a collision, simply stop drawing it. The scene will then delete it once it moves outside of the bounds
         {
             // DrawCircleV(pos, radius, ORANGE);
+            drawPos = pos;
+            drawPos.y += floatAmplitude * sin(GetTime() * floatSpeed + phaseShift);
             Texture2D texture = ecs->GetSpriteSheet();
             Rectangle src = animManager.GetTextureRectangle();
-            DrawTexturePro(texture, src, (Rectangle){pos.x - (-radius / 2), pos.y + (radius / 2), -radius, -radius}, {0, 0}, 0, RAYWHITE);
+            DrawTexturePro(texture, src, (Rectangle){drawPos.x - (-radius / 2), drawPos.y + (radius / 2), -radius, -radius}, {0, 0}, 0, RAYWHITE);
         }
     }
 
@@ -92,9 +95,14 @@ public:
     }
 
     Vector2 pos;
+    Vector2 drawPos;
     float radius = 0.2;
     bool isConsumed = false;
     AnimationManager animManager;
+
+    float phaseShift = 0;
+    float floatSpeed = 3;
+    float floatAmplitude = 0.025;
 
 #ifdef DEBUG_POSITION
     bool isSelected = false;
