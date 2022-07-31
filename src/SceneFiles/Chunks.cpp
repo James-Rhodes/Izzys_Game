@@ -3,9 +3,9 @@
 void FlatChunk::GenerateChunk()
 {
     AddSceneComponent<Ground>("Ground", {0, -2.8}, 10.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
-    AddSceneComponent<Orange>("Orange", {0, -2.4});
-    AddSceneComponent<Orange>("Orange", {-3, -2.4});
-    AddSceneComponent<Orange>("Orange", {3, -2.4});
+    AddSceneComponent<Orange>("Orange", {0, -2.2});
+    AddSceneComponent<Orange>("Orange", {-3, -2.2});
+    AddSceneComponent<Orange>("Orange", {3, -2.2});
 };
 
 void GapChunk::GenerateChunk()

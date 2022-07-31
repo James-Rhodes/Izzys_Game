@@ -26,10 +26,16 @@ public:
         config.restitution = 0.5;
         config.isSensor = true;
         ecs->RegisterEntityAsPhysicsObject(id, config);
+
+        animManager = AnimationManager(ecs->GetSpriteSheet(), 64, 133, 16, 16);
+
+        animManager.AddAnimation("Float", {0, 1, 2, 3, 2, 1}, 0.15);
+        animManager.SetState("Float", GetFrameTime());
     }
     void Update() override
     {
         pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+        animManager.SetState("Float", GetFrameTime());
 
 #ifdef DEBUG_POSITION
 
@@ -67,7 +73,10 @@ public:
     {
         if (!isConsumed) // Rather than deleting the orange when there is a collision, simply stop drawing it. The scene will then delete it once it moves outside of the bounds
         {
-            DrawCircleV(pos, radius, ORANGE);
+            // DrawCircleV(pos, radius, ORANGE);
+            Texture2D texture = ecs->GetSpriteSheet();
+            Rectangle src = animManager.GetTextureRectangle();
+            DrawTexturePro(texture, src, (Rectangle){pos.x - (-radius / 2), pos.y + (radius / 2), -radius, -radius}, {0, 0}, 0, RAYWHITE);
         }
     }
 
@@ -83,8 +92,9 @@ public:
     }
 
     Vector2 pos;
-    float radius = 0.125;
+    float radius = 0.2;
     bool isConsumed = false;
+    AnimationManager animManager;
 
 #ifdef DEBUG_POSITION
     bool isSelected = false;
