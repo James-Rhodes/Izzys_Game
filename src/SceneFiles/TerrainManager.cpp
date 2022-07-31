@@ -84,7 +84,7 @@ SceneChunk *TerrainManager::GetChunk()
     if (newChunk != nullptr)
         return newChunk;
 
-    return new LongFlyChain1(&terrainCounter);
+    // return new LongFlyChain1(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)

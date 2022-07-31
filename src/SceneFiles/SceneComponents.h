@@ -83,7 +83,7 @@ public:
     }
 
     Vector2 pos;
-    float radius = 0.1;
+    float radius = 0.125;
     bool isConsumed = false;
 
 #ifdef DEBUG_POSITION
