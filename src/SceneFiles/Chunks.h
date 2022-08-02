@@ -139,3 +139,12 @@ public:
 
     void GenerateChunk() override;
 };
+
+class BigJump : public SceneChunk
+{
+public:
+    BigJump(int *counter) : SceneChunk(counter){};
+    ~BigJump(){};
+
+    void GenerateChunk() override;
+};

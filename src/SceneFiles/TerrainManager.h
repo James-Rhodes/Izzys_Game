@@ -30,7 +30,7 @@ public:
 
     int terrainCounter = 0;
 
-    int numChunkTypes = 8;
+    int numChunkTypes = 9;
 
     float distanceTravelled = 0;
 

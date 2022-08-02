@@ -84,7 +84,7 @@ SceneChunk *TerrainManager::GetChunk()
     if (newChunk != nullptr)
         return newChunk;
 
-    return new OlFashionedLadder1(&terrainCounter);
+    return new BigJump(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)
@@ -118,6 +118,9 @@ SceneChunk *TerrainManager::GetChunk()
         break;
     case (7):
         newChunk = new OlFashionedLadder1(&terrainCounter);
+        break;
+    case (8):
+        newChunk = new BigJump(&terrainCounter);
         break;
     }
 

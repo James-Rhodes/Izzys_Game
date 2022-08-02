@@ -187,3 +187,13 @@ void OlFashionedLadder3::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {-5, -0.15});
     AddSceneComponent<Orange>("Orange", {-2, -1.15});
 }
+
+void BigJump::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-3.5, -2.8}, 3.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {2, -0.8}, 2.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {4, 0.5}, 1.51, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-0.5, -0.05});
+    AddSceneComponent<Orange>("Orange", {3.9, -0.05});
+}
