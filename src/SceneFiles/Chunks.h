@@ -110,3 +110,32 @@ public:
 
     void GenerateChunk() override;
 };
+
+class OlFashionedLadder1 : public SceneChunk
+{
+public:
+    OlFashionedLadder1(int *counter) : SceneChunk(counter){};
+    ~OlFashionedLadder1(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class OlFashionedLadder2 : public SceneChunk
+{
+public:
+    OlFashionedLadder2(int *counter) : SceneChunk(counter){};
+    ~OlFashionedLadder2(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class OlFashionedLadder3 : public SceneChunk
+{
+public:
+    OlFashionedLadder3(int *counter) : SceneChunk(counter){};
+    ~OlFashionedLadder3(){};
+
+    void GenerateChunk() override;
+};

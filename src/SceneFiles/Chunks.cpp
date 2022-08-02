@@ -148,3 +148,42 @@ void LongFlyChain3::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {-3, 0});
     AddSceneComponent<Orange>("Orange", {2, 0});
 }
+
+void OlFashionedLadder1::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-3.5, -2.8}, 3.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {0, -1.8}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {3, -0.8}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {0, -1.15});
+    AddSceneComponent<Orange>("Orange", {3, -0.15});
+}
+
+SceneChunk *OlFashionedLadder1::GetMandatoryNeighboringChunk()
+{
+    return new OlFashionedLadder2(terrainCounter);
+}
+
+void OlFashionedLadder2::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-4, 0.2}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {-1, 1.2}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {2, 0.2}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-1, 1.85});
+}
+
+SceneChunk *OlFashionedLadder2::GetMandatoryNeighboringChunk()
+{
+    return new OlFashionedLadder3(terrainCounter);
+}
+
+void OlFashionedLadder3::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-5, -0.8}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {-2, -1.8}, 1.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {3, -2.8}, 4.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-5, -0.15});
+    AddSceneComponent<Orange>("Orange", {-2, -1.15});
+}
