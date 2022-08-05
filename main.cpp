@@ -9,6 +9,20 @@
 #include <emscripten/emscripten.h>
 #endif
 
+#ifdef _WIN32
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    __declspec(dllexport) unsigned long NvOptimusEnablement = 1;
+    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+
+#ifdef __cplusplus
+}
+#endif
+#endif
+
 void UpdateDrawFrame();
 
 const int screenWidth = 640;
