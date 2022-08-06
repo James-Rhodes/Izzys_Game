@@ -197,3 +197,14 @@ void BigJump::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {-0.5, -0.05});
     AddSceneComponent<Orange>("Orange", {3.9, -0.05});
 }
+
+void BouncyBigJump::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-3.5, -2.8}, 3.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+    AddSceneComponent<Ground>("Ground", {2.1, 0.2}, 2.01, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Orange>("Orange", {-0.3, 2});
+    AddSceneComponent<Orange>("Orange", {2.1, 0.9});
+
+    AddSceneComponent<BouncyPlatform>("Bouncy", {-0.25, -1.4}, 2, 0.3, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
+}

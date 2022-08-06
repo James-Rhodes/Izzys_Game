@@ -49,6 +49,8 @@ void Scene::Update()
 
 void Scene::UpdatePhysics()
 {
+    physicsAccumulator += GetFrameTime();
+
     int numPhysicsIterations = 0;
     while (physicsAccumulator >= physTime)
     {
@@ -113,8 +115,6 @@ void Scene::Draw()
     {
         drawer->Draw();
     }
-
-    physicsAccumulator += GetFrameTime();
 
     EndDrawing();
 }
