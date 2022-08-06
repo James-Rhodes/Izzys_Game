@@ -42,6 +42,11 @@ void Ground::Update()
 {
 
     pos = {physBody->GetPosition().x, physBody->GetPosition().y};
+    if (setVelocity != nullptr)
+    {
+        Vector2 vel = setVelocity(pos, {-ecs->GetEntity<TerrainManager>("TerrainManager").GetSceneScrollSpeed(), 0}, GetTime());
+        physBody->SetLinearVelocity({vel.x, vel.y});
+    }
 
     if (numSidePlayerCollisionsCapy != 0 && numSidePlayerCollisionsFrog != 0)
     {

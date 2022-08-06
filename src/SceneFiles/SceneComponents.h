@@ -5,6 +5,7 @@
 #include "../CharacterFiles/Capybara.h"
 #include "../CharacterFiles/Frog.h"
 #include "../CharacterFiles/CapyFrogHybrid.h"
+#include "TerrainManager.h"
 #include <math.h>
 
 #define DEBUG_POSITION 1
@@ -113,8 +114,8 @@ public:
 class Ground : public Entity
 {
 public:
-    // Pos is in world coords
-    Ground(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : pos(_pos), width(_width), height(_height), srcRect(src), friction(_friction){};
+    // Pos is in world coords. Func takes in the current position, sceneScroll speed and a float which can be the time or some accumulator used to manipulate the movement
+    Ground(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1, Vector2 (*func)(Vector2, Vector2, float) = nullptr) : pos(_pos), width(_width), height(_height), srcRect(src), friction(_friction), setVelocity(func){};
 
     void Register();
 
@@ -137,6 +138,8 @@ public:
 
     b2Fixture *groundFixture;
 
+    Vector2 (*setVelocity)(Vector2, Vector2, float);
+
 #ifdef DEBUG_POSITION
     bool isSelected = false;
     Vector2 chunkWorldCenter = {10, 0};
@@ -146,7 +149,7 @@ public:
 class Ice : public Ground
 {
 public:
-    Ice(Vector2 _pos, float _width, float _height, Rectangle src) : Ground(_pos, _width, _height, src, 0){};
+    Ice(Vector2 _pos, float _width, float _height, Rectangle src, Vector2 (*func)(Vector2, Vector2, float) = nullptr) : Ground(_pos, _width, _height, src, 0, func){};
 };
 
 class Fly : public Entity
@@ -236,7 +239,7 @@ public:
 class Plank : public Ground
 {
 public:
-    Plank(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : Ground(_pos, _width, _height, src, _friction){};
+    Plank(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1, Vector2 (*func)(Vector2, Vector2, float) = nullptr) : Ground(_pos, _width, _height, src, _friction, func){};
     void OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
 };
 
@@ -244,7 +247,7 @@ class BouncyPlatform : public Ground
 {
 public:
     // Pos is in world coords
-    BouncyPlatform(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1) : Ground(_pos, _width, _height, src, _friction){};
+    BouncyPlatform(Vector2 _pos, float _width, float _height, Rectangle src, float _friction = 1, Vector2 (*func)(Vector2, Vector2, float) = nullptr) : Ground(_pos, _width, _height, src, _friction, func){};
 
     void Register();
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact) override;
@@ -256,7 +259,7 @@ class Tree : public Ground
 {
 public:
     // Pos is
-    Tree(Vector2 _pos, Rectangle src) : Ground(_pos, 0.5, 0.5, src, 1){};
+    Tree(Vector2 _pos, Rectangle src, Vector2 (*func)(Vector2, Vector2, float) = nullptr) : Ground(_pos, 0.5, 0.5, src, 1, func){};
 
     void Draw() override;
 

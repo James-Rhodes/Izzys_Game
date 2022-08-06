@@ -134,3 +134,8 @@ float TerrainManager::GetDistanceTravelled()
 {
     return distanceTravelled;
 }
+
+float TerrainManager::GetSceneScrollSpeed()
+{
+    return sceneScrollSpeed;
+}

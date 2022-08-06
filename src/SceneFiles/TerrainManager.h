@@ -20,6 +20,8 @@ public:
 
     float GetDistanceTravelled();
 
+    float GetSceneScrollSpeed();
+
     SceneChunk *currentChunk;
     SceneChunk *nextChunk;
     AnimationManager terrainBlocks;

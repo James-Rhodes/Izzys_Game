@@ -208,3 +208,7 @@ void BouncyBigJump::GenerateChunk()
 
     AddSceneComponent<BouncyPlatform>("Bouncy", {-0.25, -1.4}, 2, 0.3, terrainBlocks->GetTextureRectangleAtState("Bouncy"));
 }
+
+void MovingBlocker::GenerateChunk()
+{
+}

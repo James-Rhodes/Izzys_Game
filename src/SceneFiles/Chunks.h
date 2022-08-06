@@ -157,3 +157,12 @@ public:
 
     void GenerateChunk() override;
 };
+
+class MovingBlocker : public SceneChunk
+{
+public:
+    MovingBlocker(int *counter) : SceneChunk(counter){};
+    ~MovingBlocker(){};
+
+    void GenerateChunk() override;
+};
