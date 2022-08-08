@@ -41,21 +41,34 @@ void Frog::Register()
 
 void Frog::Update()
 {
-    UpdateController();
+    if (isAlive)
+    {
+        if (PositionIsValid() && !hitPelican)
+        {
+            UpdateController();
+        }
+        else
+        {
+            OnDeath();
+            animManager.SetState("Dead");
+        }
+    }
     pos = GetPosition();
 }
 
 void Frog::Draw()
 {
 
-    // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, GREEN);
-    Vector2 renderPos = PixelPerfectClamp({pos.x - (currDirection * width / 2), pos.y + (height / 2)}, 64);
+    Vector2 renderPos = PixelPerfectClamp({pos.x, pos.y}, 64);
+
     Vector2 renderDimensions = PixelPerfectClamp({currDirection * width, -height}, 64);
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
+    Vector2 offset = {width * 0.5f + ((float)(currDirection == -1) * -width), -height * 0.5f};
+    float angle = std::round(physBody->GetAngle() * RAD2DEG);
 
     DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
-                   {0, 0}, 0, RAYWHITE);
+                   offset, angle, RAYWHITE);
     tongue.Draw();
 }
 
@@ -68,137 +81,134 @@ Vector2 Frog::GetPosition()
 void Frog::UpdateController()
 {
     bool keyWasPressed = false;
-    if (isAlive)
+    if (IsKeyDown(KEY_A) && (!isTouchingSideOfTerrain || isOnGround))
     {
-
-        if (IsKeyDown(KEY_A) && (!isTouchingSideOfTerrain || isOnGround))
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        if (-currVel.x < speed)
         {
-            b2Vec2 currVel = physBody->GetLinearVelocity();
-            if (-currVel.x < speed)
+            b2Vec2 force;
+
+            if (isSwinging)
             {
-                b2Vec2 force;
+                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), -swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
 
-                if (isSwinging)
-                {
-                    Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), -swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
-
-                    force = tangentialForce.x <= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
-                }
-                else
-                {
-                    force = b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
-                }
-
-                physBody->ApplyForceToCenter(force, true);
+                force = tangentialForce.x <= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
+            }
+            else
+            {
+                force = b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0);
             }
 
-            currDirection = -1;
-            animManager.SetState("Run", GetFrameTime());
-            keyWasPressed = true;
+            physBody->ApplyForceToCenter(force, true);
         }
 
-        if (IsKeyDown(KEY_D) && (!isTouchingSideOfTerrain || isOnGround))
+        currDirection = -1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
+    }
+
+    if (IsKeyDown(KEY_D) && (!isTouchingSideOfTerrain || isOnGround))
+    {
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        if (currVel.x < speed)
         {
-            b2Vec2 currVel = physBody->GetLinearVelocity();
-            if (currVel.x < speed)
+            b2Vec2 force;
+
+            if (isSwinging)
             {
-                b2Vec2 force;
+                Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
 
-                if (isSwinging)
-                {
-                    Vector2 tangentialForce = Vector2Scale(GetSwingTangentVector(pos, tongue.GetEndPos()), swingStrength * physBody->GetMass() * (speed / GetFrameTime()));
-
-                    force = tangentialForce.x >= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
-                }
-                else
-                {
-                    force = b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
-                }
-                physBody->ApplyForceToCenter(force, true);
+                force = tangentialForce.x >= 0 ? b2Vec2(tangentialForce.x, tangentialForce.y) : b2Vec2(0, 0);
             }
-
-            currDirection = 1;
-            animManager.SetState("Run", GetFrameTime());
-            keyWasPressed = true;
-        }
-
-        if (IsKeyPressed(KEY_W) && isOnGround)
-
-        {
-            float gravity = physBody->GetWorld()->GetGravity().y;
-            // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-            float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
-
-            physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
-            keyWasPressed = true;
-        }
-
-        if (IsKeyPressed(KEY_C))
-        {
-            if (!capybaraIsOnHead)
+            else
             {
-                if (isSwinging)
+                force = b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0);
+            }
+            physBody->ApplyForceToCenter(force, true);
+        }
+
+        currDirection = 1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
+    }
+
+    if (IsKeyPressed(KEY_W) && isOnGround)
+
+    {
+        DoJump();
+        keyWasPressed = true;
+    }
+
+    if (IsKeyPressed(KEY_C))
+    {
+        if (!capybaraIsOnHead)
+        {
+            if (isSwinging)
+            {
+                b2Vec2 currentVel = physBody->GetPosition();
+                currentVel.Normalize();
+
+                tongue.Delete(ecs->GetPhysicsManager());
+
+                isInSwingDismount = true;
+                isSwinging = false;
+            }
+            else
+            {
+                bool succeededInTongueExtension = false;
+                Entity *nearestFly = GetNearestFly();
+                if (nearestFly != nullptr)
                 {
-                    b2Vec2 currentVel = physBody->GetPosition();
-                    currentVel.Normalize();
+                    float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
+                    int flyDirection = (flySign > 0) - (flySign < 0);
 
-                    tongue.Delete(ecs->GetPhysicsManager());
-
-                    isInSwingDismount = true;
-                    isSwinging = false;
-                }
-                else
-                {
-                    bool succeededInTongueExtension = false;
-                    Entity *nearestFly = GetNearestFly();
-                    if (nearestFly != nullptr)
+                    if (flyDirection == currDirection)
                     {
-                        float flySign = nearestFly->physBody->GetPosition().x - physBody->GetPosition().x;
-                        int flyDirection = (flySign > 0) - (flySign < 0);
-
-                        if (flyDirection == currDirection)
-                        {
-                            tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
-                            isSwinging = !isSwinging;
-                            succeededInTongueExtension = true;
-                        }
-                    }
-
-                    if (!succeededInTongueExtension)
-                    {
-                        tongue.SetDrawFalseExtension(currDirection);
-                        // To Fix.
+                        tongue.Create(ecs->GetPhysicsManager(), nearestFly->physBody, (b2Vec2){0, 0});
+                        isSwinging = !isSwinging;
+                        succeededInTongueExtension = true;
                     }
                 }
+
+                if (!succeededInTongueExtension)
+                {
+                    tongue.SetDrawFalseExtension(currDirection);
+                    // To Fix.
+                }
             }
         }
+    }
 
-        if (isInSwingDismount && !isOnGround)
-        { // In air after dismount
-            physBody->SetGravityScale(7);
-        }
-        else if (isInSwingDismount && isOnGround) // landed after swing dismount
-        {
-            isInSwingDismount = false;
-        }
-        else
-        {
-            physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
-        }
-
-        if (!keyWasPressed || !isOnGround)
-        {
-            animManager.SetState("Stand_Still");
-        }
-        if (isSwinging)
-        {
-            animManager.SetState("Swing");
-        }
+    if (isInSwingDismount && !isOnGround)
+    { // In air after dismount
+        physBody->SetGravityScale(7);
+    }
+    else if (isInSwingDismount && isOnGround) // landed after swing dismount
+    {
+        isInSwingDismount = false;
     }
     else
     {
-        animManager.SetState("Dead");
+        physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
     }
+
+    if (!keyWasPressed || !isOnGround)
+    {
+        animManager.SetState("Stand_Still");
+    }
+    if (isSwinging)
+    {
+        animManager.SetState("Swing");
+    }
+}
+
+void Frog::DoJump()
+{
+    float gravity = physBody->GetWorld()->GetGravity().y;
+    // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+    float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
+
+    physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
 }
 
 void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
@@ -266,4 +276,57 @@ Vector2 Frog::GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter)
     Vector3 cross = Vector3CrossProduct(towardsCenter, outOfScreen);
     Vector2 result = {cross.x, cross.y};
     return Vector2Normalize(result);
+}
+
+bool Frog::PositionIsValid()
+{
+    float hWidth = 0.5 * width;
+    float hHeight = 0.5 * height;
+
+    Vector2 boundariesUpper = Vector2Add(GetScreenToWorld2D({(float)GetScreenWidth(), (float)GetScreenHeight()}, *ecs->GetCamera()), {-hWidth, hHeight});
+    Vector2 boundariesLower = Vector2Add(GetScreenToWorld2D({0, 0}, *ecs->GetCamera()), {-hWidth, -hHeight});
+
+    // std::cout << "Upper: " << boundariesUpper.x << " , " << boundariesUpper.y << std::endl;
+    // std::cout << "Lower: " << boundariesLower.x << " , " << boundariesLower.y << std::endl;
+
+    if (pos.x > boundariesUpper.x)
+    {
+        physBody->SetTransform({boundariesUpper.x, pos.y}, 0);
+
+        b2Vec2 vel = physBody->GetLinearVelocity();
+        physBody->SetLinearVelocity({0, vel.y});
+    }
+
+    if (pos.x < boundariesLower.x)
+    {
+        physBody->ApplyLinearImpulseToCenter({10, 0}, true);
+        return false;
+    }
+
+    if (pos.y < boundariesLower.y)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void Frog::OnDeath()
+{
+    isAlive = false;
+    physBody->SetFixedRotation(false);
+    physBody->SetAngularVelocity(6.28); // ~2pi
+
+    b2Fixture *body = physBody->GetFixtureList();
+    while (body->IsSensor())
+    {
+        body = body->GetNext(); // Gets the main ground fixture as it is the one that is not a sensor
+    }
+
+    body->SetRestitution(0.5);
+    body->SetFriction(0.5);
+    physBody->SetLinearVelocity({0, 0});
+    physBody->SetBullet(false);
+    DoJump();
+    DoJump();
 }

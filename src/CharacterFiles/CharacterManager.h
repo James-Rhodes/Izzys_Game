@@ -22,6 +22,8 @@ public:
 
     void DrawGameOver();
 
+    bool CapyAndFrogAreGameOver();
+
     void JoinCapyAndFrog();
 
     void SeperateCapyAndFrog();
@@ -32,6 +34,8 @@ public:
     int numOrangesCollected = 0;
 
     bool capyAndFrogAreJoined = false;
+
+    bool isGameOver = false;
 
     Capy *capy = nullptr;
     Frog *frog = nullptr;

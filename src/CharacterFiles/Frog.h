@@ -24,6 +24,7 @@ public:
     void Draw();
 
     void UpdateController();
+    void DoJump();
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
@@ -32,6 +33,8 @@ public:
 
     Entity *GetNearestFly();
     Vector2 GetSwingTangentVector(Vector2 bodyPos, Vector2 circleCenter);
+    bool PositionIsValid();
+    void OnDeath();
     void SetIsAlive(bool _isAlive)
     {
         isAlive = _isAlive;
@@ -58,6 +61,8 @@ public:
     bool isTouchingSideOfTerrain = false;
 
     bool isTouchingCapy = false;
+
+    bool hitPelican = false;
 
     Tongue tongue;
 

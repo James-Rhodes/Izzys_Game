@@ -22,20 +22,39 @@ void CharacterManager::Update()
             JoinCapyAndFrog();
         }
     }
+    isGameOver = CapyAndFrogAreGameOver();
 }
 
 void CharacterManager::Draw()
 {
     float distanceTravelled = ecs->GetEntity<TerrainManager>("TerrainManager").GetDistanceTravelled();
-    const char *text = TextFormat("Distance: %.2f  Oranges: %d", distanceTravelled, numOrangesCollected);
-    int textWidth = MeasureText(text, 20);
 
-    DrawText(text, GetScreenWidth() * 0.5 - textWidth * 0.5, 10, 20, BLACK);
-    // DrawTextPro(*ecs->GetFont(), "HelloWorl", {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2}, {0, 0}, 180, 12, 2, BLACK);
+    if (!isGameOver)
+    {
+        const char *text = TextFormat("Distance: %.2f  Oranges: %d", distanceTravelled, numOrangesCollected);
+        int textWidth = MeasureText(text, 20);
+
+        DrawText(text, GetScreenWidth() * 0.5 - textWidth * 0.5, 10, 20, BLACK);
+    }
+    else
+    {
+        DrawGameOver();
+    }
 }
 
 void CharacterManager::DrawGameOver()
 {
+    std::cout << "Game be over my dude" << std::endl;
+}
+
+bool CharacterManager::CapyAndFrogAreGameOver()
+{
+    if (capyAndFrogAreJoined)
+    {
+        return !capyFrogHybrid->isAlive;
+    }
+
+    return !capy->isAlive || !frog->isAlive;
 }
 
 void CharacterManager::JoinCapyAndFrog()
