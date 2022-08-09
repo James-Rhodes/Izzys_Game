@@ -25,9 +25,7 @@ void TerrainManager::Update()
 {
     if (IsKeyPressed(KEY_B))
     {
-        sceneScrollSpeed = sceneScrollSpeed == 0 ? 1 : 0;
-        currentChunk->SetSceneMovementSpeed(sceneScrollSpeed);
-        nextChunk->SetSceneMovementSpeed(sceneScrollSpeed);
+        SetSceneScrollSpeed(sceneScrollSpeed == 0 ? 1 : 0);
     }
 
     currentChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, currentChunkPos);
@@ -138,4 +136,11 @@ float TerrainManager::GetDistanceTravelled()
 float TerrainManager::GetSceneScrollSpeed()
 {
     return sceneScrollSpeed;
+}
+
+void TerrainManager::SetSceneScrollSpeed(float _sceneScrollSpeed)
+{
+    sceneScrollSpeed = _sceneScrollSpeed;
+    currentChunk->SetSceneMovementSpeed(sceneScrollSpeed);
+    nextChunk->SetSceneMovementSpeed(sceneScrollSpeed);
 }

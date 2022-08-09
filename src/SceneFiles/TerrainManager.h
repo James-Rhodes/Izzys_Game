@@ -12,6 +12,19 @@ public:
     TerrainManager(){
 
     };
+
+    ~TerrainManager()
+    {
+        if (currentChunk != nullptr)
+        {
+            delete currentChunk;
+        }
+
+        if (nextChunk != nullptr)
+        {
+            delete nextChunk;
+        }
+    }
     void Register();
     void Update();
 
@@ -21,6 +34,7 @@ public:
     float GetDistanceTravelled();
 
     float GetSceneScrollSpeed();
+    void SetSceneScrollSpeed(float _sceneScrollSpeed);
 
     SceneChunk *currentChunk;
     SceneChunk *nextChunk;

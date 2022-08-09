@@ -56,7 +56,7 @@ void CharacterManager::DrawGameOver()
 void CharacterManager::OnGameOver()
 {
     std::cout << "Game Ended" << std::endl;
-    ecs->GetEntity<TerrainManager>("TerrainManager");
+    ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(0);
 }
 
 bool CharacterManager::CapyAndFrogAreGameOver()
