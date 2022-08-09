@@ -24,6 +24,9 @@ public:
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
+    bool PositionIsValid();
+    void OnDeath();
+    void DoJump();
 
     Vector2 GetPosition();
     void SetIsAlive(bool _isAlive)
@@ -40,6 +43,7 @@ public:
     float dashRechargeTime = 0.8;
     int isOnGround = 0;
     bool isAlive = true;
+    bool hitPelican = false;
     bool stateWasPreviouslyLocked = false;
 
     int currDirection = 1; // 1 = right facing, -1 = left facing

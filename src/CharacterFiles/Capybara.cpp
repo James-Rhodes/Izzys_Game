@@ -38,8 +38,18 @@ void Capy::Register()
 
 void Capy::Update()
 {
-    UpdateController();
-
+    if (isAlive)
+    {
+        if (PositionIsValid() && !hitPelican)
+        {
+            UpdateController();
+        }
+        else
+        {
+            OnDeath();
+            animManager.SetState("Dead");
+        }
+    }
     pos = GetPosition();
 }
 
@@ -47,13 +57,16 @@ void Capy::Draw()
 {
     // DrawRectanglePro((Rectangle){pos.x, pos.y, width, height}, {width / 2, height / 2}, 0, BROWN);
     // DrawTexture(texture, 0, 0, RAYWHITE);
-    Vector2 renderPos = PixelPerfectClamp({pos.x - (currDirection * width / 2), pos.y + (height / 2)}, 64);
+    Vector2 renderPos = PixelPerfectClamp({pos.x, pos.y}, 64);
+
     Vector2 renderDimensions = PixelPerfectClamp({currDirection * width, -height}, 64);
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
+    Vector2 offset = {width * 0.5f + ((float)(currDirection == -1) * -width), -height * 0.5f};
+    float angle = physBody->GetAngle() * RAD2DEG;
 
     DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
-                   {0, 0}, 0, RAYWHITE);
+                   offset, angle, RAYWHITE);
 }
 
 Vector2 Capy::GetPosition()
@@ -66,90 +79,86 @@ void Capy::UpdateController()
 {
     bool keyWasPressed = false;
 
-    if (isAlive)
+    if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
     {
-
-        if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        if (-currVel.x < speed)
         {
-            b2Vec2 currVel = physBody->GetLinearVelocity();
-            if (-currVel.x < speed)
-            {
 
-                physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-            }
-
-            currDirection = -1;
-            animManager.SetState("Run", GetFrameTime());
-            keyWasPressed = true;
+            physBody->ApplyForceToCenter(b2Vec2(-physBody->GetMass() * (speed / GetFrameTime()), 0), true);
         }
 
-        if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
+        currDirection = -1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
+    }
+
+    if (IsKeyDown(KEY_RIGHT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
+    {
+        b2Vec2 currVel = physBody->GetLinearVelocity();
+        if (currVel.x < speed)
         {
-            b2Vec2 currVel = physBody->GetLinearVelocity();
-            if (currVel.x < speed)
-            {
 
-                physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
-            }
-
-            currDirection = 1;
-            animManager.SetState("Run", GetFrameTime());
-            keyWasPressed = true;
+            physBody->ApplyForceToCenter(b2Vec2(physBody->GetMass() * (speed / GetFrameTime()), 0), true);
         }
 
-        if (IsKeyPressed(KEY_UP))
+        currDirection = 1;
+        animManager.SetState("Run", GetFrameTime());
+        keyWasPressed = true;
+    }
 
+    if (IsKeyPressed(KEY_UP))
+
+    {
+        if (isOnGround)
         {
-            if (isOnGround)
-            {
-                float gravity = physBody->GetWorld()->GetGravity().y;
-                // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-                float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
-
-                physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
-                keyWasPressed = true;
-            }
-        }
-
-        if (IsKeyPressed(KEY_M))
-        {
-            if (GetTime() - timeOfLastDash > dashRechargeTime)
-            {
-                float dashForce = 20 * physBody->GetMass();
-                b2Vec2 newVel = b2Vec2(0, 0);
-                physBody->SetLinearVelocity(newVel);
-                physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
-                timeOfLastDash = GetTime();
-                animManager.SetStateLock("Dash", 0.2);
-                keyWasPressed = true;
-                stateWasPreviouslyLocked = true;
-            }
-        }
-
-        if (stateWasPreviouslyLocked && !animManager.GetIsStateLocked())
-        {
-            // State just unlocked
-            stateWasPreviouslyLocked = false;
-            physBody->SetLinearVelocity({0, 0});
-        }
-
-        physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
-        physBody->SetLinearDamping(2);
-        if (animManager.GetCurrentState() == "Dash")
-        {
-            physBody->SetGravityScale(0);
-            physBody->SetLinearDamping(0);
-        }
-
-        if (!keyWasPressed || !isOnGround)
-        {
-            animManager.SetState("Stand_Still");
+            DoJump();
         }
     }
-    else
+
+    if (IsKeyPressed(KEY_M))
     {
-        animManager.SetState("Dead");
+        if (GetTime() - timeOfLastDash > dashRechargeTime)
+        {
+            float dashForce = 20 * physBody->GetMass();
+            b2Vec2 newVel = b2Vec2(0, 0);
+            physBody->SetLinearVelocity(newVel);
+            physBody->ApplyLinearImpulseToCenter(b2Vec2(currDirection * dashForce, 0), true);
+            timeOfLastDash = GetTime();
+            animManager.SetStateLock("Dash", 0.2);
+            keyWasPressed = true;
+            stateWasPreviouslyLocked = true;
+        }
     }
+
+    if (stateWasPreviouslyLocked && !animManager.GetIsStateLocked())
+    {
+        // State just unlocked
+        stateWasPreviouslyLocked = false;
+        physBody->SetLinearVelocity({0, 0});
+    }
+
+    physBody->SetGravityScale(physBody->GetLinearVelocity().y < 0 ? 13 : 8);
+    physBody->SetLinearDamping(2);
+    if (animManager.GetCurrentState() == "Dash")
+    {
+        physBody->SetGravityScale(0);
+        physBody->SetLinearDamping(0);
+    }
+
+    if (!keyWasPressed || !isOnGround)
+    {
+        animManager.SetState("Stand_Still");
+    }
+}
+
+void Capy::DoJump()
+{
+    float gravity = physBody->GetWorld()->GetGravity().y;
+    // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
+    float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
+
+    physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
 }
 
 void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
@@ -185,4 +194,52 @@ void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
     {
         isTouchingFrog = false;
     }
+}
+
+bool Capy::PositionIsValid()
+{
+    float hWidth = 0.5 * width;
+    float hHeight = 0.5 * height;
+
+    Vector2 boundariesUpper = Vector2Add(GetScreenToWorld2D({(float)GetScreenWidth(), (float)GetScreenHeight()}, *ecs->GetCamera()), {-hWidth, hHeight});
+    Vector2 boundariesLower = Vector2Add(GetScreenToWorld2D({0, 0}, *ecs->GetCamera()), {-hWidth, -hHeight});
+
+    if (pos.x > boundariesUpper.x)
+    {
+        physBody->SetTransform({boundariesUpper.x, pos.y}, 0);
+
+        b2Vec2 vel = physBody->GetLinearVelocity();
+        physBody->SetLinearVelocity({0, vel.y});
+    }
+
+    if (pos.x < boundariesLower.x)
+    {
+        physBody->ApplyLinearImpulseToCenter({10, 0}, true);
+        return false;
+    }
+
+    if (pos.y < boundariesLower.y)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void Capy::OnDeath()
+{
+    isAlive = false;
+    physBody->SetFixedRotation(false);
+    physBody->SetAngularVelocity(6.28); // ~2pi
+
+    b2Fixture *body = physBody->GetFixtureList();
+    while (body->IsSensor())
+    {
+        body = body->GetNext(); // Gets the main ground fixture as it is the one that is not a sensor
+    }
+
+    body->SetRestitution(0.5);
+    body->SetFriction(0.5);
+    DoJump();
+    DoJump();
 }

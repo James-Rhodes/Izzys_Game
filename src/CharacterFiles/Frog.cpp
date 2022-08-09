@@ -65,7 +65,7 @@ void Frog::Draw()
     Texture2D texture = ecs->GetSpriteSheet();
     Rectangle src = animManager.GetTextureRectangle();
     Vector2 offset = {width * 0.5f + ((float)(currDirection == -1) * -width), -height * 0.5f};
-    float angle = std::round(physBody->GetAngle() * RAD2DEG);
+    float angle = physBody->GetAngle() * RAD2DEG;
 
     DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
                    offset, angle, RAYWHITE);
@@ -286,9 +286,6 @@ bool Frog::PositionIsValid()
     Vector2 boundariesUpper = Vector2Add(GetScreenToWorld2D({(float)GetScreenWidth(), (float)GetScreenHeight()}, *ecs->GetCamera()), {-hWidth, hHeight});
     Vector2 boundariesLower = Vector2Add(GetScreenToWorld2D({0, 0}, *ecs->GetCamera()), {-hWidth, -hHeight});
 
-    // std::cout << "Upper: " << boundariesUpper.x << " , " << boundariesUpper.y << std::endl;
-    // std::cout << "Lower: " << boundariesLower.x << " , " << boundariesLower.y << std::endl;
-
     if (pos.x > boundariesUpper.x)
     {
         physBody->SetTransform({boundariesUpper.x, pos.y}, 0);
@@ -325,8 +322,7 @@ void Frog::OnDeath()
 
     body->SetRestitution(0.5);
     body->SetFriction(0.5);
-    physBody->SetLinearVelocity({0, 0});
-    physBody->SetBullet(false);
+
     DoJump();
     DoJump();
 }
