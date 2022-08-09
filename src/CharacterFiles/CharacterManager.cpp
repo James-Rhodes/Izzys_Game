@@ -28,6 +28,18 @@ void CharacterManager::Update()
     if (prevGameOverState != isGameOver)
     {
         OnGameOver();
+        sceneScrollSpeedAtGameOver = ecs->GetEntity<TerrainManager>("TerrainManager").GetSceneScrollSpeed();
+    }
+
+    if (isGameOver)
+    {
+
+        // Slow down the scroll speed rather than abrupt stop
+        ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(Lerp(sceneScrollSpeedAtGameOver, 0, std::min(timeSinceGameOver / scrollOnDeathSlowDown, 1.0f)));
+        if (timeSinceGameOver < scrollOnDeathSlowDown)
+        {
+            timeSinceGameOver += GetFrameTime();
+        }
     }
 }
 
@@ -56,7 +68,7 @@ void CharacterManager::DrawGameOver()
 void CharacterManager::OnGameOver()
 {
     std::cout << "Game Ended" << std::endl;
-    ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(0);
+    // ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(0);
 }
 
 bool CharacterManager::CapyAndFrogAreGameOver()

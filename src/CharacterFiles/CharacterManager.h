@@ -39,6 +39,10 @@ public:
 
     bool isGameOver = false;
 
+    float scrollOnDeathSlowDown = 2; // Time in seconds til the scene completely slows down to a stop
+    float timeSinceGameOver = 0;
+    float sceneScrollSpeedAtGameOver = 0;
+
     Capy *capy = nullptr;
     Frog *frog = nullptr;
     CapyFrogHybrid *capyFrogHybrid = nullptr;
