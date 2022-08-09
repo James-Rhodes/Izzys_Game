@@ -22,6 +22,8 @@ public:
 
     void DrawGameOver();
 
+    void OnGameOver();
+
     bool CapyAndFrogAreGameOver();
 
     void JoinCapyAndFrog();

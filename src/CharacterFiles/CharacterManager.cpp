@@ -11,7 +11,7 @@ void CharacterManager::Register()
 
 void CharacterManager::Update()
 {
-    if (IsKeyPressed(KEY_SPACE))
+    if (!isGameOver && IsKeyPressed(KEY_SPACE))
     {
         if (capyAndFrogAreJoined)
         {
@@ -22,7 +22,13 @@ void CharacterManager::Update()
             JoinCapyAndFrog();
         }
     }
+    bool prevGameOverState = isGameOver;
     isGameOver = CapyAndFrogAreGameOver();
+
+    if (prevGameOverState != isGameOver)
+    {
+        OnGameOver();
+    }
 }
 
 void CharacterManager::Draw()
@@ -44,7 +50,13 @@ void CharacterManager::Draw()
 
 void CharacterManager::DrawGameOver()
 {
-    std::cout << "Game be over my dude" << std::endl;
+    // std::cout << "Game be over my dude" << std::endl;
+}
+
+void CharacterManager::OnGameOver()
+{
+    std::cout << "Game Ended" << std::endl;
+    ecs->GetEntity<TerrainManager>("TerrainManager");
 }
 
 bool CharacterManager::CapyAndFrogAreGameOver()

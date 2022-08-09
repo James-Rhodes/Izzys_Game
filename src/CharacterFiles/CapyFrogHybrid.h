@@ -21,6 +21,10 @@ public:
 
     void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
     void OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
+    bool PositionIsValid();
+    void OnDeath();
+
+    void DoJump();
 
     Vector2 GetPosition();
 
@@ -56,6 +60,7 @@ public:
     float maxDistFromFlyToSwing = 3.5; // Can change this to alter the maximum distance before attaching to a fly fails
 
     bool isAlive = true;
+    bool hitPelican = false;
 
     Tongue tongue;
 
