@@ -48,7 +48,7 @@ void Ground::Update()
         physBody->SetLinearVelocity({vel.x, vel.y});
     }
 
-    if (numSidePlayerCollisionsCapy != 0 && numSidePlayerCollisionsFrog != 0)
+    if (numSidePlayerCollisionsCapy != 0 && numSidePlayerCollisionsFrog != 0 && numSidePlayerCollisionsCapyFrogHybrid != 0)
     {
         groundFixture->SetFriction(0);
     }
