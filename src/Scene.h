@@ -78,7 +78,7 @@ public:
     bool sceneToReset = false;
 
     float physicsAccumulator = 0;
-    float physTime = 1 / 60.0f;
-    int maxNumPhysicsSteps = 5;
+    float physTime = 1 / 90.0f;
+    int maxNumPhysicsSteps = 20;
     float physAlpha = 0; // Percentage of remaining physics time for physics steps each frame
 };

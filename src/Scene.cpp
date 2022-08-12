@@ -55,7 +55,7 @@ void Scene::UpdatePhysics()
     while (physicsAccumulator >= physTime)
     {
         physicsAccumulator -= physTime;
-        physManager->Step(physTime, 6, 2);
+        physManager->Step(physTime, 10, 4);
         numPhysicsIterations++;
 
         if (numPhysicsIterations >= maxNumPhysicsSteps)
