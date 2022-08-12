@@ -58,11 +58,13 @@ void Scene::UpdatePhysics()
         physManager->Step(physTime, 10, 4);
         numPhysicsIterations++;
 
-        if (numPhysicsIterations >= maxNumPhysicsSteps)
+        if (numPhysicsIterations >= maxNumPhysicsSteps && !firstFrame)
+        {
+            std::cout << "You Used Too Many Physics Steps..." << std::endl;
             break;
+        }
     }
-
-    physAlpha = physicsAccumulator / physTime;
+    firstFrame = false;
 }
 
 void Scene::Draw()

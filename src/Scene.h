@@ -49,7 +49,6 @@ public:
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
         ecs.SetCamera(&camera);
         ecs.SetFont(&font);
-        ecs.SetFrameData(&physAlpha);
     };
     ~Scene()
     {
@@ -80,5 +79,5 @@ public:
     float physicsAccumulator = 0;
     float physTime = 1 / 90.0f;
     int maxNumPhysicsSteps = 20;
-    float physAlpha = 0; // Percentage of remaining physics time for physics steps each frame
+    bool firstFrame = true;
 };
