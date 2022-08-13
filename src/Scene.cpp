@@ -9,12 +9,14 @@ void Scene::Run()
 
 void Scene::Init()
 {
-    ecs.CreateEntity<TerrainManager>("TerrainManager");
+    TerrainManager &terrainManager = ecs.CreateEntity<TerrainManager>("TerrainManager");
 
     // ecs.CreateEntity<Capy>("Capy", (Vector2){0, 0});
     // ecs.CreateEntity<Frog>("Frog", (Vector2){-2, 0});
 
     ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){2, 0}, (Vector2){-2, 0});
+
+    bgManager = BackgroundManager(&bgTexture, &terrainManager.sceneScrollSpeed);
     sceneToReset = false;
 }
 
@@ -72,9 +74,10 @@ void Scene::Draw()
 
     BeginTextureMode(screenBuffer);
 
+    ClearBackground(RAYWHITE);
+    bgManager.Draw();
     BeginMode2D(camera);
     // Color bg = {157, 220, 224, 255};
-    ClearBackground(RAYWHITE);
 
     auto drawables = ecs.GetAllDrawableObjects();
     for (auto drawer : drawables)

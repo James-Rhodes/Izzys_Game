@@ -3,6 +3,7 @@
 #include "EngineFiles/ECS.h"
 #include "EngineFiles/CollisionManager.h"
 #include "EngineFiles/B2D_Debug_Drawer.h"
+#include "SceneFiles/BackgroundManager.h"
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
@@ -45,6 +46,8 @@ public:
 
         font = LoadFont("./assets/Romulus_Font.png");
 
+        bgTexture = LoadTexture("./assets/Terrain_Layers.png");
+
         ecs.SetPhysicsManager(physManager);
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
         ecs.SetCamera(&camera);
@@ -69,6 +72,9 @@ public:
     DebugDrawer debugDrawer;
     RenderTexture2D screenBuffer;
     Font font;
+    BackgroundManager bgManager;
+    Texture2D bgTexture;
+
     float aspectRatio;
     int minScreenWidth;
     int minScreenHeight;
