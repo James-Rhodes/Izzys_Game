@@ -1,4 +1,5 @@
 #pragma once
+
 #include "raylib.h"
 #include "EngineFiles/ECS.h"
 #include "EngineFiles/CollisionManager.h"
@@ -7,11 +8,9 @@
 #include <memory>
 #include <cmath>
 #include "rlgl.h"
+#include "GUIFiles/GUI.h"
 
 #include "./CharacterFiles/CharacterManager.h"
-// #include "./CharacterFiles/Capybara.h"
-// #include "./CharacterFiles/Frog.h"
-// #include "./SceneFiles/SceneComponents.h"
 #include "./SceneFiles/TerrainManager.h"
 
 class Scene
@@ -74,6 +73,7 @@ public:
     Font font;
     BackgroundManager bgManager;
     Texture2D bgTexture;
+    GUIManager gui;
 
     float aspectRatio;
     int minScreenWidth;

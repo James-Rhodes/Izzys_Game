@@ -121,6 +121,8 @@ void Scene::Draw()
         drawer->Draw();
     }
 
+    gui.Draw();
+
     EndDrawing();
 }
 
