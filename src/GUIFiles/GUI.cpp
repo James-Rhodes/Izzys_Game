@@ -18,6 +18,10 @@ namespace GUIUtilities
 
         return {GetScreenWidth() * percents.x - textWidth * 0.5f, GetScreenHeight() * percents.y - fontSize * 0.5f};
     }
+    void SetFontSize(int fontSize)
+    {
+        GuiSetStyle(GuiControl::DEFAULT, GuiDefaultProperty::TEXT_SIZE, fontSize);
+    }
 }
 
 void GUIManager::Draw()
@@ -71,10 +75,38 @@ void GUIManager::DrawMainMenuScreen()
 
 void GUIManager::DrawGameOver()
 {
+
+    CharacterManager &charManager = ecs->GetEntity<CharacterManager>("CharacterManager");
+    int distance = charManager.distanceTravelled;
+    int numOranges = charManager.numOrangesCollected;
+    int score = charManager.score;
+
     const char *gameOverText = "Game Over";
-    int fontSize = GUIUtilities::GetFontSizeFromPercent(0.25);
+    const char *scoreText = TextFormat("Score: %d\nNumber of Oranges Collected: %d\nDistanceTravelled: %d", score, numOranges, distance);
 
-    Vector2 textPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.5f}, gameOverText, fontSize);
+    int gameOverFontSize = GUIUtilities::GetFontSizeFromPercent(0.25);
+    int scoreFontSize = GUIUtilities::GetFontSizeFromPercent(0.05);
 
-    DrawText(gameOverText, textPos.x, textPos.y, fontSize, RED);
+    Vector2 gameOverPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.2f}, gameOverText, gameOverFontSize);
+    Vector2 scorePos = GUIUtilities::GetTextPosFromPercent({0.5, 0.35}, scoreText, scoreFontSize);
+
+    DrawText(gameOverText, gameOverPos.x, gameOverPos.y, gameOverFontSize, RED);
+    DrawText(scoreText, scorePos.x, scorePos.y, scoreFontSize, BLACK);
+
+    GUIUtilities::SetFontSize(GUIUtilities::GetFontSizeFromPercent(0.05));
+    Vector2 restartButtonPos = GUIUtilities::GetXYFromPercent({0.5, 0.65});
+    Vector2 backToMenuButtonPos = GUIUtilities::GetXYFromPercent({0.5, 0.8});
+    Vector2 buttonDimensions = GUIUtilities::GetXYFromPercent({0.4, 0.1});
+
+    bool restartButtonPressed = GuiButton({restartButtonPos.x - 0.5f * buttonDimensions.x, restartButtonPos.y, buttonDimensions.x, buttonDimensions.y}, "Restart");
+    bool backToMenuButtonPressed = GuiButton({backToMenuButtonPos.x - 0.5f * buttonDimensions.x, backToMenuButtonPos.y, buttonDimensions.x, buttonDimensions.y}, "Back To Main Menu");
+
+    if (restartButtonPressed)
+    {
+        state = GUIStates::PLAY;
+    }
+    else if (backToMenuButtonPressed)
+    {
+        state = GUIStates::MAIN_MENU;
+    }
 }

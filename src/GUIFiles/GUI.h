@@ -16,6 +16,8 @@ namespace GUIUtilities
     int GetFontSizeFromPercent(float percent);
 
     Vector2 GetTextPosFromPercent(Vector2 percents, const char *text, int fontSize);
+
+    void SetFontSize(int fontSize);
 };
 
 enum class GUIStates
@@ -39,6 +41,6 @@ public:
     void DrawMainMenuScreen();
     void DrawGameOver();
 
-    GUIStates state = GUIStates::PLAY;
+    GUIStates state = GUIStates::GAME_OVER;
     ECS *ecs;
 };
