@@ -29,7 +29,7 @@ void GUIManager::DrawPlayScreen()
     int score = charManager.score;
 
     const char *scoreText = TextFormat("Score: %d, Oranges: %d, Distance: %d", score, numOranges, distance);
-    int fontSize = 20;
+    int fontSize = 0.06 * GetScreenHeight();
 
     int xPos = GetCenterTextPos(scoreText, fontSize).x;
 
@@ -52,7 +52,7 @@ void GUIManager::DrawMainMenuScreen()
 void GUIManager::DrawGameOver()
 {
     const char *gameOverText = "Game Over";
-    int fontSize = 80;
+    int fontSize = 0.25 * GetScreenHeight();
 
     Vector2 textPos = GetCenterTextPos(gameOverText, fontSize);
 
