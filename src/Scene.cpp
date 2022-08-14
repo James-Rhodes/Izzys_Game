@@ -2,7 +2,10 @@
 
 void Scene::Run()
 {
-    UpdatePhysics();
+    if (gui.state == GUIStates::PLAY)
+    {
+        UpdatePhysics();
+    }
     Update();
     Draw();
 }
@@ -16,15 +19,20 @@ void Scene::Init()
 
     ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){2, 0}, (Vector2){-2, 0});
 
-    bgManager = BackgroundManager(&bgTexture, &terrainManager.sceneScrollSpeed);
+    bgManager.SetSceneSpeedPointer(&terrainManager.sceneScrollSpeed);
     sceneToReset = false;
 }
 
 void Scene::Update()
 {
-    if (gui.state != gui.prevState && gui.state == GUIStates::PLAY)
+    bool guiHasChangedState = gui.state != gui.prevState;
+    if (guiHasChangedState && gui.state == GUIStates::PLAY)
     {
         ResetScene();
+    }
+    else if (guiHasChangedState && gui.state == GUIStates::MAIN_MENU)
+    {
+        ClearAllEntities();
     }
 
     for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)

@@ -49,8 +49,6 @@ void GUIManager::Draw()
 void GUIManager::DrawPlayScreen()
 {
     CharacterManager &charManager = ecs->GetEntity<CharacterManager>("CharacterManager");
-    int distance = charManager.distanceTravelled;
-    int numOranges = charManager.numOrangesCollected;
     int score = charManager.score;
 
     const char *scoreText = TextFormat("Score: %d", score);
@@ -72,6 +70,21 @@ void GUIManager::DrawPauseScreen()
 
 void GUIManager::DrawMainMenuScreen()
 {
+    const char *text = "Izzy's Game";
+    int fontSize = GUIUtilities::GetFontSizeFromPercent(0.2);
+    Vector2 pos = GUIUtilities::GetTextPosFromPercent({0.5, 0.3}, text, fontSize);
+    DrawText(text, pos.x, pos.y, fontSize, BLACK);
+
+    GUIUtilities::SetFontSize(GUIUtilities::GetFontSizeFromPercent(0.1));
+    Vector2 playButtonPos = GUIUtilities::GetXYFromPercent({0.5, 0.65});
+    Vector2 buttonDimensions = GUIUtilities::GetXYFromPercent({0.4, 0.1});
+
+    bool playButtonPressed = GuiButton({playButtonPos.x - 0.5f * buttonDimensions.x, playButtonPos.y, buttonDimensions.x, buttonDimensions.y}, "Play");
+
+    if (playButtonPressed)
+    {
+        state = GUIStates::PLAY;
+    }
 }
 
 void GUIManager::DrawGameOver()

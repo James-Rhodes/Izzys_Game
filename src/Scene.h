@@ -52,6 +52,7 @@ public:
         ecs.SetCamera(&camera);
         ecs.SetFont(&font);
 
+        bgManager = BackgroundManager(&bgTexture, nullptr);
         gui = GUIManager(&ecs);
     };
     ~Scene()

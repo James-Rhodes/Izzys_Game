@@ -23,7 +23,6 @@ public:
     void Init()
     {
         scene = new Scene();
-        scene->Init();
     }
 
     void Run()
