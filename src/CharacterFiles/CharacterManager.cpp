@@ -32,7 +32,17 @@ void CharacterManager::Update()
 
     if (isGameOver)
     {
-
+        if (!capyAndFrogAreJoined)
+        {
+            if (capy->isAlive)
+            {
+                capy->OnDeath();
+            }
+            else if (frog->isAlive)
+            {
+                frog->OnDeath();
+            }
+        }
         // Slow down the scroll speed rather than abrupt stop
         ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(Lerp(sceneScrollSpeedAtGameOver, 0, std::min(timeSinceGameOver / scrollOnDeathSlowDown, 1.0f)));
         if (timeSinceGameOver < scrollOnDeathSlowDown)

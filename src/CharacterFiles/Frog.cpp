@@ -50,7 +50,6 @@ void Frog::Update()
         else
         {
             OnDeath();
-            animManager.SetState("Dead");
         }
     }
     pos = GetPosition();
@@ -325,4 +324,6 @@ void Frog::OnDeath()
 
     DoJump();
     DoJump();
+
+    animManager.SetState("Dead");
 }

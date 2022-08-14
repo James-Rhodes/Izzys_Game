@@ -47,7 +47,6 @@ void Capy::Update()
         else
         {
             OnDeath();
-            animManager.SetState("Dead");
         }
     }
     pos = GetPosition();
@@ -242,4 +241,5 @@ void Capy::OnDeath()
     body->SetFriction(0.5);
     DoJump();
     DoJump();
+    animManager.SetState("Dead");
 }
