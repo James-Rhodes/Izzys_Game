@@ -90,6 +90,8 @@ void GUIManager::DrawMainMenuScreen()
 void GUIManager::DrawGameOver()
 {
 
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {255, 255, 255, 80});
+
     CharacterManager &charManager = ecs->GetEntity<CharacterManager>("CharacterManager");
     int distance = charManager.distanceTravelled;
     int numOranges = charManager.numOrangesCollected;
