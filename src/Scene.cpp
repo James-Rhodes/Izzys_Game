@@ -22,7 +22,7 @@ void Scene::Init()
 
 void Scene::Update()
 {
-    if (IsKeyPressed(KEY_R))
+    if (gui.state != gui.prevState && gui.state == GUIStates::PLAY)
     {
         ResetScene();
     }

@@ -41,6 +41,7 @@ public:
     void DrawMainMenuScreen();
     void DrawGameOver();
 
-    GUIStates state = GUIStates::GAME_OVER;
+    GUIStates state = GUIStates::PLAY;
+    GUIStates prevState = GUIStates::PLAY;
     ECS *ecs;
 };

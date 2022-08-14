@@ -26,6 +26,7 @@ namespace GUIUtilities
 
 void GUIManager::Draw()
 {
+    prevState = state;
     switch (state)
     {
     case (GUIStates::PLAY):
@@ -52,12 +53,12 @@ void GUIManager::DrawPlayScreen()
     int numOranges = charManager.numOrangesCollected;
     int score = charManager.score;
 
-    const char *scoreText = TextFormat("Score: %d, Oranges: %d, Distance: %d", score, numOranges, distance);
+    const char *scoreText = TextFormat("Score: %d", score);
     int fontSize = GUIUtilities::GetFontSizeFromPercent(0.06);
 
-    int xPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.1f}, scoreText, fontSize).x;
+    Vector2 textPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.1f}, scoreText, fontSize);
 
-    DrawText(scoreText, xPos, 0, fontSize, BLACK);
+    DrawText(scoreText, textPos.x, textPos.y, fontSize, BLACK);
 
     if (charManager.showGameOverScreen)
     {
