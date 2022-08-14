@@ -19,18 +19,27 @@ void TerrainManager::Register()
 
     currentChunk->SetSceneMovementSpeed(0);
     nextChunk->SetSceneMovementSpeed(0);
+
+    timeStart = GetTime();
 };
 
 void TerrainManager::Update()
 {
-    if (IsKeyPressed(KEY_B))
+    if (GetTime() - timeStart > timeBeforeMovement && !hasStarted)
     {
-        SetSceneScrollSpeed(sceneScrollSpeed == 0 ? 1 : 0);
+        SetSceneScrollSpeed(speedMileStones[mileStonesIndex]);
+        hasStarted = true;
     }
 
     currentChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, currentChunkPos);
     nextChunkPos = Vector2Add({GetFrameTime() * -sceneScrollSpeed, 0}, nextChunkPos);
     distanceTravelled += GetFrameTime() * sceneScrollSpeed;
+
+    if (distanceTravelled > distanceMileStones[mileStonesIndex] && mileStonesIndex != NUM_MILESTONES - 1)
+    {
+        mileStonesIndex++;
+        SetSceneScrollSpeed(speedMileStones[mileStonesIndex]);
+    }
 
     if (terrainCounter > 100)
     {
