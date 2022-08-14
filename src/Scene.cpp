@@ -77,7 +77,6 @@ void Scene::Draw()
     ClearBackground(RAYWHITE);
     bgManager.Draw();
     BeginMode2D(camera);
-    // Color bg = {157, 220, 224, 255};
 
     auto drawables = ecs.GetAllDrawableObjects();
     for (auto drawer : drawables)
@@ -128,11 +127,17 @@ void Scene::Draw()
 
 void Scene::ResetScene()
 {
+    ClearAllEntities();
+    sceneToReset = true;
+}
+
+void Scene::ClearAllEntities()
+{
     for (auto it = ecs.m_entityMap.cbegin(); it != ecs.m_entityMap.cend();)
     {
         ecs.RemoveEntity(it->second->entityPointer->id);
         ++it;
     }
 
-    sceneToReset = true;
+    bgManager.SetSceneSpeedPointer(nullptr);
 }

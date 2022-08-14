@@ -20,6 +20,8 @@ public:
 
     void Draw();
 
+    void SetSceneSpeedPointer(float *_sceneSpeed);
+
     Texture2D *backgroundTexture;
     float *sceneSpeed;
     std::array<Rectangle, 5> srcRectangles;

@@ -1,6 +1,6 @@
 # Note: can change the version of cpp and also the optimisation levels below (O0 being no optimisation and O3 being the most)
 
-SRCS := $(wildcard ./*.cpp ./src/*.cpp ./vendor/*.cpp ./src/EngineFiles/*.cpp ./src/CharacterFiles/*.cpp ./src/SceneFiles/*.cpp)
+SRCS := $(wildcard ./*.cpp ./src/*.cpp ./vendor/*.cpp ./src/EngineFiles/*.cpp ./src/CharacterFiles/*.cpp ./src/SceneFiles/*.cpp ./src/GUIFiles/*.cpp)
 
 OBJS := $(SRCS:%.cpp=%.o)
 # OBJS := $(subst src/,obj/,$(OBJS))

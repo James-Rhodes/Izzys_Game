@@ -4,17 +4,34 @@
 #undef RAYGUI_IMPLEMENTATION
 #endif
 
-// #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 #include "raylib.h"
+#include "./../EngineFiles/ECS.h"
+#include "./../CharacterFiles/CharacterManager.h"
+
+enum GUIStates
+{
+    PLAY,
+    PAUSE,
+    MAIN_MENU,
+    GAME_OVER
+};
 
 class GUIManager
 {
 public:
     GUIManager() = default;
+    GUIManager(ECS *_ecs) : ecs(_ecs){};
 
-    void Draw()
-    {
-        // GuiButton((Rectangle){30, 320, 115, 30}, "NORMAL");
-    }
+    void Draw();
+
+    void DrawPlayScreen();
+    void DrawPauseScreen();
+    void DrawMainMenuScreen();
+    void DrawGameOver();
+
+    Vector2 GetCenterTextPos(const char *text, int fontSize);
+
+    GUIStates state = GUIStates::PLAY;
+    ECS *ecs;
 };

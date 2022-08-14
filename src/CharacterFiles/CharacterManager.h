@@ -18,12 +18,6 @@ public:
 
     void Update() override;
 
-    void Draw() override; // Draw text for score etc
-
-    void DrawGameOver();
-
-    void OnGameOver();
-
     bool CapyAndFrogAreGameOver();
 
     void JoinCapyAndFrog();
@@ -34,10 +28,13 @@ public:
     Vector2 initFrogPos;
 
     int numOrangesCollected = 0;
+    int score = 0;
+    int distanceTravelled = 0;
 
     bool capyAndFrogAreJoined = false;
 
     bool isGameOver = false;
+    bool showGameOverScreen = false;
 
     float scrollOnDeathSlowDown = 2; // Time in seconds til the scene completely slows down to a stop
     float timeSinceGameOver = 0;
@@ -46,5 +43,4 @@ public:
     Capy *capy = nullptr;
     Frog *frog = nullptr;
     CapyFrogHybrid *capyFrogHybrid = nullptr;
-    Camera2D *camera;
 };

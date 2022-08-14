@@ -51,6 +51,8 @@ public:
         ecs.SetSpriteSheet(LoadTexture("./assets/Sprite_Sheet.png"));
         ecs.SetCamera(&camera);
         ecs.SetFont(&font);
+
+        gui = GUIManager(&ecs);
     };
     ~Scene()
     {
@@ -63,6 +65,7 @@ public:
     void Draw();
     void UpdatePhysics();
     void ResetScene();
+    void ClearAllEntities();
 
     ECS ecs;
     b2World *physManager;

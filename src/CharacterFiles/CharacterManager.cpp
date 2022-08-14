@@ -2,15 +2,15 @@
 
 void CharacterManager::Register()
 {
-    ecs->RegisterEntityAsScreenSpaceDrawable(id);
-
-    camera = ecs->GetCamera();
     capy = &ecs->CreateEntity<Capy>("Capy", initCapyPos, &numOrangesCollected);
     frog = &ecs->CreateEntity<Frog>("Frog", initFrogPos, &numOrangesCollected);
 }
 
 void CharacterManager::Update()
 {
+    distanceTravelled = (int)ecs->GetEntity<TerrainManager>("TerrainManager").GetDistanceTravelled();
+    score = distanceTravelled + 10 * numOrangesCollected;
+
     if (!isGameOver && IsKeyPressed(KEY_SPACE))
     {
         if (capyAndFrogAreJoined)
@@ -27,7 +27,6 @@ void CharacterManager::Update()
 
     if (prevGameOverState != isGameOver)
     {
-        OnGameOver();
         sceneScrollSpeedAtGameOver = ecs->GetEntity<TerrainManager>("TerrainManager").GetSceneScrollSpeed();
     }
 
@@ -40,35 +39,11 @@ void CharacterManager::Update()
         {
             timeSinceGameOver += GetFrameTime();
         }
+        else
+        {
+            showGameOverScreen = true;
+        }
     }
-}
-
-void CharacterManager::Draw()
-{
-    float distanceTravelled = ecs->GetEntity<TerrainManager>("TerrainManager").GetDistanceTravelled();
-
-    if (!isGameOver)
-    {
-        const char *text = TextFormat("Distance: %.2f  Oranges: %d", distanceTravelled, numOrangesCollected);
-        int textWidth = MeasureText(text, 20);
-
-        DrawText(text, GetScreenWidth() * 0.5 - textWidth * 0.5, 10, 20, BLACK);
-    }
-    else
-    {
-        DrawGameOver();
-    }
-}
-
-void CharacterManager::DrawGameOver()
-{
-    // std::cout << "Game be over my dude" << std::endl;
-}
-
-void CharacterManager::OnGameOver()
-{
-    std::cout << "Game Ended" << std::endl;
-    // ecs->GetEntity<TerrainManager>("TerrainManager").SetSceneScrollSpeed(0);
 }
 
 bool CharacterManager::CapyAndFrogAreGameOver()
