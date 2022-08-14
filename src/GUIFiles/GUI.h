@@ -9,7 +9,16 @@
 #include "./../EngineFiles/ECS.h"
 #include "./../CharacterFiles/CharacterManager.h"
 
-enum GUIStates
+namespace GUIUtilities
+{
+    Vector2 GetXYFromPercent(Vector2 percents);
+
+    int GetFontSizeFromPercent(float percent);
+
+    Vector2 GetTextPosFromPercent(Vector2 percents, const char *text, int fontSize);
+};
+
+enum class GUIStates
 {
     PLAY,
     PAUSE,
@@ -29,8 +38,6 @@ public:
     void DrawPauseScreen();
     void DrawMainMenuScreen();
     void DrawGameOver();
-
-    Vector2 GetCenterTextPos(const char *text, int fontSize);
 
     GUIStates state = GUIStates::PLAY;
     ECS *ecs;

@@ -1,5 +1,25 @@
 #include "GUI.h"
 
+namespace GUIUtilities
+{
+    Vector2 GetXYFromPercent(Vector2 percents)
+    {
+        return {percents.x * GetScreenWidth(), percents.y * GetScreenHeight()};
+    }
+
+    int GetFontSizeFromPercent(float percent)
+    {
+        return (int)(percent * GetScreenHeight());
+    }
+
+    Vector2 GetTextPosFromPercent(Vector2 percents, const char *text, int fontSize)
+    {
+        int textWidth = MeasureText(text, fontSize);
+
+        return {GetScreenWidth() * percents.x - textWidth * 0.5f, GetScreenHeight() * percents.y - fontSize * 0.5f};
+    }
+}
+
 void GUIManager::Draw()
 {
     switch (state)
@@ -29,9 +49,9 @@ void GUIManager::DrawPlayScreen()
     int score = charManager.score;
 
     const char *scoreText = TextFormat("Score: %d, Oranges: %d, Distance: %d", score, numOranges, distance);
-    int fontSize = 0.06 * GetScreenHeight();
+    int fontSize = GUIUtilities::GetFontSizeFromPercent(0.06);
 
-    int xPos = GetCenterTextPos(scoreText, fontSize).x;
+    int xPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.1f}, scoreText, fontSize).x;
 
     DrawText(scoreText, xPos, 0, fontSize, BLACK);
 
@@ -52,16 +72,9 @@ void GUIManager::DrawMainMenuScreen()
 void GUIManager::DrawGameOver()
 {
     const char *gameOverText = "Game Over";
-    int fontSize = 0.25 * GetScreenHeight();
+    int fontSize = GUIUtilities::GetFontSizeFromPercent(0.25);
 
-    Vector2 textPos = GetCenterTextPos(gameOverText, fontSize);
+    Vector2 textPos = GUIUtilities::GetTextPosFromPercent({0.5f, 0.5f}, gameOverText, fontSize);
 
     DrawText(gameOverText, textPos.x, textPos.y, fontSize, RED);
-}
-
-Vector2 GUIManager::GetCenterTextPos(const char *text, int fontSize)
-{
-    int textWidth = MeasureText(text, fontSize);
-
-    return {GetScreenWidth() * 0.5f - textWidth * 0.5f, GetScreenHeight() * 0.5f - fontSize * 0.5f};
 }
