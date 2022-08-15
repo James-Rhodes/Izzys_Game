@@ -10,11 +10,14 @@
 class Pelican : public Entity
 {
 public:
-    Pelican(Vector2 _pos, float _speed) : pos(_pos), speed(_speed) {}
+    Pelican() = default;
+    Pelican(Vector2 _pos) : pos(_pos) {}
 
     void Register() override;
     void Update() override;
     void Draw() override;
+
+    void SetSpeed(float _speed);
 
     Vector2 pos;
     float speed = 0;

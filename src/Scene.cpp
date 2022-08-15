@@ -19,7 +19,7 @@ void Scene::Init()
 
     ecs.CreateEntity<CharacterManager>("CharacterManager", (Vector2){2, 0}, (Vector2){-2, 0});
 
-    ecs.CreateEntity<Pelican>("Pelican", (Vector2){0, 0}, 0);
+    ecs.CreateEntity<PelicanLauncher>("PelicanLauncher");
 
     bgManager.SetSceneSpeedPointer(&terrainManager.sceneScrollSpeed);
     sceneToReset = false;

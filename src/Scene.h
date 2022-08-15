@@ -11,7 +11,7 @@
 #include "GUIFiles/GUI.h"
 
 #include "./CharacterFiles/CharacterManager.h"
-#include "./CharacterFiles/Pelican.h"
+#include "./CharacterFiles/PelicanLauncher.h"
 
 #include "./SceneFiles/TerrainManager.h"
 

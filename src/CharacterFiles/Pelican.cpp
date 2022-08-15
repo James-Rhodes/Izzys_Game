@@ -21,7 +21,13 @@ void Pelican::Register()
 }
 void Pelican::Update()
 {
+    pos = {physBody->GetPosition().x, physBody->GetPosition().y};
     animManager.SetState("Flying", GetFrameTime());
+
+    if (physBody->GetPosition().x < -7)
+    {
+        SetSpeed(0);
+    }
 }
 
 void Pelican::Draw()
@@ -36,4 +42,10 @@ void Pelican::Draw()
 
     DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
                    offset, angle, RAYWHITE);
+}
+
+void Pelican::SetSpeed(float _speed)
+{
+    speed = _speed;
+    physBody->SetLinearVelocity({-speed, 0});
 }
