@@ -29,7 +29,7 @@ void Capy::Register()
 
     animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 0, 64, 32);
 
-    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.1);
     animManager.AddAnimation("Stand_Still", {0});
     animManager.AddAnimation("Dash", {3});
     animManager.AddAnimation("Dead", {4});

@@ -29,7 +29,7 @@ void CapyFrogHybrid::Register()
 
     animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 149, 64, 88);
 
-    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.1);
     animManager.AddAnimation("Stand_Still", {0});
     animManager.AddAnimation("Swing", {3});
     animManager.AddAnimation("Dash", {4});

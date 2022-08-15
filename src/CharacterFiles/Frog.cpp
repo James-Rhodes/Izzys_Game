@@ -29,7 +29,7 @@ void Frog::Register()
 
     animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 33, 32, 64);
 
-    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.3);
+    animManager.AddAnimation("Run", {0, 1, 0, 2}, 0.1);
     animManager.AddAnimation("Stand_Still", {0});
     animManager.AddAnimation("Swing", {3});
     animManager.AddAnimation("Dead", {4});
