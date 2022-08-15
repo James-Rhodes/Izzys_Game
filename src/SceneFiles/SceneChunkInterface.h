@@ -34,6 +34,7 @@ public:
 
             b2Vec2 diff;
             diff.x = sceneMovementSpeed;
+            diff.y = 0;
             ent->physBody->SetLinearVelocity(diff);
             ent->physBody->SetAwake(true);
         }

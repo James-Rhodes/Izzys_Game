@@ -8,7 +8,7 @@
 #include "TerrainManager.h"
 #include <math.h>
 
-#define DEBUG_POSITION 1
+// #define DEBUG_POSITION
 
 class Orange : public Entity
 {
