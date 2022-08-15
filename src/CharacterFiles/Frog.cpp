@@ -223,6 +223,10 @@ void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
         isTouchingCapy = true;
         capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
     }
+    else if (collidedEntity->id == "Pelican")
+    {
+        OnDeath();
+    }
     else if (collidedEntity->id.rfind("Orange", 0) == 0)
     {
         Orange *orange = (Orange *)collidedEntity;

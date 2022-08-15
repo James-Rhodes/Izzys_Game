@@ -37,25 +37,3 @@ void Pelican::Draw()
     DrawTexturePro(texture, src, (Rectangle){renderPos.x, renderPos.y, renderDimensions.x, renderDimensions.y},
                    offset, angle, RAYWHITE);
 }
-
-void Pelican::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
-{
-    if (collidedEntity->id == "Capy")
-    {
-        // ((Capy *)collidedEntity)->isTouchingSideOfTerrain = false;
-        // numSidePlayerCollisionsCapy--;
-        std::cout << "Capy Hit me" << std::endl;
-    }
-    else if (collidedEntity->id == "Frog")
-    {
-        // ((Frog *)collidedEntity)->isTouchingSideOfTerrain = false;
-        // numSidePlayerCollisionsFrog--;
-        std::cout << "Frog Hit me" << std::endl;
-    }
-    else if (collidedEntity->id == "CapyFrogHybrid")
-    {
-        // ((CapyFrogHybrid *)collidedEntity)->isTouchingSideOfTerrain = false;
-        // numSidePlayerCollisionsCapyFrogHybrid--;
-        std::cout << "Capy hybrid hit me" << std::endl;
-    }
-}

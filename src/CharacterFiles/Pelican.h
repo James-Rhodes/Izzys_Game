@@ -16,8 +16,6 @@ public:
     void Update() override;
     void Draw() override;
 
-    void OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact);
-
     Vector2 pos;
     float speed = 0;
     float width = 1;

@@ -172,6 +172,10 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     {
         isTouchingFrog = true;
     }
+    else if (collidedEntity->id == "Pelican")
+    {
+        OnDeath();
+    }
     else if (collidedEntity->id.rfind("Orange", 0) == 0)
     {
         Orange *orange = (Orange *)collidedEntity;
