@@ -11,6 +11,8 @@
 #include "GUIFiles/GUI.h"
 
 #include "./CharacterFiles/CharacterManager.h"
+#include "./CharacterFiles/Pelican.h"
+
 #include "./SceneFiles/TerrainManager.h"
 
 class Scene
