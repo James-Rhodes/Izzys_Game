@@ -52,7 +52,6 @@ void CapyFrogHybrid::Update()
         else
         {
             OnDeath();
-            animManager.SetState("Dead");
         }
     }
     pos = GetPosition();
@@ -242,7 +241,7 @@ void CapyFrogHybrid::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
         isOnGround++;
     }
 
-    if (collidedEntity->id == "Pelican")
+    if (collidedEntity->id == "Pelican" && isAlive)
     {
         OnDeath();
     }
@@ -341,6 +340,7 @@ void CapyFrogHybrid::OnDeath()
 
     DoJump();
     DoJump();
+    animManager.SetState("Dead");
 }
 
 void CapyFrogHybrid::DoJump()

@@ -223,7 +223,7 @@ void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
         isTouchingCapy = true;
         capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
     }
-    else if (collidedEntity->id == "Pelican")
+    else if (collidedEntity->id == "Pelican" && isAlive)
     {
         OnDeath();
     }

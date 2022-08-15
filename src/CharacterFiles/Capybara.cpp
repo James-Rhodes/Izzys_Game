@@ -172,7 +172,7 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
     {
         isTouchingFrog = true;
     }
-    else if (collidedEntity->id == "Pelican")
+    else if (collidedEntity->id == "Pelican" && isAlive)
     {
         OnDeath();
     }
