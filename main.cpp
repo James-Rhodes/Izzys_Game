@@ -25,8 +25,8 @@ extern "C"
 
 void UpdateDrawFrame();
 
-const int screenWidth = 640;
-const int screenHeight = 360;
+const int screenWidth = 960;
+const int screenHeight = 540;
 
 Game game;
 bool isFirstFrame = true;
@@ -36,9 +36,6 @@ int main()
     // Initialization
     //--------------------------------------------------------------------------------------
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-
-    // const int screenWidth = 640;
-    // const int screenHeight = 360;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Raylib Template");
