@@ -44,6 +44,11 @@ void GUIManager::Draw()
         DrawGameOver();
         break;
     };
+
+    // EM_ASM({SaveHighScore($0)}, 10000);
+    // int x = EM_ASM_INT({
+    //     return GetCurrentHighScore();
+    // });
 }
 
 void GUIManager::DrawPlayScreen()
@@ -60,6 +65,8 @@ void GUIManager::DrawPlayScreen()
 
     if (charManager.showGameOverScreen)
     {
+        firstRenderOfGameOverScreen = true;
+        renderNewHighScore = false;
         state = GUIStates::GAME_OVER;
     }
 }
@@ -97,9 +104,36 @@ void GUIManager::DrawGameOver()
     int numOranges = charManager.numOrangesCollected;
     int score = charManager.score;
 
-    const char *gameOverText = "Game Over";
-    const char *scoreText = TextFormat("Score: %d\nNumber of Oranges Collected: %d\nDistanceTravelled: %d", score, numOranges, distance);
+#ifdef PLATFORM_WEB
+    if (firstRenderOfGameOverScreen)
+    {
+        prevHighScore = EM_ASM_INT({
+            return GetCurrentHighScore();
+        });
 
+        if (prevHighScore < score)
+        {
+            EM_ASM({SaveHighScore($0)}, score);
+            renderNewHighScore = true;
+        }
+    }
+#endif
+
+    const char *gameOverText = "Game Over";
+    const char *prevHighScoreText;
+    const char *scoreText;
+    Color scoreColor;
+    if (renderNewHighScore)
+    {
+        scoreText = TextFormat("NEW HIGH SCORE: %d\nNumber of Oranges Collected: %d\nDistanceTravelled: %d", score, numOranges, distance);
+        scoreColor = GOLD;
+        prevHighScoreText = TextFormat("");
+    }
+    else
+    {
+        scoreText = TextFormat("Score: %d\nNumber of Oranges Collected: %d\nDistanceTravelled: %d\nCurrent High Score: %d", score, numOranges, distance, prevHighScore);
+        scoreColor = BLACK;
+    }
     int gameOverFontSize = GUIUtilities::GetFontSizeFromPercent(0.25);
     int scoreFontSize = GUIUtilities::GetFontSizeFromPercent(0.05);
 
@@ -107,7 +141,7 @@ void GUIManager::DrawGameOver()
     Vector2 scorePos = GUIUtilities::GetTextPosFromPercent({0.5, 0.35}, scoreText, scoreFontSize);
 
     DrawText(gameOverText, gameOverPos.x, gameOverPos.y, gameOverFontSize, RED);
-    DrawText(scoreText, scorePos.x, scorePos.y, scoreFontSize, BLACK);
+    DrawText(scoreText, scorePos.x, scorePos.y, scoreFontSize, scoreColor);
 
     GUIUtilities::SetFontSize(GUIUtilities::GetFontSizeFromPercent(0.05));
     Vector2 restartButtonPos = GUIUtilities::GetXYFromPercent({0.5, 0.65});
@@ -125,4 +159,6 @@ void GUIManager::DrawGameOver()
     {
         state = GUIStates::MAIN_MENU;
     }
+
+    firstRenderOfGameOverScreen = false;
 }

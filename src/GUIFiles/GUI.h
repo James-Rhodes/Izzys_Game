@@ -9,6 +9,10 @@
 #include "./../EngineFiles/ECS.h"
 #include "./../CharacterFiles/CharacterManager.h"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 namespace GUIUtilities
 {
     Vector2 GetXYFromPercent(Vector2 percents);
@@ -44,4 +48,8 @@ public:
     GUIStates state = GUIStates::MAIN_MENU;
     GUIStates prevState = GUIStates::MAIN_MENU;
     ECS *ecs;
+
+    int prevHighScore = 0;
+    bool firstRenderOfGameOverScreen = true;
+    bool renderNewHighScore = false;
 };
