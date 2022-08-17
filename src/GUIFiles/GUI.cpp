@@ -44,11 +44,6 @@ void GUIManager::Draw()
         DrawGameOver();
         break;
     };
-
-    // EM_ASM({SaveHighScore($0)}, 10000);
-    // int x = EM_ASM_INT({
-    //     return GetCurrentHighScore();
-    // });
 }
 
 void GUIManager::DrawPlayScreen()
