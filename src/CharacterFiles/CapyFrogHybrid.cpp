@@ -147,7 +147,7 @@ void CapyFrogHybrid::UpdateController()
         keyWasPressed = true;
     }
 
-    if (IsKeyPressed(KEY_C))
+    if (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_LEFT_SHIFT))
     {
         if (isSwinging)
         {

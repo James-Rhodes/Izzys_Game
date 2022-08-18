@@ -138,7 +138,7 @@ void Frog::UpdateController()
         keyWasPressed = true;
     }
 
-    if (IsKeyPressed(KEY_C))
+    if (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_LEFT_SHIFT))
     {
         if (!capybaraIsOnHead)
         {

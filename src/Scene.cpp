@@ -122,7 +122,9 @@ void Scene::Draw()
     ClearBackground(BLACK);
     DrawTexturePro(screenBuffer.texture, (Rectangle){0, 0, (float)screenBuffer.texture.width, (float)screenBuffer.texture.height}, (Rectangle){0, 0, (float)currScreenWidth, (float)currScreenHeight}, {0, 0}, 0, RAYWHITE);
 
+#ifndef PLATFORM_WEB
     DrawFPS(10, 10);
+#endif
     // Draws the screen space objects
     auto screenSpaceDrawables = ecs.GetAllScreenSpaceDrawableObjects();
     for (auto drawer : screenSpaceDrawables)
