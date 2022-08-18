@@ -204,7 +204,7 @@ bool Capy::PositionIsValid()
     float hWidth = 0.5 * width;
     float hHeight = 0.5 * height;
 
-    Vector2 boundariesUpper = Vector2Add(GetScreenToWorld2D({(float)GetScreenWidth(), (float)GetScreenHeight()}, *ecs->GetCamera()), {-hWidth, hHeight});
+    Vector2 boundariesUpper = Vector2Add(GetScreenToWorld2D({640, 360}, *ecs->GetCamera()), {-hWidth, hHeight});
     Vector2 boundariesLower = Vector2Add(GetScreenToWorld2D({0, 0}, *ecs->GetCamera()), {-hWidth, -hHeight});
 
     if (pos.x > boundariesUpper.x)
