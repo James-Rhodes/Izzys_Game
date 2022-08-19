@@ -34,6 +34,8 @@ void Ground::Register()
         groundFixture = groundFixture->GetNext(); // Gets the main ground fixture as it is the one that is not a sensor
     }
 
+    timeOfInstantiation = GetTime();
+
     // Below are the coords for the start pos for future reference
     // animManager = AnimationManager(ecs->GetSpriteSheet(), 0, 97, 32, 36);
 }
@@ -44,7 +46,7 @@ void Ground::Update()
     pos = {physBody->GetPosition().x, physBody->GetPosition().y};
     if (setVelocity != nullptr)
     {
-        Vector2 vel = setVelocity(pos, {-ecs->GetEntity<TerrainManager>("TerrainManager").GetSceneScrollSpeed(), 0}, GetTime());
+        Vector2 vel = setVelocity(pos, {-ecs->GetEntity<TerrainManager>("TerrainManager").GetSceneScrollSpeed(), 0}, GetTime() - timeOfInstantiation);
         physBody->SetLinearVelocity({vel.x, vel.y});
     }
 

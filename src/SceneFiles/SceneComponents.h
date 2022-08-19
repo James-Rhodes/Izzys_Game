@@ -8,7 +8,7 @@
 #include "TerrainManager.h"
 #include <math.h>
 
-// #define DEBUG_POSITION
+#define DEBUG_POSITION 1
 
 class Orange : public Entity
 {
@@ -135,6 +135,8 @@ public:
     int numSidePlayerCollisionsCapy = 0;
     int numSidePlayerCollisionsFrog = 0;
     int numSidePlayerCollisionsCapyFrogHybrid = 0;
+
+    float timeOfInstantiation = 0;
 
     b2Fixture *groundFixture;
 

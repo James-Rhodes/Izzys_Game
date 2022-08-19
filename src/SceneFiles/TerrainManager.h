@@ -54,12 +54,13 @@ public:
     int prevRandChunkIndex = -1;
 
     float timeStart;
-    float timeBeforeMovement = 2; // Seconds before scrolling starts
+    float timeBeforeMovement = 1; // Seconds before scrolling starts
     bool hasStarted = false;
 
     int mileStonesIndex = 0;
 
     float distanceMileStones[NUM_MILESTONES] = {10, 50, 100, 200, 300, 500};
 
-    float speedMileStones[NUM_MILESTONES] = {0.5, 1, 2, 3, 4, 5};
+    // float speedMileStones[NUM_MILESTONES] = {0.5, 1, 2, 3, 4, 5};
+    float speedMileStones[NUM_MILESTONES] = {1, 1, 2, 3, 4, 5};
 };
