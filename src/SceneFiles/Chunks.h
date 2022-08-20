@@ -175,3 +175,12 @@ public:
 
     void GenerateChunk() override;
 };
+
+class CirclingPlatforms : public SceneChunk
+{
+public:
+    CirclingPlatforms(int *counter) : SceneChunk(counter){};
+    ~CirclingPlatforms(){};
+
+    void GenerateChunk() override;
+};
