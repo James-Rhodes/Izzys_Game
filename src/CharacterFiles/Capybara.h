@@ -5,6 +5,9 @@
 #include "../EngineFiles/ECS.h"
 #include "../EngineFiles/AnimationManager.h"
 #include "../SceneFiles/TerrainManager.h"
+
+#include "../EngineFiles/Timer.h"
+
 class Capy : public Entity
 {
 public:
@@ -55,4 +58,8 @@ public:
     bool isTouchingFrog = false;
 
     int *orangeScore = nullptr;
+
+    // COYOTE_TIME is defined in timer. Yes this is a bad place for it to be defined
+    Timer coyoteTimer = Timer(COYOTE_TIME);
+    bool jumpWasPressed = false;
 };

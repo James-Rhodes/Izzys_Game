@@ -47,6 +47,7 @@ void CapyFrogHybrid::Update()
     {
         if (PositionIsValid() && !hitPelican)
         {
+            coyoteTimer.Update();
             UpdateController();
         }
         else
@@ -83,6 +84,7 @@ Vector2 CapyFrogHybrid::GetPosition()
 void CapyFrogHybrid::UpdateController()
 {
     bool keyWasPressed = false;
+    jumpWasPressed = false;
 
     if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
     {
@@ -135,15 +137,11 @@ void CapyFrogHybrid::UpdateController()
         keyWasPressed = true;
     }
 
-    if (IsKeyPressed(KEY_W) && isOnGround)
+    if (IsKeyPressed(KEY_W) && (isOnGround || !coyoteTimer.isFinished()))
 
     {
-
-        float gravity = physBody->GetWorld()->GetGravity().y;
-        // float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * physBody->GetGravityScale() * gravity);
-        float jumpForce = physBody->GetMass() * sqrt(jumpHeight * -2 * 8 * gravity); // 8 is the gravity scale downwards
-
-        physBody->ApplyLinearImpulseToCenter(b2Vec2(0, jumpForce), true);
+        jumpWasPressed = true;
+        DoJump();
         keyWasPressed = true;
     }
 
@@ -260,6 +258,10 @@ void CapyFrogHybrid::OnCollisionEnd(Entity *collidedEntity, bool detectedBySenso
     if (detectedBySensor)
     {
         isOnGround--;
+        if (isOnGround == 0 && !jumpWasPressed)
+        {
+            coyoteTimer.Start();
+        }
     }
 }
 

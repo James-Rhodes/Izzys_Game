@@ -7,6 +7,7 @@
 #include "../SceneFiles/TerrainManager.h"
 
 #include "Tongue.h"
+#include "../EngineFiles/Timer.h"
 
 class Frog : public Entity
 {
@@ -67,4 +68,8 @@ public:
     Tongue tongue;
 
     int *orangeScore = nullptr;
+
+    // COYOTE_TIME is defined in timer. Yes this is a bad place for it to be defined
+    Timer coyoteTimer = Timer(COYOTE_TIME);
+    bool jumpWasPressed = false;
 };

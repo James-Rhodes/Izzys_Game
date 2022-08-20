@@ -42,6 +42,7 @@ void Capy::Update()
     {
         if (PositionIsValid() && !hitPelican)
         {
+            coyoteTimer.Update();
             UpdateController();
         }
         else
@@ -77,6 +78,7 @@ Vector2 Capy::GetPosition()
 void Capy::UpdateController()
 {
     bool keyWasPressed = false;
+    jumpWasPressed = false;
 
     if (IsKeyDown(KEY_LEFT) && (!isTouchingSideOfTerrain || isOnGround) && (animManager.GetCurrentState() != "Dash"))
     {
@@ -106,13 +108,11 @@ void Capy::UpdateController()
         keyWasPressed = true;
     }
 
-    if (IsKeyPressed(KEY_UP))
+    if (IsKeyPressed(KEY_UP) && (isOnGround || !coyoteTimer.isFinished()))
 
     {
-        if (isOnGround)
-        {
-            DoJump();
-        }
+        jumpWasPressed = true;
+        DoJump();
     }
 
     if (IsKeyPressed(KEY_M))
@@ -191,6 +191,10 @@ void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
     if (detectedBySensor)
     {
         isOnGround--;
+        if (isOnGround == 0 && !jumpWasPressed)
+        {
+            coyoteTimer.Start();
+        }
     }
 
     if (collidedEntity->id == "Frog")

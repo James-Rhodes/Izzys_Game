@@ -45,6 +45,7 @@ void Frog::Update()
     {
         if (PositionIsValid() && !hitPelican)
         {
+            coyoteTimer.Update();
             UpdateController();
         }
         else
@@ -80,6 +81,8 @@ Vector2 Frog::GetPosition()
 void Frog::UpdateController()
 {
     bool keyWasPressed = false;
+    jumpWasPressed = false;
+
     if (IsKeyDown(KEY_A) && (!isTouchingSideOfTerrain || isOnGround))
     {
         b2Vec2 currVel = physBody->GetLinearVelocity();
@@ -131,9 +134,11 @@ void Frog::UpdateController()
         keyWasPressed = true;
     }
 
-    if (IsKeyPressed(KEY_W) && isOnGround)
+    if (IsKeyPressed(KEY_W) && (isOnGround || !coyoteTimer.isFinished()))
 
     {
+        jumpWasPressed = true;
+
         DoJump();
         keyWasPressed = true;
     }
@@ -242,6 +247,10 @@ void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
     if (detectedBySensor)
     {
         isOnGround--;
+        if (isOnGround == 0 && !jumpWasPressed)
+        {
+            coyoteTimer.Start();
+        }
     }
 
     if (collidedEntity->id == "Capy")
