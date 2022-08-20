@@ -38,7 +38,7 @@ void TerrainManager::Update()
     if (distanceTravelled > distanceMileStones[mileStonesIndex] && mileStonesIndex != NUM_MILESTONES - 1)
     {
         mileStonesIndex++;
-        // SetSceneScrollSpeed(speedMileStones[mileStonesIndex]);
+        SetSceneScrollSpeed(speedMileStones[mileStonesIndex]);
     }
 
     if (terrainCounter > 100)
@@ -57,11 +57,6 @@ void TerrainManager::Update()
 
         nextChunk = GenerateNextChunk();
         nextChunk->SetSceneMovementSpeed(sceneScrollSpeed);
-    }
-
-    if (IsKeyPressed(KEY_B))
-    {
-        SetSceneScrollSpeed(sceneScrollSpeed != 0 ? 0 : 1);
     }
 };
 
@@ -95,8 +90,6 @@ SceneChunk *TerrainManager::GetChunk()
 
     if (newChunk != nullptr)
         return newChunk;
-
-    return new UpDownMoving1(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)

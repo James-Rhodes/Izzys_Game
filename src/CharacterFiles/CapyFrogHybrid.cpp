@@ -325,6 +325,8 @@ bool CapyFrogHybrid::PositionIsValid()
 
 void CapyFrogHybrid::OnDeath()
 {
+    tongue.Delete(ecs->GetPhysicsManager());
+
     isAlive = false;
     physBody->SetFixedRotation(false);
     physBody->SetAngularVelocity(6.28); // ~2pi
