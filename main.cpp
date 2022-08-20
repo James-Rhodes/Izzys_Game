@@ -38,7 +38,7 @@ int main()
     SetConfigFlags(FLAG_MSAA_4X_HINT);
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
-    InitWindow(screenWidth, screenHeight, "Raylib Template");
+    InitWindow(screenWidth, screenHeight, "Izzy's Game");
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
