@@ -28,77 +28,128 @@ public:
         Vector2 gradient = Vector2Divide(Vector2Subtract(endPos, beginPos), {distance, distance});
         float angle = atan2f(gradient.y, gradient.x);
 
-        float boxMoveAmt = 1.0f / numChainLinks;
-        float boxWidth = 0.5 * distance / (numChainLinks);
-        float currentBoxPosT = boxMoveAmt * 0.5;
-        Vector2 boxPos = Vector2Lerp(beginPos, endPos, currentBoxPosT);
-
-        // body and fixture defs are common to all chain links
-        b2BodyDef bodyDef;
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position.Set(boxPos.x, boxPos.y);
-        bodyDef.angle = angle;
-        b2FixtureDef fixtureDef;
-        fixtureDef.density = 10;
-        b2PolygonShape polygonShape;
-        polygonShape.SetAsBox(boxWidth, 0.05);
-        fixtureDef.shape = &polygonShape;
-
-        // create first link
-        b2Body *link = world->CreateBody(&bodyDef);
-        link->CreateFixture(&fixtureDef);
-
-        b2RevoluteJointDef revoluteJointDef;
-
-        revoluteJointDef.localAnchorA.Set(beginBodyOffset.x, beginBodyOffset.y);
-        revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
-
-        revoluteJointDef.bodyA = beginBody;
-        revoluteJointDef.bodyB = link;
-        world->CreateJoint(&revoluteJointDef);
-
-        revoluteJointDef.localAnchorA.Set(boxWidth, 0);
-        revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
-
-        revoluteJointDef.lowerAngle = -maxDeflectionAngle;
-        revoluteJointDef.upperAngle = maxDeflectionAngle;
-        revoluteJointDef.enableLimit = true;
-
-        // use same definitions to create multiple bodies
-        for (int i = 0; i < numChainLinks - 1; i++)
+        if (distance < minDist)
         {
-            chainBodies[i] = link;
-            currentBoxPosT += boxMoveAmt;
-            Vector2 boxPos = Vector2Lerp(beginPos, endPos, currentBoxPosT);
-            bodyDef.position.Set(boxPos.x, boxPos.y);
-            b2Body *newLink = world->CreateBody(&bodyDef);
-            newLink->CreateFixture(&fixtureDef);
+            isTooShort = true;
+            Vector2 boxPos = Vector2Lerp(beginPos, endPos, 0.5); // Half way between begin and end
+            float boxWidth = 0.5 * distance;
 
-            revoluteJointDef.bodyA = link;
-            revoluteJointDef.bodyB = newLink;
+            // body and fixture defs are common to all chain links
+            b2BodyDef bodyDef;
+            bodyDef.type = b2_dynamicBody;
+            bodyDef.position.Set(boxPos.x, boxPos.y);
+            bodyDef.angle = angle;
+            b2FixtureDef fixtureDef;
+            fixtureDef.density = 10;
+            b2PolygonShape polygonShape;
+            polygonShape.SetAsBox(boxWidth, 0.05);
+            fixtureDef.shape = &polygonShape;
+
+            // create first link
+            b2Body *link = world->CreateBody(&bodyDef);
+            link->CreateFixture(&fixtureDef);
+
+            b2RevoluteJointDef revoluteJointDef;
+
+            revoluteJointDef.localAnchorA.Set(beginBodyOffset.x, beginBodyOffset.y);
+            revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
+
+            revoluteJointDef.bodyA = beginBody;
+            revoluteJointDef.bodyB = link;
             world->CreateJoint(&revoluteJointDef);
 
-            link = newLink; // prepare for next iteration
+            chainBodies[0] = link;
+
+            revoluteJointDef.localAnchorA.Set(boxWidth, 0);
+            revoluteJointDef.localAnchorB.Set(endBodyLocalCoords.x, endBodyLocalCoords.y);
+
+            revoluteJointDef.bodyA = link;
+            revoluteJointDef.bodyB = endBody;
+            world->CreateJoint(&revoluteJointDef);
+            isActive = true;
         }
-        chainBodies[chainBodies.size() - 1] = link;
+        else
+        {
+            isTooShort = false;
+            float boxMoveAmt = 1.0f / numChainLinks;
+            float boxWidth = 0.5 * distance / (numChainLinks);
+            float currentBoxPosT = boxMoveAmt * 0.5;
+            Vector2 boxPos = Vector2Lerp(beginPos, endPos, currentBoxPosT);
 
-        revoluteJointDef.localAnchorB.Set(endBodyLocalCoords.x, endBodyLocalCoords.y);
-        revoluteJointDef.bodyA = link;
-        revoluteJointDef.bodyB = endBody;
-        revoluteJointDef.enableLimit = false;
+            // body and fixture defs are common to all chain links
+            b2BodyDef bodyDef;
+            bodyDef.type = b2_dynamicBody;
+            bodyDef.position.Set(boxPos.x, boxPos.y);
+            bodyDef.angle = angle;
+            b2FixtureDef fixtureDef;
+            fixtureDef.density = 10;
+            b2PolygonShape polygonShape;
+            polygonShape.SetAsBox(boxWidth, 0.05);
+            fixtureDef.shape = &polygonShape;
 
-        world->CreateJoint(&revoluteJointDef);
-        isActive = true;
+            // create first link
+            b2Body *link = world->CreateBody(&bodyDef);
+            link->CreateFixture(&fixtureDef);
+
+            b2RevoluteJointDef revoluteJointDef;
+
+            revoluteJointDef.localAnchorA.Set(beginBodyOffset.x, beginBodyOffset.y);
+            revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
+
+            revoluteJointDef.bodyA = beginBody;
+            revoluteJointDef.bodyB = link;
+            world->CreateJoint(&revoluteJointDef);
+
+            revoluteJointDef.localAnchorA.Set(boxWidth, 0);
+            revoluteJointDef.localAnchorB.Set(-boxWidth, 0);
+
+            revoluteJointDef.lowerAngle = -maxDeflectionAngle;
+            revoluteJointDef.upperAngle = maxDeflectionAngle;
+            revoluteJointDef.enableLimit = true;
+
+            // use same definitions to create multiple bodies
+            for (int i = 0; i < numChainLinks - 1; i++)
+            {
+                chainBodies[i] = link;
+                currentBoxPosT += boxMoveAmt;
+                Vector2 boxPos = Vector2Lerp(beginPos, endPos, currentBoxPosT);
+                bodyDef.position.Set(boxPos.x, boxPos.y);
+                b2Body *newLink = world->CreateBody(&bodyDef);
+                newLink->CreateFixture(&fixtureDef);
+
+                revoluteJointDef.bodyA = link;
+                revoluteJointDef.bodyB = newLink;
+                world->CreateJoint(&revoluteJointDef);
+
+                link = newLink; // prepare for next iteration
+            }
+            chainBodies[chainBodies.size() - 1] = link;
+
+            revoluteJointDef.localAnchorB.Set(endBodyLocalCoords.x, endBodyLocalCoords.y);
+            revoluteJointDef.bodyA = link;
+            revoluteJointDef.bodyB = endBody;
+            revoluteJointDef.enableLimit = false;
+
+            world->CreateJoint(&revoluteJointDef);
+            isActive = true;
+        }
     }
 
     void Delete(b2World *world)
     {
         if (isActive)
         {
-            for (b2Body *body : chainBodies)
+            if (isTooShort)
             {
-                world->DestroyBody(body);
-                body = nullptr;
+                world->DestroyBody(chainBodies[0]);
+            }
+            else
+            {
+                for (b2Body *body : chainBodies)
+                {
+                    world->DestroyBody(body);
+                    body = nullptr;
+                }
             }
             isActive = false;
         }
@@ -115,8 +166,16 @@ public:
 
             if (timeSinceTongueActivated > tongueExtendTime)
             {
-                splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, beginBodyOffset, endBody, endBodyOffset, 0.1, PINK, false);
-                DrawCircleV(endPos, 0.05, PINK);
+                if (isTooShort)
+                {
+                    DrawLineEx(beginPos, endPos, 0.1, PINK);
+                    DrawCircleV(endPos, 0.05, PINK);
+                }
+                else
+                {
+                    splineDrawer.DrawCatmullRomSpline(chainBodies, beginBody, beginBodyOffset, endBody, endBodyOffset, 0.1, PINK, false);
+                    DrawCircleV(endPos, 0.05, PINK);
+                }
             }
             else
             {
@@ -193,4 +252,8 @@ private:
     int currDirection = 0;
     float falseExtensionLength = 1; // Extend tongue 1m for false extension
     float timeSinceFalseExtension = 0;
+
+    bool isTooShort = false;
+
+    float minDist = 1.75;
 };
