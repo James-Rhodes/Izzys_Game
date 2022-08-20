@@ -96,7 +96,7 @@ SceneChunk *TerrainManager::GetChunk()
     if (newChunk != nullptr)
         return newChunk;
 
-    return new SplitThemUp(&terrainCounter);
+    return new CirclingPlatforms(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)
@@ -142,6 +142,9 @@ SceneChunk *TerrainManager::GetChunk()
         break;
     case (11):
         newChunk = new SplitThemUp(&terrainCounter);
+        break;
+    case (12):
+        newChunk = new CirclingPlatforms(&terrainCounter);
         break;
     }
 

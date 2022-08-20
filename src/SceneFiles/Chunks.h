@@ -4,6 +4,8 @@
 #include "raymath.h"
 // This will have all of the chunks defined in it
 
+#define CIRCLING_RADIUS 2 // For Circling Platforms Chunk
+
 class FlatChunk : public SceneChunk
 // Simply just the ground in the scene
 {
