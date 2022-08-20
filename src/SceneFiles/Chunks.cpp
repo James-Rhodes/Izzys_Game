@@ -226,18 +226,18 @@ void SplitThemUp::GenerateChunk()
     AddSceneComponent<Ground>("Ground", {-3, -2.8}, 4.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
     AddSceneComponent<Ground>("Ground", {4, -2.8}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
 
-    AddSceneComponent<Ground>("Ground", {0, -0.25}, 4, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 0, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
-                              { return {scrollSpeed.x + 2 * 4 * cos(4 * time), scrollSpeed.y}; });
+    AddSceneComponent<Ground>("Ground", {0.75, -0.25}, 2.5, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 0, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                              { return {scrollSpeed.x + 1.5f * 4 * cos(4 * time), scrollSpeed.y}; });
+
+    AddSceneComponent<Ground>("Ground", {-3, -0.25}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock"));
+    AddSceneComponent<Ground>("Ground", {-3.525, 1.25}, 1, 3, terrainBlocks->GetTextureRectangleAtState("Rock"));
+    AddSceneComponent<Ground>("Ground", {2, -0.25}, 4, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock"));
 
     AddSceneComponent<Orange>("Orange", {-1.5, 0.75});
     AddSceneComponent<Orange>("Orange", {1, 0.75});
     AddSceneComponent<Orange>("Orange", {0, -2});
     AddSceneComponent<Orange>("Orange", {1, -2});
     AddSceneComponent<Orange>("Orange", {2, -2});
-
-    AddSceneComponent<Ground>("Ground", {-4, -0.25}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock"));
-    AddSceneComponent<Ground>("Ground", {-4.525, 1.25}, 1, 3, terrainBlocks->GetTextureRectangleAtState("Rock"));
-    AddSceneComponent<Ground>("Ground", {2, -0.25}, 4.5, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock"));
 }
 
 void CirclingPlatforms::GenerateChunk()

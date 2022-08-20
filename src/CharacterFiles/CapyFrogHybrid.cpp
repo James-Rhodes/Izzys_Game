@@ -243,7 +243,7 @@ void CapyFrogHybrid::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
 
     if (collidedEntity->id == "Pelican" && isAlive)
     {
-        OnDeath();
+        hitPelican = true;
     }
     else if (collidedEntity->id.rfind("Orange", 0) == 0)
     {
