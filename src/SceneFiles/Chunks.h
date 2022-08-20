@@ -195,3 +195,22 @@ public:
 
     void GenerateChunk() override;
 };
+
+class UpDownMoving1 : public SceneChunk
+{
+public:
+    UpDownMoving1(int *counter) : SceneChunk(counter){};
+    ~UpDownMoving1(){};
+
+    void GenerateChunk() override;
+    SceneChunk *GetMandatoryNeighboringChunk() override;
+};
+
+class UpDownMoving2 : public SceneChunk
+{
+public:
+    UpDownMoving2(int *counter) : SceneChunk(counter){};
+    ~UpDownMoving2(){};
+
+    void GenerateChunk() override;
+};

@@ -275,3 +275,40 @@ void MovingBouncyBigJump::GenerateChunk()
     AddSceneComponent<BouncyPlatform>("Bouncy", {-0.25, -1.4}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Bouncy"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
                                       { return {scrollSpeed.x + 1.5f * cos(1.5f * time), scrollSpeed.y}; });
 }
+
+void UpDownMoving1::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {-3.5, -2.8}, 3.02, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Plank>("Ground", {-1, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, cos(time)}; });
+    AddSceneComponent<Plank>("Ground", {1.5, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, -cos(time)}; });
+    AddSceneComponent<Plank>("Ground", {4, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, cos(time)}; });
+
+    AddSceneComponent<Orange>("Orange", {-1, 2});
+    AddSceneComponent<Orange>("Orange", {1.5, 2});
+    AddSceneComponent<Orange>("Orange", {4, 2});
+}
+
+SceneChunk *UpDownMoving1::GetMandatoryNeighboringChunk()
+{
+    return new UpDownMoving2(terrainCounter);
+}
+
+void UpDownMoving2::GenerateChunk()
+{
+    AddSceneComponent<Ground>("Ground", {4, -2.8}, 2.05, 0.5, terrainBlocks->GetTextureRectangleAtState("Rock and Grass"));
+
+    AddSceneComponent<Plank>("Ground", {-3.5, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, -cos(time)}; });
+    AddSceneComponent<Plank>("Ground", {-1, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, cos(time)}; });
+    AddSceneComponent<Plank>("Ground", {1.5, -1}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Plank"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
+                             { return {scrollSpeed.x, -cos(time)}; });
+
+    AddSceneComponent<Orange>("Orange", {-3.5, 2});
+    AddSceneComponent<Orange>("Orange", {-1, 2});
+    AddSceneComponent<Orange>("Orange", {1.5, 2});
+}
