@@ -252,16 +252,16 @@ void CirclingPlatforms::GenerateChunk()
     AddSceneComponent<Orange>("Orange", {-2, 0});
 
     AddSceneComponent<Ground>("Ground", {2, 0}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
-                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(time), CIRCLING_RADIUS * cos(time)}; });
+                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(-time + PI), CIRCLING_RADIUS * cos(-time + PI)}; });
 
     AddSceneComponent<Ground>("Ground", {0, -2}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
-                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(time - PI / 2), CIRCLING_RADIUS * cos(time - PI / 2)}; });
+                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(-time + PI / 2), CIRCLING_RADIUS * cos(-time + PI / 2)}; });
 
     AddSceneComponent<Ground>("Ground", {-2, 0}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
-                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(time - PI), CIRCLING_RADIUS * cos(time - PI)}; });
+                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(-time), CIRCLING_RADIUS * cos(-time)}; });
 
     AddSceneComponent<Ground>("Ground", {0, 2}, 1, 0.3, terrainBlocks->GetTextureRectangleAtState("Rock"), 1, [](Vector2 currPos, Vector2 scrollSpeed, float time) -> Vector2
-                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(time - 3 * PI / 2), CIRCLING_RADIUS * cos(time - 3 * PI / 2)}; });
+                              { return {scrollSpeed.x - CIRCLING_RADIUS * sin(-time + 3 * PI / 2), CIRCLING_RADIUS * cos(-time + 3 * PI / 2)}; });
 }
 
 void MovingBouncyBigJump::GenerateChunk()
