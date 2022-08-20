@@ -166,3 +166,12 @@ public:
 
     void GenerateChunk() override;
 };
+
+class SplitThemUp : public SceneChunk
+{
+public:
+    SplitThemUp(int *counter) : SceneChunk(counter){};
+    ~SplitThemUp(){};
+
+    void GenerateChunk() override;
+};

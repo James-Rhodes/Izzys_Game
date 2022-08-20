@@ -61,7 +61,7 @@ void TerrainManager::Update()
 
     if (IsKeyPressed(KEY_B))
     {
-        SetSceneScrollSpeed(sceneScrollSpeed == 1 ? 0 : 1);
+        SetSceneScrollSpeed(sceneScrollSpeed != 0 ? 0 : 1);
     }
 };
 
@@ -96,7 +96,7 @@ SceneChunk *TerrainManager::GetChunk()
     if (newChunk != nullptr)
         return newChunk;
 
-    return new MovingBlocker(&terrainCounter);
+    return new SplitThemUp(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)
@@ -136,6 +136,12 @@ SceneChunk *TerrainManager::GetChunk()
         break;
     case (9):
         newChunk = new BouncyBigJump(&terrainCounter);
+        break;
+    case (10):
+        newChunk = new MovingBlocker(&terrainCounter);
+        break;
+    case (11):
+        newChunk = new SplitThemUp(&terrainCounter);
         break;
     }
 
