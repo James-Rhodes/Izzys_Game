@@ -186,3 +186,12 @@ public:
 
     void GenerateChunk() override;
 };
+
+class MovingBouncyBigJump : public SceneChunk
+{
+public:
+    MovingBouncyBigJump(int *counter) : SceneChunk(counter){};
+    ~MovingBouncyBigJump(){};
+
+    void GenerateChunk() override;
+};

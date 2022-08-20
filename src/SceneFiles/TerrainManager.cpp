@@ -96,7 +96,7 @@ SceneChunk *TerrainManager::GetChunk()
     if (newChunk != nullptr)
         return newChunk;
 
-    return new CirclingPlatforms(&terrainCounter);
+    return new MovingBouncyBigJump(&terrainCounter);
 
     int randChunkIndex = GetRandomValue(0, numChunkTypes - 1);
     while (randChunkIndex == prevRandChunkIndex)
@@ -145,6 +145,9 @@ SceneChunk *TerrainManager::GetChunk()
         break;
     case (12):
         newChunk = new CirclingPlatforms(&terrainCounter);
+        break;
+    case (13):
+        newChunk = new MovingBouncyBigJump(&terrainCounter);
         break;
     }
 

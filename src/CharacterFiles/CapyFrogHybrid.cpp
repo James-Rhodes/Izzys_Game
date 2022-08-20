@@ -307,7 +307,6 @@ bool CapyFrogHybrid::PositionIsValid()
 
         b2Vec2 vel = physBody->GetLinearVelocity();
         physBody->SetLinearVelocity({0, vel.y});
-        std::cout << "Am here" << std::endl;
     }
 
     if (pos.x < boundariesLower.x)
