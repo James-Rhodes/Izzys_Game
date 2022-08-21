@@ -11,8 +11,8 @@ void Capy::Register()
     config.isRollable = false;
     config.restitution = 0;
     config.pos = pos;
-    config.width = width;
-    config.height = height;
+    config.width = width * 0.5;
+    config.height = height - 0.02;
 
     ecs->RegisterEntityAsPhysicsObject(id, config);
     b2PolygonShape rect;
@@ -23,6 +23,21 @@ void Capy::Register()
     feetSensorDef.shape = &rect;
 
     feetSensor = physBody->CreateFixture(&feetSensorDef);
+
+    b2CircleShape circleShape;
+    circleShape.m_radius = 0.25;
+    circleShape.m_p = {width / 4, 0};
+
+    b2FixtureDef roundingCircles;
+    roundingCircles.friction = 1;
+    roundingCircles.restitution = 0;
+    roundingCircles.density = 1;
+    roundingCircles.shape = &circleShape;
+
+    physBody->CreateFixture(&roundingCircles);
+    circleShape.m_p = {-width / 4, 0};
+    physBody->CreateFixture(&roundingCircles);
+
     physBody->SetBullet(true);
 
     physBody->SetLinearDamping(2);
@@ -170,7 +185,7 @@ void Capy::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
 
     if (collidedEntity->id == "Frog")
     {
-        isTouchingFrog = true;
+        isTouchingFrog++;
     }
     else if (collidedEntity->id == "Pelican" && isAlive)
     {
@@ -199,7 +214,7 @@ void Capy::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
 
     if (collidedEntity->id == "Frog")
     {
-        isTouchingFrog = false;
+        isTouchingFrog--;
     }
 }
 

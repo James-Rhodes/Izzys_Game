@@ -12,7 +12,7 @@ void Frog::Register()
     config.restitution = 0;
     config.pos = pos;
     config.width = width;
-    config.height = height;
+    config.height = height / 2;
 
     ecs->RegisterEntityAsPhysicsObject(id, config);
     b2PolygonShape rect;
@@ -23,6 +23,21 @@ void Frog::Register()
     feetSensorDef.shape = &rect;
 
     feetSensor = physBody->CreateFixture(&feetSensorDef);
+
+    b2CircleShape circleShape;
+    circleShape.m_radius = 0.25;
+    circleShape.m_p = {0, height / 4};
+
+    b2FixtureDef roundingCircles;
+    roundingCircles.friction = 1;
+    roundingCircles.restitution = 0;
+    roundingCircles.density = 1;
+    roundingCircles.shape = &circleShape;
+
+    physBody->CreateFixture(&roundingCircles);
+    circleShape.m_p = {0, -height / 4};
+    physBody->CreateFixture(&roundingCircles);
+
     physBody->SetBullet(true);
 
     physBody->SetLinearDamping(2);
@@ -225,7 +240,7 @@ void Frog::OnCollision(Entity *collidedEntity, bool detectedBySensor, b2Contact 
 
     if (collidedEntity->id == "Capy")
     {
-        isTouchingCapy = true;
+        isTouchingCapy++;
         capybaraIsOnHead = collidedEntity->physBody->GetPosition().y > (pos.y + height / 2);
     }
     else if (collidedEntity->id == "Pelican" && isAlive)
@@ -255,7 +270,7 @@ void Frog::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Conta
 
     if (collidedEntity->id == "Capy")
     {
-        isTouchingCapy = false;
+        isTouchingCapy--;
         capybaraIsOnHead = false;
     }
 }

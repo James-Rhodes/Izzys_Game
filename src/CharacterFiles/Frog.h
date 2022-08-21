@@ -61,7 +61,7 @@ public:
 
     bool isTouchingSideOfTerrain = false;
 
-    bool isTouchingCapy = false;
+    int isTouchingCapy = 0;
 
     bool hitPelican = false;
 

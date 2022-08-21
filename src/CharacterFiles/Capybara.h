@@ -55,7 +55,7 @@ public:
 
     bool isTouchingSideOfTerrain = false;
 
-    bool isTouchingFrog = false;
+    int isTouchingFrog = 0;
 
     int *orangeScore = nullptr;
 
