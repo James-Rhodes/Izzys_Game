@@ -33,6 +33,9 @@
 
 output.exe
 
-/include
-
 .vscode
+
+game.wasm
+game.html
+game.data
+game.js
