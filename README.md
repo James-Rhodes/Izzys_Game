@@ -1,8 +1,8 @@
 # Izzys Game
 
-Welcome to a game I have created using the game library Raylib as well as box2D for 2D physics. 
+Welcome to a game I have created using the game library Raylib as well as box2D for 2D physics.
 
-This game was created with inspiration from Jetpack Joy Ride for its side scrolling nature as well as Fireboy and Watergirl for its cooperative game play.  
+This game was created with inspiration from Jetpack Joy Ride for its side scrolling nature as well as Fireboy and Watergirl for its cooperative game play.
 
 The idea of the game is that you play as a capybara and a frog searching to collect oranges that were stolen by the stimky pelicans (references for all capybara lovers). The game itself is a side scrolling platformer requiring the capybara and frog to work together in two player co-op style (classic co-op using wasd and arrows) to collect as many oranges as possible and not fall off any platforms.
 
@@ -16,3 +16,5 @@ https://izzys-game.herokuapp.com/
 
 Thank you all and I hope you enjoy!
 
+![Main Menu](./screenshots/Main_Menu.PNG)
+![Beginning Game Play](./screenshots/Start_Of_Game.PNG)
