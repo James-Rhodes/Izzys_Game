@@ -3,4 +3,10 @@ https://openbase.com/js/box2d-wasm/documentation
 
 - basically compile box2d wasm in intermediate steps. At one point a .a file is compiled and thats what you need.
 - compiling raylib for web was standard, same for normal raylib.
-- Ccompiling box2d was also standard however you must change the compiler to mingw for it to compile to .a as far as I know
+- Compiling box2d was also standard however you must change the compiler to mingw for it to compile to .a as far as I know
+
+The links to Box2d and Raylib can be found below:
+
+https://github.com/raysan5/raylib
+
+https://github.com/erincatto/box2d
