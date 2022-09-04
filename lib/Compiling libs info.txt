@@ -10,3 +10,11 @@ The links to Box2d and Raylib can be found below:
 https://github.com/raysan5/raylib
 
 https://github.com/erincatto/box2d
+
+The required names for each .a (library file is as follows):
+- raylib: libraylib.a 
+- raylib for web: libraylib_web.a
+- box2d: libbox2d.a
+- box2d for web: libbox2d_web.a
+
+Simply place these files in the lib folder and type make into the command line to build the project
