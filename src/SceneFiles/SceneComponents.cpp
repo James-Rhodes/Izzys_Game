@@ -183,11 +183,12 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
 
     Ground::OnCollision(collidedEntity, detectedBySensor, contact);
     b2Vec2 sceneMovementSpeed = physBody->GetLinearVelocity();
+    float fudgeFactor = 0.05;
     if (collidedEntity->id == "Capy")
     {
         Capy *capy = (Capy *)collidedEntity;
         float minDistBetween = capy->height * 0.5 + height * 0.5;
-        bool contactFromAbove = capy->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactFromAbove = capy->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         if (contactFromAbove)
         {
             capy->physBody->SetLinearVelocity(sceneMovementSpeed);
@@ -198,7 +199,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
     {
         Frog *frog = (Frog *)collidedEntity;
         float minDistBetween = frog->height * 0.5 + height * 0.5;
-        bool contactFromAbove = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactFromAbove = frog->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         if (contactFromAbove)
         {
             frog->physBody->SetLinearVelocity(sceneMovementSpeed);
@@ -209,7 +210,7 @@ void BouncyPlatform::OnCollision(Entity *collidedEntity, bool detectedBySensor, 
     {
         CapyFrogHybrid *capyFrogHybrid = (CapyFrogHybrid *)collidedEntity;
         float minDistBetween = capyFrogHybrid->height * 0.5 + height * 0.5;
-        bool contactFromAbove = capyFrogHybrid->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactFromAbove = capyFrogHybrid->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         if (contactFromAbove)
         {
             capyFrogHybrid->physBody->SetLinearVelocity(sceneMovementSpeed);
