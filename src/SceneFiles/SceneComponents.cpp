@@ -148,25 +148,26 @@ void Ground::OnCollisionEnd(Entity *collidedEntity, bool detectedBySensor, b2Con
 
 void Plank::OnPreSolve(Entity *collidedEntity, bool detectedBySensor, b2Contact *contact)
 {
+    float fudgeFactor = 0.05;
     if (collidedEntity->id == "Capy")
     {
         Capy *capy = (Capy *)collidedEntity;
         float minDistBetween = capy->height * 0.5 + height * 0.5;
-        bool contactResult = capy->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactResult = capy->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         contact->SetEnabled(contactResult);
     }
     else if (collidedEntity->id == "Frog")
     {
         Frog *frog = (Frog *)collidedEntity;
         float minDistBetween = frog->height * 0.5 + height * 0.5;
-        bool contactResult = frog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactResult = frog->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         contact->SetEnabled(contactResult);
     }
     else if (collidedEntity->id == "CapyFrogHybrid")
     {
         CapyFrogHybrid *capyFrog = (CapyFrogHybrid *)collidedEntity;
         float minDistBetween = capyFrog->height * 0.5 + height * 0.5;
-        bool contactResult = capyFrog->pos.y - physBody->GetPosition().y >= minDistBetween;
+        bool contactResult = capyFrog->pos.y - physBody->GetPosition().y >= minDistBetween - fudgeFactor;
         contact->SetEnabled(contactResult);
     }
 }
