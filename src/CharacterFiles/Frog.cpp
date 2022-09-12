@@ -11,7 +11,7 @@ void Frog::Register()
     config.isRollable = false;
     config.restitution = 0;
     config.pos = pos;
-    config.width = width;
+    config.width = width - 0.05;
     config.height = height / 2;
 
     ecs->RegisterEntityAsPhysicsObject(id, config);

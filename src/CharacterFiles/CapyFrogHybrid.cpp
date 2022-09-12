@@ -12,7 +12,7 @@ void CapyFrogHybrid::Register()
     config.restitution = 0;
     config.pos = pos;
     config.width = width;
-    config.height = height - 0.02;
+    config.height = height - 0.05;
 
     ecs->RegisterEntityAsPhysicsObject(id, config);
     b2PolygonShape rect;

@@ -12,7 +12,7 @@ void Capy::Register()
     config.restitution = 0;
     config.pos = pos;
     config.width = width * 0.5;
-    config.height = height - 0.02;
+    config.height = height - 0.05;
 
     ecs->RegisterEntityAsPhysicsObject(id, config);
     b2PolygonShape rect;
