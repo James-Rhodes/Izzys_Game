@@ -12,7 +12,7 @@ This is my first step out into sharing my code with people so I hope you all enj
 
 I am also hosting this game on heroku at:
 
-https://izzys-game.herokuapp.com/
+https://izzys-game.netlify.app/
 
 Thank you all and I hope you enjoy!
 
